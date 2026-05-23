@@ -9,6 +9,7 @@ import {
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import Header from "@/components/sections/header/Header";
 import { routing } from "@/i18n/routing";
 
 type HomePageProps = {
@@ -28,15 +29,18 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = await getTranslations("HomePage");
 
   return (
-    <main className="flex min-h-svh items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{t("title")}</CardTitle>
-          <Button>Button</Button>
-          <CardDescription>{t("description")}</CardDescription>
-        </CardHeader>
-        <CardContent />
-      </Card>
-    </main>
+    <div>
+      <Header />
+      <main className="flex min-h-svh items-center justify-center p-6">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>{t("title")}</CardTitle>
+            <Button>Button</Button>
+            <CardDescription>{t("description")}</CardDescription>
+          </CardHeader>
+          <CardContent />
+        </Card>
+      </main>
+    </div>
   );
 }
