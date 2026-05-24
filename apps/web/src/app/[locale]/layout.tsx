@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { routing } from '@/i18n/routing';
+import { QueryProvider } from '@/providers/query-provider';
 import '@repo/ui/globals.css';
 import Header from '@/components/sections/header/Header';
 
@@ -47,10 +48,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={jost.variable}>
       <body className="min-h-svh bg-background font-sans text-foreground antialiased">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Header />
-          {children}
-        </NextIntlClientProvider>
+        <QueryProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <Header />
+            {children}
+          </NextIntlClientProvider>
+        </QueryProvider>
       </body>
     </html>
   );

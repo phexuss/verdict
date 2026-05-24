@@ -7,7 +7,9 @@
     "dev": "next dev --turbopack --port 3000",
     "build": "next build",
     "start": "next start --port 3000",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "api:generate": "orval --config ./orval.config.ts",
+    "api:watch": "orval --config ./orval.config.ts --watch"
   },
   "dependencies": {
     "@repo/shared": "*",
@@ -25,6 +27,7 @@
     "@repo/tsconfig": "*",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "orval": "^8.12.3"
   }
 }
