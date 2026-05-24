@@ -1,22 +1,23 @@
-import type { Metadata } from "next";
-import { Jost } from "next/font/google";
-import { notFound } from "next/navigation";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
-import type { ReactNode } from "react";
-import { routing } from "@/i18n/routing";
-import "@repo/ui/globals.css";
+import type { Metadata } from 'next';
+import { Jost } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
+import type { ReactNode } from 'react';
+import { routing } from '@/i18n/routing';
+import '@repo/ui/globals.css';
+import Header from '@/components/sections/header/Header';
 
 const jost = Jost({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-jost",
-  display: "swap",
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-jost',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Verdict",
+  title: 'Verdict',
   description:
-    "A clean modern starter powered by Next.js, NestJS and Turborepo.",
+    'A clean modern starter powered by Next.js, NestJS and Turborepo.',
 };
 
 export function generateStaticParams() {
@@ -47,6 +48,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={jost.variable}>
       <body className="min-h-svh bg-background font-sans text-foreground antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <Header />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -1,9 +1,9 @@
-export const API_VERSION = "v1" as const;
+export const API_VERSION = 'v1' as const;
 
-export type SupportedLocale = "en" | "ru";
+export type SupportedLocale = 'en' | 'ru';
 
 export type HealthResponse = {
-  status: "ok";
+  status: 'ok';
   version: typeof API_VERSION;
   timestamp: string;
 };

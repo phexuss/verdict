@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { TrendingMoviesQueryDto } from './tmdb.types';
+import { TrendingMoviesResponse } from './tmdb.types';
 
 @Injectable()
 export class TmdbService {
@@ -18,7 +18,7 @@ export class TmdbService {
 
   async fetchTrendingMovies() {
     const { data } = await firstValueFrom(
-      this.httpService.get<TrendingMoviesQueryDto>(
+      this.httpService.get<TrendingMoviesResponse>(
         `${this.BASE_URL}discover/movie?include_adult=false&include_video=false&language=${this.LANGUAGE}&page=1&sort_by=popularity.desc`,
         {
           headers: {

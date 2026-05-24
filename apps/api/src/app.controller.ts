@@ -1,12 +1,23 @@
-import { Controller, Get, Inject } from "@nestjs/common";
-import type { HealthResponse } from "@repo/shared";
-import { AppService } from "./app.service";
+import { Controller, Get, Inject } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { HealthResponse } from '@repo/shared';
+import { HealthResponseDto } from './app.dto';
+import { AppService } from './app.service';
 
-@Controller("health")
+@ApiTags('health')
+@Controller('health')
 export class AppController {
   constructor(@Inject(AppService) private readonly appService: AppService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get API health',
+    operationId: 'getHealth',
+  })
+  @ApiOkResponse({
+    description: 'API is running.',
+    type: HealthResponseDto,
+  })
   getHealth(): HealthResponse {
     return this.appService.getHealth();
   }

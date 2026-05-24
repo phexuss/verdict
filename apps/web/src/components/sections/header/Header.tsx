@@ -1,7 +1,7 @@
-import { Button } from "@repo/ui/components/button";
-import { SettingsLinear, UserLinear } from "@solar-icons/react-perf";
-import { Link } from "@/i18n/navigation";
-import HeaderNavButtons from "./HeaderNavButtons";
+import { Button } from '@repo/ui/components/button';
+import { SettingsLinear, UserLinear } from '@solar-icons/react-perf';
+import { Link } from '@/i18n/navigation';
+import HeaderNavButtons from './HeaderNavButtons';
 
 export default function Header() {
   return (
