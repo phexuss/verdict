@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { TmdbService } from './tmdb.service';
-import { TrendingMoviesResponse } from './tmdb.types';
+import { TmdbService } from './tmdb.service.js';
+import { TrendingMoviesResponse } from './tmdb.types.js';
 
 @ApiTags('tmdb')
 @Controller('tmdb')

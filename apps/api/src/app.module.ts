@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TmdbModule } from './providers/tmdb/tmdb.module';
+import Joi from 'joi';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { TmdbModule } from './providers/tmdb/tmdb.module.js';
 
 @Module({
   imports: [

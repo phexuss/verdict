@@ -1,8 +1,8 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { HealthResponse } from '@repo/shared';
-import { HealthResponseDto } from './app.dto';
-import { AppService } from './app.service';
+import { HealthResponseDto } from './app.dto.js';
+import { AppService } from './app.service.js';
 
 @ApiTags('health')
 @Controller('health')

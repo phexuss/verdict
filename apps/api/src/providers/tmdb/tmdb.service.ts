@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { TrendingMoviesResponse } from './tmdb.types';
+import { TrendingMoviesResponse } from './tmdb.types.js';
 
 @Injectable()
 export class TmdbService {

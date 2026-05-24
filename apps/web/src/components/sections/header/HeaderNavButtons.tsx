@@ -1,11 +1,13 @@
 import { Button } from '@repo/ui/components/button';
+import { Link } from '@/i18n/navigation';
 
 export default function HeaderNavButtons() {
   return (
     <div className="hidden  flex-row items-center gap-8 md:flex md:gap-5">
       <Button className="text-lg" variant="ghost">
-        Curated
+        <Link href="/curated"> Curated</Link>
       </Button>
+
       <Button className="text-lg" variant="ghost">
         Tonight
       </Button>
