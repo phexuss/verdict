@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { SignInInput, signInSchema } from '@/features/auth/schemas';
 import { useRouter } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
+import GoogleLoginButton from './GoogleLoginButton';
 import SignInPasswordInput from './SignInPasswordInput';
 
 export default function SignInForm() {
@@ -86,6 +87,7 @@ export default function SignInForm() {
       >
         {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
       </Button>
+      <GoogleLoginButton />
     </form>
   );
 }
