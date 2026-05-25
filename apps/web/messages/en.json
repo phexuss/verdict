@@ -2,5 +2,14 @@
   "HomePage": {
     "title": "Verdict",
     "description": "A clean modern starter powered by Next.js, NestJS and Turborepo."
+  },
+  "SignInPage": {
+    "title": "Sign In",
+    "googleSignIn": "Sign in with Google",
+    "description": "Sign in to your account to access the dashboard."
+  },
+  "SignUpPage": {
+    "title": "Sign Up",
+    "description": "Create a new account to access the dashboard."
   }
 }

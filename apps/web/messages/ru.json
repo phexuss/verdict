@@ -2,5 +2,14 @@
   "HomePage": {
     "title": "Verdict",
     "description": "Чистый современный стартер на Next.js, NestJS и Turborepo."
+  },
+  "SignInPage": {
+    "title": "Войти",
+    "googleSignIn": "Войти с помощью Google",
+    "description": "Войдите в свою учетную запись, чтобы получить доступ к панели управления."
+  },
+  "SignUpPage": {
+    "title": "Зарегистрироваться",
+    "description": "Создайте новую учетную запись, чтобы получить доступ к панели управления."
   }
 }
