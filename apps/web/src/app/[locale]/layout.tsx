@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { routing } from '@/i18n/routing';
 import { QueryProvider } from '@/providers/query-provider';
 import '@repo/ui/globals.css';
+import Footer from '@/components/footer/Footer';
 import Header from '@/components/sections/header/Header';
 
 const jost = Jost({
@@ -52,6 +53,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Header />
             {children}
+            <Footer />
           </NextIntlClientProvider>
         </QueryProvider>
       </body>

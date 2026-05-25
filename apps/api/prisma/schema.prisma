@@ -1,0 +1,258 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String      @id
+  name          String
+  email         String
+  emailVerified Boolean     @default(false)
+  image         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  movieActions  UserMovie[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum Locale {
+  EN @map("en")
+  RU @map("ru")
+}
+
+enum DailyListStatus {
+  DRAFT
+  PUBLISHED
+  FAILED
+}
+
+enum UserMovieStatus {
+  SAVED
+  WATCHED
+  DISLIKED
+}
+
+model Movie {
+  id String @id @default(cuid())
+
+  tmdbId Int     @unique
+  imdbId String?
+
+  originalTitle    String?
+  originalLanguage String?
+
+  posterPath   String?
+  backdropPath String?
+
+  releaseDate DateTime?
+  runtime     Int?
+
+  popularity  Float?
+  voteAverage Float?
+  voteCount   Int?
+
+  adult Boolean @default(false)
+
+  translations MovieTranslation[]
+  genres       MovieGenre[]
+  dailyItems   DailyListItem[]
+  userActions  UserMovie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tmdbId])
+  @@index([popularity])
+  @@index([releaseDate])
+}
+
+model MovieTranslation {
+  id String @id @default(cuid())
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  locale Locale
+
+  title    String
+  overview String? @db.Text
+
+  aiSummary  String? @db.Text
+  aiAnalysis String? @db.Text
+  aiVerdict  String? @db.Text
+  aiReason   String? @db.Text
+
+  aiMoodTags String[]
+  aiThemes   String[]
+  aiGenres   String[]
+
+  aiScore       Int?
+  aiGeneratedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([movieId, locale])
+  @@index([locale])
+}
+
+model Genre {
+  id String @id @default(cuid())
+
+  tmdbId Int @unique
+
+  translations GenreTranslation[]
+  movies       MovieGenre[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GenreTranslation {
+  id String @id @default(cuid())
+
+  genreId String
+  genre   Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  locale Locale
+  name   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([genreId, locale])
+  @@index([locale])
+}
+
+model MovieGenre {
+  movieId String
+  genreId String
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, genreId])
+}
+
+model DailyList {
+  id String @id @default(cuid())
+
+  date   DateTime @db.Date
+  locale Locale
+
+  title       String?
+  description String? @db.Text
+
+  status DailyListStatus @default(DRAFT)
+
+  source String @default("tmdb_trending")
+
+  aiCurationReason String?   @db.Text
+  aiGeneratedAt    DateTime?
+
+  items DailyListItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, locale])
+  @@index([date])
+  @@index([locale])
+}
+
+model DailyListItem {
+  id String @id @default(cuid())
+
+  dailyListId String
+  dailyList   DailyList @relation(fields: [dailyListId], references: [id], onDelete: Cascade)
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  position Int
+  reason   String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([dailyListId, movieId])
+  @@unique([dailyListId, position])
+  @@index([movieId])
+}
+
+model UserMovie {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  status UserMovieStatus
+
+  rating Int?
+  note   String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, movieId, status])
+  @@index([userId])
+  @@index([movieId])
+}

@@ -5,13 +5,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false,
+  });
   const configService = app.get(ConfigService);
   const port = configService.getOrThrow<number>('PORT');
   const webOrigin = configService.getOrThrow<string>('WEB_ORIGIN');
 
   app.enableCors({
     origin: webOrigin,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
