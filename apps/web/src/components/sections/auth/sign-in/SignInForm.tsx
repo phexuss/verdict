@@ -48,6 +48,7 @@ export default function SignInForm() {
 
   return (
     <form
+      noValidate
       className="space-y-4 w-full max-w-md"
       onSubmit={form.handleSubmit(onSubmit)}
     >
@@ -85,7 +86,7 @@ export default function SignInForm() {
         type="submit"
         disabled={form.formState.isSubmitting}
       >
-        {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+        {form.formState.isSubmitting ? `${t('titleLoading')}` : `${t('title')}`}
       </Button>
       <GoogleLoginButton />
     </form>

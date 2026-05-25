@@ -5,10 +5,11 @@
   },
   "SignInPage": {
     "title": "Sign In",
+    "titleLoading": "Signing In...",
     "emailLabel": "Email",
     "passwordLabel": "Password",
     "googleSignIn": "Sign in with Google",
-    "description": "Sign in to your account to access the dashboard."
+    "description": "Welcome back! Please enter your details."
   },
   "SignUpPage": {
     "title": "Sign Up",
