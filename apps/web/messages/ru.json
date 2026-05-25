@@ -5,6 +5,8 @@
   },
   "SignInPage": {
     "title": "Войти",
+    "emailLabel": "Электронная почта",
+    "passwordLabel": "Пароль",
     "googleSignIn": "Войти с помощью Google",
     "description": "Войдите в свою учетную запись, чтобы получить доступ к панели управления."
   },

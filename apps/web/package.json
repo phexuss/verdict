@@ -12,6 +12,7 @@
     "api:watch": "orval --config ./orval.config.ts --watch"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "@repo/shared": "*",
     "@repo/ui": "*",
     "@solar-icons/react-perf": "^2.1.1",

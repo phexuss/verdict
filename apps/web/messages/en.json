@@ -5,6 +5,8 @@
   },
   "SignInPage": {
     "title": "Sign In",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
     "googleSignIn": "Sign in with Google",
     "description": "Sign in to your account to access the dashboard."
   },
