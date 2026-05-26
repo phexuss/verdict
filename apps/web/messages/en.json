@@ -6,6 +6,13 @@
       "profile": "Profile"
     }
   },
+  "Footer": {
+    "navigation": {
+      "curated": "Curated",
+      "tonight": "Tonight",
+      "profile": "Profile"
+    }
+  },
   "HomePage": {
     "title": "Verdict",
     "description": "A clean modern starter powered by Next.js, NestJS and Turborepo."

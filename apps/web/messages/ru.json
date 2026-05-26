@@ -6,6 +6,13 @@
       "profile": "Профиль"
     }
   },
+  "Footer": {
+    "navigation": {
+      "curated": "Подборка",
+      "tonight": "Сегодня",
+      "profile": "Профиль"
+    }
+  },
   "HomePage": {
     "title": "Verdict",
     "description": "Чистый современный стартер на Next.js, NestJS и Turborepo."

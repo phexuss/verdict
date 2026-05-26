@@ -14,9 +14,9 @@ export default function Header() {
 
       <HeaderNavButtons />
       <div className="col-start-3  flex flex-row justify-self-end md:gap-1.5">
-        <Button asChild variant="ghost" size="icon">
-          <Link href="/profile" aria-label="Profile">
-            <UserLinear className="size-4 text-foreground md:size-5" />
+        <Button asChild variant="ghost" size="icon" className="hidden md:flex">
+          <Link href="/profile" aria-label="Profile" className="">
+            <UserLinear className="size-4 text-foreground md:size-5 " />
           </Link>
         </Button>
 

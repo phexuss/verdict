@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { TmdbService } from './tmdb.service.js';
 import { TrendingMoviesResponse } from './tmdb.types.js';
 
@@ -9,6 +10,7 @@ export class TmdbController {
   constructor(private readonly tmdbService: TmdbService) {}
 
   @Get('trending-movies')
+  @AllowAnonymous()
   @ApiOperation({
     summary: 'Get trending movies',
     description:

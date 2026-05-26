@@ -48,7 +48,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={jost.variable}>
-      <body className="min-h-svh bg-background font-sans text-foreground antialiased">
+      <body className="min-h-svh bg-background pb-[calc(6rem+env(safe-area-inset-bottom))] font-sans text-foreground antialiased md:pb-0">
         <QueryProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Header />

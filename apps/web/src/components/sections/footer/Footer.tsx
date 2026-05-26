@@ -1,5 +1,9 @@
-import { StarRainbowLinear } from '@solar-icons/react-perf';
+import FooterNavButtons from './FooterNavButtons';
 
 export default function Footer() {
-  return <footer className="border-t border-sidebar-accent px-4"></footer>;
+  return (
+    <footer className="md:hidden">
+      <FooterNavButtons />
+    </footer>
+  );
 }
