@@ -57,6 +57,12 @@
         "solo": "Solo",
         "duo": "Duo",
         "group": "Group"
+      },
+      "time": {
+        "maxSuffix": "max",
+        "hoursShort": "{hours}h",
+        "hoursPlusShort": "{hours}h+",
+        "duration": "{hours}h {minutes}m"
       }
     },
     "genres": {

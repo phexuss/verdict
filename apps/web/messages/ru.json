@@ -57,6 +57,12 @@
         "solo": "Один",
         "duo": "Вдвоём",
         "group": "Компания"
+      },
+      "time": {
+        "maxSuffix": "макс",
+        "hoursShort": "{hours} ч",
+        "hoursPlusShort": "{hours} ч+",
+        "duration": "{hours} ч {minutes} мин"
       }
     },
     "genres": {

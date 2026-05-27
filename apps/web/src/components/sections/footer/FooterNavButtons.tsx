@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/curated', label: 'curated', icon: StarLinear },
-  { href: '/', label: 'tonight', icon: PlayCircleLinear },
+  { href: '/tonight', label: 'tonight', icon: PlayCircleLinear },
   { href: '/profile', label: 'profile', icon: UserLinear },
 ] as const;
 
