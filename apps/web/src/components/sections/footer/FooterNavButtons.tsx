@@ -63,7 +63,7 @@ export default function FooterNavButtons() {
 
               <span
                 className={cn(
-                  'font-medium text-[11px] leading-none tracking-tight capitalize',
+                  'font-medium text-[12px] leading-none tracking-tight capitalize',
                   isActive ? 'text-primary' : 'text-muted-foreground',
                 )}
               >

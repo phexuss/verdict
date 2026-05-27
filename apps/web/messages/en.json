@@ -28,5 +28,47 @@
   "SignUpPage": {
     "title": "Sign Up",
     "description": "Create a new account to access the dashboard."
+  },
+  "TonightPage": {
+    "title": "What are we watching tonight?",
+    "description": "Pick a mood. Get three films. Stop scrolling.",
+    "genreMenu": {
+      "label": "Atmosphere",
+      "selectLabel": "select up to 3",
+      "secondLabel": "Who is watching?",
+      "thirdLabel": "Time Commitment",
+      "fourthLabel": "Your personalized trio will include",
+
+      "picks": {
+        "safe": {
+          "label": "Safe Pick",
+          "description": "A highly acclaimed film aligned closely with your top genres."
+        },
+        "risk": {
+          "label": "Risk Pick",
+          "description": "A hidden gem that takes a bold departure from your usual preferences."
+        },
+        "wildcard": {
+          "label": "Wildcard",
+          "description": "An unexpected gem to discover outside your usual algorithm."
+        }
+      },
+      "groups": {
+        "solo": "Solo",
+        "duo": "Duo",
+        "group": "Group"
+      }
+    },
+    "genres": {
+      "dark": "Dark",
+      "tense": "Tense",
+      "weird": "Weird",
+      "atmospheric": "Atmospheric",
+      "comfort": "Comfort",
+      "smart": "Smart",
+      "fast": "Fast",
+      "emotional": "Emotional",
+      "funny": "Funny"
+    }
   }
 }
