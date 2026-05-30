@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String      @id
-  name          String
-  email         String
-  emailVerified Boolean     @default(false)
-  image         String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  movieActions  UserMovie[]
+  id              String           @id
+  name            String
+  email           String
+  emailVerified   Boolean          @default(false)
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  movieActions    UserMovie[]
+  recommendations Recommendation[]
 
   @@unique([email])
   @@map("user")
@@ -113,6 +114,8 @@ model Movie {
   genres       MovieGenre[]
   dailyItems   DailyListItem[]
   userActions  UserMovie[]
+
+  recommendationItems RecommendationItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -254,5 +257,69 @@ model UserMovie {
 
   @@unique([userId, movieId, status])
   @@index([userId])
+  @@index([movieId])
+}
+
+enum RecommendationItemType {
+  SAFE
+  RISK
+  WILDCARD
+}
+
+enum RecommendationStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+model Recommendation {
+  id String @id @default(cuid())
+
+  slug String @unique
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  locale Locale
+
+  status RecommendationStatus @default(READY)
+
+  moods     String[]
+  groupType String?
+  duration  String?
+
+  title       String?
+  description String? @db.Text
+
+  aiReason String? @db.Text
+
+  items RecommendationItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model RecommendationItem {
+  id String @id @default(cuid())
+
+  recommendationId String
+  recommendation   Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  position Int
+  type     RecommendationItemType
+
+  reason String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([recommendationId, movieId])
+  @@unique([recommendationId, position])
   @@index([movieId])
 }

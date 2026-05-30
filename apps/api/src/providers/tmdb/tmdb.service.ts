@@ -29,4 +29,36 @@ export class TmdbService {
     );
     return data;
   }
+
+  async getTrendingMovies(params: { language: string }) {
+    const response = await this.httpService.axiosRef.get(
+      'https://api.themoviedb.org/3/trending/movie/day',
+      {
+        params: {
+          language: params.language,
+        },
+        headers: {
+          Authorization: `Bearer ${this.BEARER_TOKEN}`,
+        },
+      },
+    );
+
+    return response.data as {
+      results: Array<{
+        id: number;
+        title: string;
+        overview: string;
+        poster_path: string | null;
+        backdrop_path: string | null;
+        release_date: string | null;
+        vote_average: number;
+        vote_count: number;
+        popularity: number;
+        original_title: string;
+        original_language: string;
+        genre_ids: number[];
+        adult: boolean;
+      }>;
+    };
+  }
 }
