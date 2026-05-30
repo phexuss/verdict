@@ -5,9 +5,7 @@
  * OpenAPI documentation for the Verdict backend.
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -17,143 +15,186 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
 } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import type { ErrorType } from '../../fetcher';
 
-import type {
-  TrendingMoviesResponse
-} from '../models';
-
+import { customFetch } from '../../fetcher';
+import type { TrendingMoviesResponse } from '../models';
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export type getTrendingMoviesResponse200 = {
-  data: TrendingMoviesResponse
-  status: 200
-}
+  data: TrendingMoviesResponse;
+  status: 200;
+};
 
-export type getTrendingMoviesResponseSuccess = (getTrendingMoviesResponse200) & {
+export type getTrendingMoviesResponseSuccess = getTrendingMoviesResponse200 & {
   headers: Headers;
 };
-;
 
 export const getGetTrendingMoviesUrl = () => {
-
-
-
-
-  return `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`
-}
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`;
+};
 
 /**
  * Returns popular movies from TMDB using the configured TMDB bearer token.
  * @summary Get trending movies
  */
-export const getTrendingMovies = async ( options?: RequestInit): Promise<getTrendingMoviesResponseSuccess> => {
-
-  const res = await fetch(getGetTrendingMoviesUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  if (!res.ok) {
-
-    const err: globalThis.Error & {info?: any, status?: number} = new globalThis.Error();
-    const data  = body ? JSON.parse(body) : {}
-    err.info = data;
-    err.status = res.status;
-    throw err;
-  }
-  const data: getTrendingMoviesResponseSuccess['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getTrendingMoviesResponseSuccess
-}
-
-
-
-
+export const getTrendingMovies = async (
+  options?: RequestInit,
+): Promise<getTrendingMoviesResponseSuccess> => {
+  return customFetch<getTrendingMoviesResponseSuccess>(
+    getGetTrendingMoviesUrl(),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
 
 export const getGetTrendingMoviesQueryKey = () => {
-    return [
-    `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`
-    ] as const;
-    }
+  return [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`,
+  ] as const;
+};
 
+export const getGetTrendingMoviesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTrendingMovies>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getTrendingMovies>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetTrendingMoviesQueryOptions = <TData = Awaited<ReturnType<typeof getTrendingMovies>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData>>, fetch?: RequestInit}
-) => {
+  const queryKey = queryOptions?.queryKey ?? getGetTrendingMoviesQueryKey();
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTrendingMovies>>
+  > = ({ signal }) => getTrendingMovies({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTrendingMoviesQueryKey();
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTrendingMovies>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTrendingMoviesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTrendingMovies>>
+>;
+export type GetTrendingMoviesQueryError = ErrorType<unknown>;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTrendingMovies>>> = ({ signal }) => getTrendingMovies({ signal, ...fetchOptions });
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTrendingMoviesQueryResult = NonNullable<Awaited<ReturnType<typeof getTrendingMovies>>>
-export type GetTrendingMoviesQueryError = unknown
-
-
-export function useGetTrendingMovies<TData = Awaited<ReturnType<typeof getTrendingMovies>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData>> & Pick<
+export function useGetTrendingMovies<
+  TData = Awaited<ReturnType<typeof getTrendingMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTrendingMovies>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTrendingMovies>>,
           TError,
           Awaited<ReturnType<typeof getTrendingMovies>>
-        > , 'initialData'
-      >, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTrendingMovies<TData = Awaited<ReturnType<typeof getTrendingMovies>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTrendingMovies<
+  TData = Awaited<ReturnType<typeof getTrendingMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTrendingMovies>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTrendingMovies>>,
           TError,
           Awaited<ReturnType<typeof getTrendingMovies>>
-        > , 'initialData'
-      >, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTrendingMovies<TData = Awaited<ReturnType<typeof getTrendingMovies>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData>>, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTrendingMovies<
+  TData = Awaited<ReturnType<typeof getTrendingMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTrendingMovies>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get trending movies
  */
 
-export function useGetTrendingMovies<TData = Awaited<ReturnType<typeof getTrendingMovies>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTrendingMovies>>, TError, TData>>, fetch?: RequestInit}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTrendingMovies<
+  TData = Awaited<ReturnType<typeof getTrendingMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTrendingMovies>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetTrendingMoviesQueryOptions(options);
 
-  const queryOptions = getGetTrendingMoviesQueryOptions(options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
-
-
-
-
-
-

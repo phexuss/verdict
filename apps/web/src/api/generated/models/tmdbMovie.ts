@@ -5,13 +5,11 @@
  * OpenAPI documentation for the Verdict backend.
  * OpenAPI spec version: 1.0.0
  */
-import type { TmdbMovieBackdropPath } from './tmdbMovieBackdropPath';
-import type { TmdbMoviePosterPath } from './tmdbMoviePosterPath';
 
 export interface TmdbMovie {
   adult: boolean;
   /** @nullable */
-  backdrop_path: TmdbMovieBackdropPath;
+  backdrop_path: string | null;
   genre_ids: number[];
   id: number;
   original_language: string;
@@ -19,7 +17,7 @@ export interface TmdbMovie {
   overview: string;
   popularity: number;
   /** @nullable */
-  poster_path: TmdbMoviePosterPath;
+  poster_path: string | null;
   release_date: string;
   title: string;
   video: boolean;

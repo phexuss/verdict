@@ -33,6 +33,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addTag('health', 'Service health checks')
     .addTag('tmdb', 'TMDB provider endpoints')
+    .addTag('recommendations', 'Movie recommendation endpoints')
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 

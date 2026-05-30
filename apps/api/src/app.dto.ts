@@ -5,9 +5,13 @@ export class HealthResponseDto implements HealthResponse {
   @ApiProperty({ example: 'ok' })
   status: 'ok';
 
-  @ApiProperty({ example: API_VERSION })
+  @ApiProperty({ example: API_VERSION, type: String })
   version: typeof API_VERSION;
 
-  @ApiProperty({ example: '2026-05-24T12:00:00.000Z' })
+  @ApiProperty({
+    example: '2026-05-24T12:00:00.000Z',
+    format: 'date-time',
+    type: String,
+  })
   timestamp: string;
 }

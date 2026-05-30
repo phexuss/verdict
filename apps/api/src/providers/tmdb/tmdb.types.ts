@@ -7,6 +7,7 @@ export class TmdbMovie {
   @ApiProperty({
     example: '/wMrV8SLne1jHLeYS0lLrA1Tf86P.jpg',
     nullable: true,
+    type: String,
   })
   backdrop_path: string | null;
 
@@ -28,7 +29,11 @@ export class TmdbMovie {
   @ApiProperty({ example: 128.42 })
   popularity: number;
 
-  @ApiProperty({ example: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg', nullable: true })
+  @ApiProperty({
+    example: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
+    nullable: true,
+    type: String,
+  })
   poster_path: string | null;
 
   @ApiProperty({ example: '1999-10-15' })

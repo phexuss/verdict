@@ -5,12 +5,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  AllowAnonymous,
-  OptionalAuth,
-  type UserSession,
-} from '@thallesp/nestjs-better-auth';
+import { AllowAnonymous, OptionalAuth } from '@thallesp/nestjs-better-auth';
 import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
+import {
+  CreateRecommendationResponseDto,
+  RecommendationResponseDto,
+} from './dto/recommendation-response.dto.js';
 import { RecommendationsService } from './recommendations.service.js';
 
 @ApiTags('recommendations')
@@ -24,15 +24,11 @@ export class RecommendationsController {
   @OptionalAuth()
   @ApiOperation({ operationId: 'createRecommendation' })
   @ApiOkResponse({
-    schema: {
-      type: 'object',
-      properties: {
-        slug: { type: 'string', example: 'a8K2pQx19z' },
-      },
-      required: ['slug'],
-    },
+    type: CreateRecommendationResponseDto,
   })
-  create(@Body() dto: CreateRecommendationDto) {
+  create(
+    @Body() dto: CreateRecommendationDto,
+  ): Promise<CreateRecommendationResponseDto> {
     return this.recommendationsService.create(dto);
   }
 
@@ -40,7 +36,10 @@ export class RecommendationsController {
   @AllowAnonymous()
   @ApiOperation({ operationId: 'getRecommendationBySlug' })
   @ApiParam({ name: 'slug', example: 'a8K2pQx19z' })
-  findBySlug(@Param('slug') slug: string) {
+  @ApiOkResponse({
+    type: RecommendationResponseDto,
+  })
+  findBySlug(@Param('slug') slug: string): Promise<RecommendationResponseDto> {
     return this.recommendationsService.findBySlug(slug);
   }
 }

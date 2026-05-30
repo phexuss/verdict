@@ -5,10 +5,9 @@
  * OpenAPI documentation for the Verdict backend.
  * OpenAPI spec version: 1.0.0
  */
-import type { HealthResponseDtoVersion } from './healthResponseDtoVersion';
 
 export interface HealthResponseDto {
   status: string;
-  version: HealthResponseDtoVersion;
+  version: string;
   timestamp: string;
 }

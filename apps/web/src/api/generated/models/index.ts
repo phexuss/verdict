@@ -6,9 +6,18 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './createRecommendationDto';
+export * from './createRecommendationDtoDuration';
+export * from './createRecommendationDtoGroup';
+export * from './createRecommendationDtoLocale';
+export * from './createRecommendationResponseDto';
 export * from './healthResponseDto';
-export * from './healthResponseDtoVersion';
+export * from './recommendationGenreDto';
+export * from './recommendationItemDto';
+export * from './recommendationItemDtoType';
+export * from './recommendationMovieDto';
+export * from './recommendationResponseDto';
+export * from './recommendationResponseDtoLocale';
+export * from './recommendationResponseDtoStatus';
 export * from './tmdbMovie';
-export * from './tmdbMovieBackdropPath';
-export * from './tmdbMoviePosterPath';
 export * from './trendingMoviesResponse';

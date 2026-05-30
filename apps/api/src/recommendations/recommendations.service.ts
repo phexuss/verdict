@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { nanoid } from 'nanoid';
 import { GroqService } from '../ai/groq/groq.service.js';
+import type { Prisma } from '../generated/prisma/client.js';
 import {
   Locale,
   RecommendationItemType,
@@ -13,6 +14,39 @@ import {
 import { PrismaService } from '../prisma/prisma.service.js';
 import { TmdbService } from '../providers/tmdb/tmdb.service.js';
 import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
+import type {
+  CreateRecommendationResponseDto,
+  RecommendationGenreDto,
+  RecommendationResponseDto,
+} from './dto/recommendation-response.dto.js';
+
+const recommendationInclude = {
+  items: {
+    orderBy: {
+      position: 'asc',
+    },
+    include: {
+      movie: {
+        include: {
+          translations: true,
+          genres: {
+            include: {
+              genre: {
+                include: {
+                  translations: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} satisfies Prisma.RecommendationInclude;
+
+type RecommendationWithItems = Prisma.RecommendationGetPayload<{
+  include: typeof recommendationInclude;
+}>;
 
 @Injectable()
 export class RecommendationsService {
@@ -22,7 +56,10 @@ export class RecommendationsService {
     private readonly groqService: GroqService,
   ) {}
 
-  async create(dto: CreateRecommendationDto, userId?: string) {
+  async create(
+    dto: CreateRecommendationDto,
+    userId?: string,
+  ): Promise<CreateRecommendationResponseDto> {
     const slug = nanoid(10);
     const locale = dto.locale === 'ru' ? Locale.RU : Locale.EN;
 
@@ -130,41 +167,94 @@ export class RecommendationsService {
     }
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(slug: string): Promise<RecommendationResponseDto> {
     const recommendation = await this.prisma.recommendation.findUnique({
       where: {
         slug,
       },
-      include: {
-        items: {
-          orderBy: {
-            position: 'asc',
-          },
-          include: {
-            movie: {
-              include: {
-                translations: true,
-                genres: {
-                  include: {
-                    genre: {
-                      include: {
-                        translations: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      include: recommendationInclude,
     });
 
     if (!recommendation) {
       throw new NotFoundException('Recommendation not found');
     }
 
-    return recommendation;
+    return this.toRecommendationResponse(recommendation);
+  }
+
+  private toRecommendationResponse(
+    recommendation: RecommendationWithItems,
+  ): RecommendationResponseDto {
+    return {
+      id: recommendation.id,
+      slug: recommendation.slug,
+      locale: recommendation.locale,
+      status: recommendation.status,
+      moods: recommendation.moods,
+      groupType: recommendation.groupType,
+      duration: recommendation.duration,
+      title: recommendation.title,
+      description: recommendation.description,
+      aiReason: recommendation.aiReason,
+      createdAt: recommendation.createdAt.toISOString(),
+      updatedAt: recommendation.updatedAt.toISOString(),
+      items: recommendation.items.map((item) => {
+        const movie = item.movie;
+        const translation =
+          movie.translations.find(
+            (candidate) => candidate.locale === recommendation.locale,
+          ) ?? movie.translations[0];
+
+        return {
+          id: item.id,
+          position: item.position,
+          type: item.type,
+          reason: item.reason,
+          movie: {
+            id: movie.id,
+            tmdbId: movie.tmdbId,
+            originalTitle: movie.originalTitle,
+            originalLanguage: movie.originalLanguage,
+            posterPath: movie.posterPath,
+            backdropPath: movie.backdropPath,
+            releaseDate: movie.releaseDate
+              ? movie.releaseDate.toISOString().slice(0, 10)
+              : null,
+            runtime: movie.runtime,
+            popularity: movie.popularity,
+            voteAverage: movie.voteAverage,
+            voteCount: movie.voteCount,
+            adult: movie.adult,
+            title: translation?.title ?? movie.originalTitle,
+            overview: translation?.overview ?? null,
+            genres: this.mapRecommendationGenres(
+              movie.genres,
+              recommendation.locale,
+            ),
+          },
+        };
+      }),
+    };
+  }
+
+  private mapRecommendationGenres(
+    movieGenres: RecommendationWithItems['items'][number]['movie']['genres'],
+    locale: Locale,
+  ): RecommendationGenreDto[] {
+    return movieGenres
+      .map((movieGenre) => {
+        const translation =
+          movieGenre.genre.translations.find(
+            (candidate) => candidate.locale === locale,
+          ) ?? movieGenre.genre.translations[0];
+
+        return {
+          id: movieGenre.genre.id,
+          tmdbId: movieGenre.genre.tmdbId,
+          name: translation?.name ?? '',
+        };
+      })
+      .filter((genre) => genre.name.length > 0);
   }
 
   private async getCandidates(locale: 'en' | 'ru') {
@@ -261,19 +351,6 @@ export class RecommendationsService {
     });
 
     return movie;
-  }
-
-  private async getMovieIdByTmdbId(tmdbId: number) {
-    const movie = await this.prisma.movie.findUnique({
-      where: {
-        tmdbId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    return movie?.id ?? '__new_movie_placeholder__';
   }
 
   private mapPickType(type: 'safe' | 'risk' | 'wildcard') {

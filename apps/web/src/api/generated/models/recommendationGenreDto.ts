@@ -6,7 +6,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * @nullable
- */
-export type TmdbMoviePosterPath = { [key: string]: unknown } | null;
+export interface RecommendationGenreDto {
+  id: string;
+  tmdbId: number;
+  name: string;
+}

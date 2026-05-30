@@ -12,13 +12,16 @@ export default defineConfig({
       client: 'react-query',
       httpClient: 'fetch',
       clean: true,
+      formatter: 'biome',
       baseUrl: {
         runtime: 'process.env.NEXT_PUBLIC_API_URL',
       },
       override: {
+        mutator: {
+          path: './src/api/fetcher.ts',
+          name: 'customFetch',
+        },
         query: {
-          useQuery: true,
-          useMutation: true,
           useSuspenseQuery: false,
           shouldExportQueryKey: true,
         },

@@ -12,5 +12,6 @@ import { TmdbService } from './tmdb.service.js';
   ],
   controllers: [TmdbController],
   providers: [TmdbService],
+  exports: [TmdbService],
 })
 export class TmdbModule {}
