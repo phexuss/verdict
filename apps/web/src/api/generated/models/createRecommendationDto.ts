@@ -14,5 +14,11 @@ export interface CreateRecommendationDto {
   moods: string[];
   group: CreateRecommendationDtoGroup;
   duration: CreateRecommendationDtoDuration;
+  /**
+   * Maximum runtime per movie in minutes.
+   * @minimum 60
+   * @maximum 240
+   */
+  maxRuntimeMinutes: number;
   locale: CreateRecommendationDtoLocale;
 }

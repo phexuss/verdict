@@ -12,7 +12,17 @@ const groupKeys = [
   { value: 'group', icon: UsersGroupTwoRoundedLinear },
 ] as const;
 
-export default function GroupButtons() {
+export type GroupKey = (typeof groupKeys)[number]['value'];
+
+type GroupButtonsProps = {
+  value: GroupKey;
+  onValueChange: (value: GroupKey) => void;
+};
+
+export default function GroupButtons({
+  value,
+  onValueChange,
+}: GroupButtonsProps) {
   const t = useTranslations('TonightPage.genreMenu');
 
   return (
@@ -23,7 +33,12 @@ export default function GroupButtons() {
       <ToggleGroup
         variant="outline"
         type="single"
-        defaultValue="solo"
+        value={value}
+        onValueChange={(nextValue) => {
+          if (nextValue) {
+            onValueChange(nextValue as GroupKey);
+          }
+        }}
         className="grid w-full grid-cols-3 gap-3"
       >
         {groupKeys.map(({ value, icon: Icon }) => {

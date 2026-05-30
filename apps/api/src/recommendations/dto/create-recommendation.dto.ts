@@ -4,7 +4,10 @@ import {
   ArrayMinSize,
   IsArray,
   IsIn,
+  IsInt,
   IsString,
+  Max,
+  Min,
 } from 'class-validator';
 
 export class CreateRecommendationDto {
@@ -31,6 +34,17 @@ export class CreateRecommendationDto {
   })
   @IsIn(['short', 'medium', 'long'])
   duration!: 'short' | 'medium' | 'long';
+
+  @ApiProperty({
+    example: 135,
+    minimum: 60,
+    maximum: 240,
+    description: 'Maximum runtime per movie in minutes.',
+  })
+  @IsInt()
+  @Min(60)
+  @Max(240)
+  maxRuntimeMinutes!: number;
 
   @ApiProperty({
     example: 'en',

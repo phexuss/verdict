@@ -2,20 +2,26 @@
 
 import { Slider } from '@repo/ui/components/slider';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 
 const MIN_HOURS = 1;
 const MAX_HOURS = 4;
 const MIN_MINUTES = MIN_HOURS * 60;
 const MAX_MINUTES = MAX_HOURS * 60;
 const STEP_MINUTES = 15;
-const DEFAULT_MINUTES = 135;
+export const DEFAULT_MAX_RUNTIME_MINUTES = 135;
 
 const timeMarks = [1, 2, 3, MAX_HOURS] as const;
 
-export default function TimeSlider() {
+type TimeSliderProps = {
+  minutes: number;
+  onMinutesChange: (minutes: number) => void;
+};
+
+export default function TimeSlider({
+  minutes,
+  onMinutesChange,
+}: TimeSliderProps) {
   const t = useTranslations('TonightPage.genreMenu');
-  const [minutes, setMinutes] = useState(DEFAULT_MINUTES);
 
   function formatDuration(minutes: number) {
     const hours = Math.floor(minutes / 60);
@@ -29,7 +35,7 @@ export default function TimeSlider() {
   }
 
   function handleValueChange(nextValue: number[]) {
-    setMinutes(nextValue[0] ?? DEFAULT_MINUTES);
+    onMinutesChange(nextValue[0] ?? DEFAULT_MAX_RUNTIME_MINUTES);
   }
 
   function formatTimeMark(hours: number) {

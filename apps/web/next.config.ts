@@ -10,6 +10,14 @@ const monorepoRoot = path.resolve(
 );
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+      },
+    ],
+  },
   transpilePackages: ['@repo/shared', '@repo/ui'],
   turbopack: {
     root: monorepoRoot,

@@ -80,7 +80,10 @@ export class RecommendationsService {
     });
 
     try {
-      const candidates = await this.getCandidates(dto.locale);
+      const candidates = await this.getCandidates(
+        dto.locale,
+        dto.maxRuntimeMinutes,
+      );
 
       if (candidates.length < 8) {
         throw new Error('Not enough candidate movies for recommendation');
@@ -91,12 +94,14 @@ export class RecommendationsService {
         moods: dto.moods,
         group: dto.group,
         duration: dto.duration,
+        maxRuntimeMinutes: dto.maxRuntimeMinutes,
         candidates: candidates.map((movie) => ({
           tmdbId: movie.tmdbId,
           title: movie.title,
           overview: movie.overview,
           genres: movie.genres,
           releaseDate: movie.releaseDate,
+          runtime: movie.runtime,
           voteAverage: movie.voteAverage,
           popularity: movie.popularity,
         })),
@@ -114,8 +119,16 @@ export class RecommendationsService {
             );
           }
 
+          const movieDetails = await this.tmdbService.getMovieDetails({
+            tmdbId: candidate.tmdbId,
+            language: this.getTmdbLanguage(dto.locale),
+          });
+
           const movie = await this.upsertMovieFromCandidate(
-            candidate,
+            {
+              ...candidate,
+              runtime: movieDetails.runtime ?? null,
+            },
             dto.locale,
           );
 
@@ -257,11 +270,10 @@ export class RecommendationsService {
       .filter((genre) => genre.name.length > 0);
   }
 
-  private async getCandidates(locale: 'en' | 'ru') {
-    const tmdbLanguage = locale === 'ru' ? 'ru-RU' : 'en-US';
-
+  private async getCandidates(locale: 'en' | 'ru', maxRuntimeMinutes: number) {
     const response = await this.tmdbService.getTrendingMovies({
-      language: tmdbLanguage,
+      language: this.getTmdbLanguage(locale),
+      maxRuntimeMinutes,
     });
 
     return response.results.slice(0, 20).map((movie) => ({
@@ -274,6 +286,7 @@ export class RecommendationsService {
       voteAverage: movie.vote_average,
       voteCount: movie.vote_count,
       popularity: movie.popularity,
+      runtime: null,
       originalTitle: movie.original_title,
       originalLanguage: movie.original_language,
       genreIds: movie.genre_ids ?? [],
@@ -293,6 +306,7 @@ export class RecommendationsService {
       voteAverage?: number | null;
       voteCount?: number | null;
       popularity?: number | null;
+      runtime?: number | null;
       originalTitle?: string | null;
       originalLanguage?: string | null;
       adult?: boolean;
@@ -317,6 +331,7 @@ export class RecommendationsService {
         voteAverage: candidate.voteAverage,
         voteCount: candidate.voteCount,
         popularity: candidate.popularity,
+        runtime: candidate.runtime,
         adult: candidate.adult ?? false,
       },
       update: {
@@ -327,6 +342,7 @@ export class RecommendationsService {
         voteAverage: candidate.voteAverage,
         voteCount: candidate.voteCount,
         popularity: candidate.popularity,
+        runtime: candidate.runtime,
         adult: candidate.adult ?? false,
       },
     });
@@ -351,6 +367,10 @@ export class RecommendationsService {
     });
 
     return movie;
+  }
+
+  private getTmdbLanguage(locale: 'en' | 'ru') {
+    return locale === 'ru' ? 'ru-RU' : 'en-US';
   }
 
   private mapPickType(type: 'safe' | 'risk' | 'wildcard') {

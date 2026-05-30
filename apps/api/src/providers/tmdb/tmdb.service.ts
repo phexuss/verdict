@@ -8,7 +8,7 @@ import { TrendingMoviesResponse } from './tmdb.types.js';
 export class TmdbService {
   private readonly BASE_URL = 'https://api.themoviedb.org/3/';
   private readonly BEARER_TOKEN: string;
-  private readonly LANGUAGE = 'en-EN'; // No DB yet, so hardcoding this for now
+  private readonly LANGUAGE = 'en-US';
   constructor(
     private readonly httpService: HttpService,
     configService: ConfigService,
@@ -17,48 +17,54 @@ export class TmdbService {
   }
 
   async fetchTrendingMovies() {
+    return this.getTrendingMovies({
+      language: this.LANGUAGE,
+    });
+  }
+
+  async getTrendingMovies(params: {
+    language: string;
+    maxRuntimeMinutes?: number;
+  }): Promise<TrendingMoviesResponse> {
     const { data } = await firstValueFrom(
       this.httpService.get<TrendingMoviesResponse>(
-        `${this.BASE_URL}discover/movie?include_adult=false&include_video=false&language=${this.LANGUAGE}&page=1&sort_by=popularity.desc`,
+        `${this.BASE_URL}discover/movie`,
         {
+          params: {
+            include_adult: false,
+            include_video: false,
+            language: params.language,
+            page: 1,
+            sort_by: 'popularity.desc',
+            ...(params.maxRuntimeMinutes
+              ? { 'with_runtime.lte': params.maxRuntimeMinutes }
+              : {}),
+          },
           headers: {
             Authorization: `Bearer ${this.BEARER_TOKEN}`,
           },
         },
       ),
     );
+
     return data;
   }
 
-  async getTrendingMovies(params: { language: string }) {
-    const response = await this.httpService.axiosRef.get(
-      'https://api.themoviedb.org/3/trending/movie/day',
-      {
-        params: {
-          language: params.language,
+  async getMovieDetails(params: { tmdbId: number; language: string }) {
+    const { data } = await firstValueFrom(
+      this.httpService.get<{ runtime?: number | null }>(
+        `${this.BASE_URL}movie/${params.tmdbId}`,
+        {
+          params: {
+            language: params.language,
+          },
+          headers: {
+            Authorization: `Bearer ${this.BEARER_TOKEN}`,
+          },
         },
-        headers: {
-          Authorization: `Bearer ${this.BEARER_TOKEN}`,
-        },
-      },
+      ),
     );
 
-    return response.data as {
-      results: Array<{
-        id: number;
-        title: string;
-        overview: string;
-        poster_path: string | null;
-        backdrop_path: string | null;
-        release_date: string | null;
-        vote_average: number;
-        vote_count: number;
-        popularity: number;
-        original_title: string;
-        original_language: string;
-        genre_ids: number[];
-        adult: boolean;
-      }>;
-    };
+    return data;
   }
 }

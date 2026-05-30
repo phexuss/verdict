@@ -12,6 +12,7 @@ type CandidateMovie = {
   overview?: string | null;
   genres?: string[];
   releaseDate?: string | null;
+  runtime?: number | null;
   voteAverage?: number | null;
   popularity?: number | null;
 };
@@ -21,6 +22,7 @@ type PickMovieTrioInput = {
   moods: string[];
   group: 'solo' | 'duo' | 'group';
   duration: 'short' | 'medium' | 'long';
+  maxRuntimeMinutes: number;
   candidates: CandidateMovie[];
 };
 
@@ -89,6 +91,7 @@ export class GroqService {
         overview: movie.overview,
         genres: movie.genres ?? [],
         releaseDate: movie.releaseDate,
+        runtime: movie.runtime,
         voteAverage: movie.voteAverage,
         popularity: movie.popularity,
       })),
@@ -121,6 +124,7 @@ export class GroqService {
             `Moods: ${input.moods.join(', ')}`,
             `Watching group: ${input.group}`,
             `Time commitment: ${input.duration}`,
+            `Maximum runtime per movie: ${input.maxRuntimeMinutes} minutes`,
             '',
             'Candidate movies:',
             candidatesJson,

@@ -38,6 +38,9 @@
       "secondLabel": "Who is watching?",
       "thirdLabel": "Time Commitment",
       "fourthLabel": "Your personalized trio will include",
+      "findButton": "Find picks",
+      "findButtonLoading": "Finding picks...",
+      "findError": "Could not create a recommendation. Try again.",
 
       "picks": {
         "safe": {

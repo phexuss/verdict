@@ -2,7 +2,6 @@
 
 import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 
 const genreKeys = [
   'dark',
@@ -16,15 +15,22 @@ const genreKeys = [
   'funny',
 ] as const;
 
-type GenreKey = (typeof genreKeys)[number];
+export type MoodKey = (typeof genreKeys)[number];
 
-export default function ToggleButtons() {
+type MoodButtonsProps = {
+  selected: MoodKey[];
+  onSelectedChange: (selected: MoodKey[]) => void;
+};
+
+export default function MoodButtons({
+  selected,
+  onSelectedChange,
+}: MoodButtonsProps) {
   const t = useTranslations('TonightPage');
-  const [selected, setSelected] = useState<GenreKey[]>([]);
 
   function handleChange(next: string[]) {
     if (next.length > 3) return;
-    setSelected(next as GenreKey[]);
+    onSelectedChange(next as MoodKey[]);
   }
 
   return (
