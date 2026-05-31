@@ -79,5 +79,40 @@
       "emotional": "Emotional",
       "funny": "Funny"
     }
+  },
+  "ProfilePage": {
+    "title": "Taste Profile",
+    "label": "Your Cinematic Identity",
+    "description": "Analyzed from {count} watched titles",
+    "Sections": {
+      "Atmosphere": {
+        "title": "Atmosphere & Mood",
+        "highaff": "HIGH AFFINITY",
+        "lowaff": "LOW AFFINITY"
+      },
+      "Timing": {
+        "title": "Preferred Pacing",
+        "breakpoints": {
+          "slow": "Slow Burn",
+          "medium": "Measured",
+          "high": "Frantic"
+        }
+      },
+      "Emotional": {
+        "title": "Emotional Weight",
+        "moods": {
+          "1": "Melancholic",
+          "2": "Uplifting"
+        }
+      },
+      "Runtime": {
+        "time": "AVG. RUNTIME",
+        "skip": "USUALLY SKIP"
+      },
+      "BestPicks": {
+        "title": "Best Picks for Tonight",
+        "description": "Curated to perfectly match your current cinematic identity."
+      }
+    }
   }
 }
