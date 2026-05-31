@@ -88,21 +88,18 @@ export class GroqService {
       input.candidates.map((movie) => ({
         tmdbId: movie.tmdbId,
         title: movie.title,
-        overview: movie.overview,
+        overview: truncateText(movie.overview, 320),
         genres: movie.genres ?? [],
         releaseDate: movie.releaseDate,
         runtime: movie.runtime,
         voteAverage: movie.voteAverage,
-        popularity: movie.popularity,
       })),
-      null,
-      2,
     );
 
     const response = await this.groq.chat.completions.create({
       model: this.model,
       temperature: 0.4,
-      max_completion_tokens: 5000,
+      max_completion_tokens: 1200,
       messages: [
         {
           role: 'system',
@@ -171,4 +168,12 @@ export class GroqService {
     }
     return validated;
   }
+}
+
+function truncateText(value: string | null | undefined, maxLength: number) {
+  if (!value || value.length <= maxLength) {
+    return value;
+  }
+
+  return `${value.slice(0, maxLength).trimEnd()}...`;
 }

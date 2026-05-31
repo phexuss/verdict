@@ -10,16 +10,33 @@ import {
   Min,
 } from 'class-validator';
 
+export const recommendationMoods = [
+  'dark',
+  'tense',
+  'weird',
+  'atmospheric',
+  'comfort',
+  'smart',
+  'fast',
+  'emotional',
+  'funny',
+] as const;
+
+export type RecommendationMood = (typeof recommendationMoods)[number];
+
 export class CreateRecommendationDto {
   @ApiProperty({
     example: ['dark', 'tense', 'weird'],
+    enum: recommendationMoods,
+    isArray: true,
     maxItems: 3,
   })
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(3)
   @IsString({ each: true })
-  moods!: string[];
+  @IsIn(recommendationMoods, { each: true })
+  moods!: RecommendationMood[];
 
   @ApiProperty({
     example: 'solo',

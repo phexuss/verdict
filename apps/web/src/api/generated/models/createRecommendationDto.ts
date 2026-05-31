@@ -8,10 +8,11 @@
 import type { CreateRecommendationDtoDuration } from './createRecommendationDtoDuration';
 import type { CreateRecommendationDtoGroup } from './createRecommendationDtoGroup';
 import type { CreateRecommendationDtoLocale } from './createRecommendationDtoLocale';
+import type { CreateRecommendationDtoMoodsItem } from './createRecommendationDtoMoodsItem';
 
 export interface CreateRecommendationDto {
   /** @maxItems 3 */
-  moods: string[];
+  moods: CreateRecommendationDtoMoodsItem[];
   group: CreateRecommendationDtoGroup;
   duration: CreateRecommendationDtoDuration;
   /**

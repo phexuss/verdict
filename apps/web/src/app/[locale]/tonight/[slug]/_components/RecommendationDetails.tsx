@@ -102,7 +102,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
               className="overflow-hidden rounded-lg border border-border bg-card"
               key={item.id}
             >
-              <div className="relative aspect-[2/3] bg-muted">
+              <div className="relative aspect-2/3 bg-muted">
                 {posterUrl ? (
                   <Image
                     alt={title}

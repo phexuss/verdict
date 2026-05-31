@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
@@ -49,35 +48,38 @@ export function GenreMenu() {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md md:max-w-3xl lg:max-w-none">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg">{t('label')}</CardTitle>
         <CardDescription className="uppercase text-xs">
           {t('selectLabel')}
         </CardDescription>
       </CardHeader>
-      <CardContent className="">
-        <MoodButtons selected={moods} onSelectedChange={setMoods} />
-        <Separator orientation="horizontal" />
-        <GroupButtons value={group} onValueChange={setGroup} />
-        <Separator orientation="horizontal" />
-        <TimeSlider
-          minutes={maxRuntimeMinutes}
-          onMinutesChange={setMaxRuntimeMinutes}
-        />
-      </CardContent>
 
-      <CardFooter className="flex-col gap-2">
-        <PickCards />
-        <FindPicksButton
-          disabled={moods.length === 0}
-          isPending={createRecommendation.isPending}
-          onClick={handleFindPicks}
-        />
-        {createRecommendation.error ? (
-          <p className="text-destructive text-sm">{t('findError')}</p>
-        ) : null}
-      </CardFooter>
+      <CardContent className="grid gap-6 md:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,24rem)] lg:items-start">
+        <div>
+          <MoodButtons selected={moods} onSelectedChange={setMoods} />
+          <Separator orientation="horizontal" />
+          <GroupButtons value={group} onValueChange={setGroup} />
+          <Separator orientation="horizontal" />
+          <TimeSlider
+            minutes={maxRuntimeMinutes}
+            onMinutesChange={setMaxRuntimeMinutes}
+          />
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <PickCards />
+          <FindPicksButton
+            disabled={moods.length === 0}
+            isPending={createRecommendation.isPending}
+            onClick={handleFindPicks}
+          />
+          {createRecommendation.error ? (
+            <p className="text-destructive text-sm">{t('findError')}</p>
+          ) : null}
+        </div>
+      </CardContent>
     </Card>
   );
 }

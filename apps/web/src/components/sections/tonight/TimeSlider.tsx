@@ -53,7 +53,7 @@ export default function TimeSlider({
       <div className="flex items-start justify-between gap-4">
         <h2 className="font-medium text-lg leading-tight">{t('thirdLabel')}</h2>
         <p
-          className="shrink-0 pt-1  text-primary text-sm leading-none"
+          className="shrink-0 pt-1 text-primary text-sm leading-none"
           aria-live="polite"
         >
           {selectedDuration} {t('time.maxSuffix')}

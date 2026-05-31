@@ -21,7 +21,10 @@ import { useQuery } from '@tanstack/react-query';
 import type { ErrorType } from '../../fetcher';
 
 import { customFetch } from '../../fetcher';
-import type { TrendingMoviesResponse } from '../models';
+import type {
+  GetTrendingMoviesParams,
+  TrendingMoviesResponse,
+} from '../models';
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -38,8 +41,20 @@ export type getTrendingMoviesResponseSuccess = getTrendingMoviesResponse200 & {
   headers: Headers;
 };
 
-export const getGetTrendingMoviesUrl = () => {
-  return `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`;
+export const getGetTrendingMoviesUrl = (params?: GetTrendingMoviesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies?${stringifiedParams}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`;
 };
 
 /**
@@ -47,10 +62,11 @@ export const getGetTrendingMoviesUrl = () => {
  * @summary Get trending movies
  */
 export const getTrendingMovies = async (
+  params?: GetTrendingMoviesParams,
   options?: RequestInit,
 ): Promise<getTrendingMoviesResponseSuccess> => {
   return customFetch<getTrendingMoviesResponseSuccess>(
-    getGetTrendingMoviesUrl(),
+    getGetTrendingMoviesUrl(params),
     {
       ...options,
       method: 'GET',
@@ -58,32 +74,39 @@ export const getTrendingMovies = async (
   );
 };
 
-export const getGetTrendingMoviesQueryKey = () => {
+export const getGetTrendingMoviesQueryKey = (
+  params?: GetTrendingMoviesParams,
+) => {
   return [
     `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/trending-movies`,
+    ...(params ? [params] : []),
   ] as const;
 };
 
 export const getGetTrendingMoviesQueryOptions = <
   TData = Awaited<ReturnType<typeof getTrendingMovies>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof getTrendingMovies>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params?: GetTrendingMoviesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTrendingMovies>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetTrendingMoviesQueryKey();
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTrendingMoviesQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getTrendingMovies>>
-  > = ({ signal }) => getTrendingMovies({ signal, ...requestOptions });
+  > = ({ signal }) => getTrendingMovies(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getTrendingMovies>>,
@@ -101,6 +124,7 @@ export function useGetTrendingMovies<
   TData = Awaited<ReturnType<typeof getTrendingMovies>>,
   TError = ErrorType<unknown>,
 >(
+  params: undefined | GetTrendingMoviesParams,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -127,6 +151,7 @@ export function useGetTrendingMovies<
   TData = Awaited<ReturnType<typeof getTrendingMovies>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetTrendingMoviesParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -153,6 +178,7 @@ export function useGetTrendingMovies<
   TData = Awaited<ReturnType<typeof getTrendingMovies>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetTrendingMoviesParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -175,6 +201,7 @@ export function useGetTrendingMovies<
   TData = Awaited<ReturnType<typeof getTrendingMovies>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetTrendingMoviesParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -189,7 +216,7 @@ export function useGetTrendingMovies<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getGetTrendingMoviesQueryOptions(options);
+  const queryOptions = getGetTrendingMoviesQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

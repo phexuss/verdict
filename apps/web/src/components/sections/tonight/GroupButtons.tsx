@@ -49,7 +49,7 @@ export default function GroupButtons({
               key={value}
               value={value}
               aria-label={label}
-              className="group/group-button flex h-18 min-w-0 flex-col gap-2 rounded-2xl border-border/80 bg-background/20 px-2 py-4 text-muted-foreground transition-all hover:border-border hover:bg-muted/40 hover:text-foreground data-[state=on]:border-primary/70 data-[state=on]:bg-primary/10 data-[state=on]:text-foreground sm:h-28"
+              className="group/group-button flex h-18 min-w-0 flex-col gap-2 rounded-2xl border-border/80 bg-background/20 px-2 py-4 text-muted-foreground transition-all hover:border-border hover:bg-muted/40 hover:text-foreground data-[state=on]:border-primary/70 data-[state=on]:bg-primary/10 data-[state=on]:text-foreground sm:h-24 lg:h-28"
             >
               <Icon
                 size={36}

@@ -13,7 +13,10 @@ import {
 } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { TmdbService } from '../providers/tmdb/tmdb.service.js';
-import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
+import {
+  CreateRecommendationDto,
+  type RecommendationMood,
+} from './dto/create-recommendation.dto.js';
 import type {
   CreateRecommendationResponseDto,
   RecommendationGenreDto,
@@ -48,6 +51,57 @@ type RecommendationWithItems = Prisma.RecommendationGetPayload<{
   include: typeof recommendationInclude;
 }>;
 
+const tmdbGenreNames: Record<number, string> = {
+  12: 'Adventure',
+  14: 'Fantasy',
+  16: 'Animation',
+  18: 'Drama',
+  27: 'Horror',
+  28: 'Action',
+  35: 'Comedy',
+  36: 'History',
+  37: 'Western',
+  53: 'Thriller',
+  80: 'Crime',
+  99: 'Documentary',
+  878: 'Science Fiction',
+  9648: 'Mystery',
+  10402: 'Music',
+  10749: 'Romance',
+  10751: 'Family',
+  10752: 'War',
+};
+
+const moodDiscoveryProfiles = {
+  dark: {
+    genreIds: [18, 27, 53, 80, 9648],
+  },
+  tense: {
+    genreIds: [27, 28, 53, 80, 9648],
+  },
+  weird: {
+    genreIds: [14, 27, 878, 9648],
+  },
+  atmospheric: {
+    genreIds: [14, 18, 53, 878, 9648],
+  },
+  comfort: {
+    genreIds: [16, 35, 10749, 10751],
+  },
+  smart: {
+    genreIds: [18, 99, 878, 9648],
+  },
+  fast: {
+    genreIds: [12, 28, 53],
+  },
+  emotional: {
+    genreIds: [16, 18, 10749],
+  },
+  funny: {
+    genreIds: [35],
+  },
+} as const satisfies Record<RecommendationMood, { genreIds: number[] }>;
+
 @Injectable()
 export class RecommendationsService {
   constructor(
@@ -80,10 +134,7 @@ export class RecommendationsService {
     });
 
     try {
-      const candidates = await this.getCandidates(
-        dto.locale,
-        dto.maxRuntimeMinutes,
-      );
+      const candidates = await this.getCandidates(dto);
 
       if (candidates.length < 8) {
         throw new Error('Not enough candidate movies for recommendation');
@@ -270,13 +321,45 @@ export class RecommendationsService {
       .filter((genre) => genre.name.length > 0);
   }
 
-  private async getCandidates(locale: 'en' | 'ru', maxRuntimeMinutes: number) {
-    const response = await this.tmdbService.getTrendingMovies({
-      language: this.getTmdbLanguage(locale),
-      maxRuntimeMinutes,
-    });
+  private async getCandidates(dto: CreateRecommendationDto) {
+    const language = this.getTmdbLanguage(dto.locale);
+    const genreIds = this.getDiscoveryGenreIds(dto.moods);
 
-    return response.results.slice(0, 20).map((movie) => ({
+    const discoveryRequests = [
+      { page: 1, sortBy: 'popularity.desc', minVoteCount: 80 },
+      { page: 2, sortBy: 'popularity.desc', minVoteCount: 80 },
+      { page: 1, sortBy: 'vote_average.desc', minVoteCount: 250 },
+    ];
+
+    const responses = await Promise.all(
+      discoveryRequests.map((request) =>
+        this.tmdbService.discoverMovies({
+          language,
+          genreIds,
+          maxRuntimeMinutes: dto.maxRuntimeMinutes,
+          minVoteCount: request.minVoteCount,
+          page: request.page,
+          sortBy: request.sortBy,
+        }),
+      ),
+    );
+
+    let movies = this.dedupeTmdbMovies(
+      responses.flatMap((response) => response.results),
+    );
+
+    if (movies.length < 8) {
+      const fallback = await this.tmdbService.discoverMovies({
+        language,
+        maxRuntimeMinutes: dto.maxRuntimeMinutes,
+        minVoteCount: 50,
+        sortBy: 'popularity.desc',
+      });
+
+      movies = this.dedupeTmdbMovies([...movies, ...fallback.results]);
+    }
+
+    return movies.slice(0, 30).map((movie) => ({
       tmdbId: movie.id,
       title: movie.title,
       overview: movie.overview,
@@ -290,7 +373,7 @@ export class RecommendationsService {
       originalTitle: movie.original_title,
       originalLanguage: movie.original_language,
       genreIds: movie.genre_ids ?? [],
-      genres: [],
+      genres: this.getGenreNames(movie.genre_ids ?? []),
       adult: movie.adult ?? false,
     }));
   }
@@ -371,6 +454,31 @@ export class RecommendationsService {
 
   private getTmdbLanguage(locale: 'en' | 'ru') {
     return locale === 'ru' ? 'ru-RU' : 'en-US';
+  }
+
+  private getDiscoveryGenreIds(moods: RecommendationMood[]) {
+    return [
+      ...new Set(moods.flatMap((mood) => moodDiscoveryProfiles[mood].genreIds)),
+    ];
+  }
+
+  private getGenreNames(genreIds: number[]) {
+    return genreIds
+      .map((genreId) => tmdbGenreNames[genreId])
+      .filter((genreName): genreName is string => Boolean(genreName));
+  }
+
+  private dedupeTmdbMovies<TMovie extends { id: number }>(movies: TMovie[]) {
+    const seenIds = new Set<number>();
+
+    return movies.filter((movie) => {
+      if (seenIds.has(movie.id)) {
+        return false;
+      }
+
+      seenIds.add(movie.id);
+      return true;
+    });
   }
 
   private mapPickType(type: 'safe' | 'risk' | 'wildcard') {
