@@ -9,6 +9,7 @@ import { auth } from './auth.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { TmdbModule } from './providers/tmdb/tmdb.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
+import { UserModule } from './user/user.module.js';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module.
     PrismaModule,
     AiModule,
     RecommendationsModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

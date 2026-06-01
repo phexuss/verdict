@@ -34,6 +34,7 @@ async function bootstrap() {
     .addTag('health', 'Service health checks')
     .addTag('tmdb', 'TMDB provider endpoints')
     .addTag('recommendations', 'Movie recommendation endpoints')
+    .addTag('user', 'Current user profile endpoints')
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 

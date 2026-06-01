@@ -5,6 +5,10 @@ import {
   type MovieTrio,
   movieTrioSchema,
 } from '../schemas/movie-trio.schema.js';
+import {
+  type TasteProfile,
+  tasteProfileSchema,
+} from '../schemas/taste-profile.schema.js';
 
 type CandidateMovie = {
   tmdbId: number;
@@ -24,6 +28,21 @@ type PickMovieTrioInput = {
   duration: 'short' | 'medium' | 'long';
   maxRuntimeMinutes: number;
   candidates: CandidateMovie[];
+};
+
+type TasteProfileMovie = {
+  title: string;
+  genres: string[];
+  status: 'WATCHED' | 'DISLIKED';
+  rating?: number | null;
+  runtime?: number | null;
+  moodTags?: string[];
+  themes?: string[];
+};
+
+type GenerateTasteProfileInput = {
+  locale: 'en' | 'ru';
+  movies: TasteProfileMovie[];
 };
 
 const movieTrioJsonSchema = {
@@ -68,6 +87,71 @@ const movieTrioJsonSchema = {
     },
   },
   required: ['title', 'description', 'curationReason', 'picks'],
+} as const;
+
+const tasteProfileJsonSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    highAffinity: { type: 'array', items: { type: 'string' }, maxItems: 6 },
+    lowAffinity: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    pacing: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        score: { type: 'integer', minimum: 0, maximum: 100 },
+        label: { type: 'string' },
+        description: { type: 'string' },
+      },
+      required: ['score', 'label', 'description'],
+    },
+    emotionalWeight: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        score: { type: 'integer', minimum: 0, maximum: 100 },
+        label: { type: 'string' },
+      },
+      required: ['score', 'label'],
+    },
+    identityCards: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 2,
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          title: { type: 'string' },
+          description: { type: 'string' },
+        },
+        required: ['title', 'description'],
+      },
+    },
+    frequentlySeen: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    runtimeRange: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        min: { type: 'integer' },
+        max: { type: 'integer' },
+      },
+      required: ['min', 'max'],
+    },
+    usuallySkip: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    summary: { type: 'string' },
+  },
+  required: [
+    'highAffinity',
+    'lowAffinity',
+    'pacing',
+    'emotionalWeight',
+    'identityCards',
+    'frequentlySeen',
+    'runtimeRange',
+    'usuallySkip',
+    'summary',
+  ],
 } as const;
 
 @Injectable()
@@ -167,6 +251,53 @@ export class GroqService {
       );
     }
     return validated;
+  }
+
+  async generateTasteProfile(
+    input: GenerateTasteProfileInput,
+  ): Promise<TasteProfile> {
+    const language = input.locale === 'ru' ? 'Russian' : 'English';
+    const moviesJson = JSON.stringify(input.movies.slice(0, 80));
+
+    const response = await this.groq.chat.completions.create({
+      model: this.model,
+      temperature: 0.3,
+      max_completion_tokens: 1000,
+      messages: [
+        {
+          role: 'system',
+          content: [
+            'You analyze movie preferences for a cinema app.',
+            'Infer a concise cinematic taste profile from user actions.',
+            'WATCHED movies are positive signals unless rated poorly.',
+            'DISLIKED movies are negative signals.',
+            'Pacing score: 0 means slow burn, 100 means fast-paced.',
+            'Emotional weight score: 0 means light, 100 means heavy.',
+            `Write all user-facing text in ${language}.`,
+          ].join('\n'),
+        },
+        {
+          role: 'user',
+          content: `User movie actions:\n${moviesJson}`,
+        },
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'user_taste_profile',
+          strict: true,
+          schema: tasteProfileJsonSchema,
+        },
+      },
+    });
+
+    const raw = response.choices[0]?.message?.content;
+
+    if (!raw) {
+      throw new Error('No response');
+    }
+
+    return tasteProfileSchema.parse(JSON.parse(raw));
   }
 }
 

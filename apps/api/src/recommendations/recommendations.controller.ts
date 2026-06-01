@@ -5,7 +5,13 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { AllowAnonymous, OptionalAuth } from '@thallesp/nestjs-better-auth';
+import {
+  AllowAnonymous,
+  OptionalAuth,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
+import { auth } from '../auth.js';
 import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
 import {
   CreateRecommendationResponseDto,
@@ -28,8 +34,9 @@ export class RecommendationsController {
   })
   create(
     @Body() dto: CreateRecommendationDto,
+    @Session() session?: UserSession<typeof auth>,
   ): Promise<CreateRecommendationResponseDto> {
-    return this.recommendationsService.create(dto);
+    return this.recommendationsService.create(dto, session?.user.id);
   }
 
   @Get(':slug')
