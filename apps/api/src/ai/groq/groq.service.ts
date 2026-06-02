@@ -33,7 +33,8 @@ type PickMovieTrioInput = {
 type TasteProfileMovie = {
   title: string;
   genres: string[];
-  status: 'WATCHED' | 'DISLIKED';
+  watched: boolean;
+  reaction?: 'LIKED' | 'DISLIKED' | null;
   rating?: number | null;
   runtime?: number | null;
   moodTags?: string[];
@@ -269,8 +270,9 @@ export class GroqService {
           content: [
             'You analyze movie preferences for a cinema app.',
             'Infer a concise cinematic taste profile from user actions.',
-            'WATCHED movies are positive signals unless rated poorly.',
-            'DISLIKED movies are negative signals.',
+            'Watched movies are preference signals.',
+            'LIKED movies and high ratings are strong positive signals.',
+            'DISLIKED movies and low ratings are strong negative signals.',
             'Pacing score: 0 means slow burn, 100 means fast-paced.',
             'Emotional weight score: 0 means light, 100 means heavy.',
             `Write all user-facing text in ${language}.`,

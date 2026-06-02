@@ -84,9 +84,8 @@ enum DailyListStatus {
   FAILED
 }
 
-enum UserMovieStatus {
-  SAVED
-  WATCHED
+enum UserMovieReaction {
+  LIKED
   DISLIKED
 }
 
@@ -242,13 +241,15 @@ model DailyListItem {
 model UserMovie {
   id String @id @default(cuid())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  userId  String
   movieId String
-  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
 
-  status UserMovieStatus
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  savedAt   DateTime?
+  watchedAt DateTime?
+  reaction  UserMovieReaction?
 
   rating Int?
   note   String? @db.Text
@@ -256,9 +257,7 @@ model UserMovie {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, movieId, status])
-  @@index([userId])
-  @@index([movieId])
+  @@unique([userId, movieId])
 }
 
 enum RecommendationItemType {

@@ -5,8 +5,9 @@ import {
 } from '@nestjs/common';
 import { GroqService } from '../ai/groq/groq.service.js';
 import type { Prisma } from '../generated/prisma/client.js';
-import { Locale, UserMovieStatus } from '../generated/prisma/enums.js';
+import { Locale } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { UpdateUserMovieDto } from './dto/update-user-movie.dto.js';
 
 @Injectable()
 export class UserService {
@@ -50,7 +51,11 @@ export class UserService {
   async refreshTasteProfile(userId: string, locale: 'en' | 'ru') {
     const where: Prisma.UserMovieWhereInput = {
       userId,
-      status: { in: [UserMovieStatus.WATCHED, UserMovieStatus.DISLIKED] },
+      OR: [
+        { watchedAt: { not: null } },
+        { reaction: { not: null } },
+        { rating: { not: null } },
+      ],
     };
 
     const [actions, analyzedMovieCount] = await Promise.all([
@@ -79,14 +84,14 @@ export class UserService {
     }
 
     const prismaLocale = locale === 'ru' ? Locale.RU : Locale.EN;
-    const movies = actions.map(({ status, rating, movie }) => {
+    const movies = actions.map(({ watchedAt, reaction, rating, movie }) => {
       const translation =
         movie.translations.find((item) => item.locale === prismaLocale) ??
         movie.translations[0];
 
       return {
-        status:
-          status === 'DISLIKED' ? ('DISLIKED' as const) : ('WATCHED' as const),
+        watched: Boolean(watchedAt),
+        reaction,
         rating,
         title: translation?.title ?? movie.originalTitle ?? 'Unknown',
         runtime: movie.runtime,
@@ -125,6 +130,53 @@ export class UserService {
         analyzedMovieCount: true,
         generatedAt: true,
         updatedAt: true,
+      },
+    });
+  }
+
+  async getUserMovies(userId: string) {
+    const movies = await this.prisma.userMovie.findMany({
+      where: { userId },
+    });
+    return movies;
+  }
+
+  async addUserMovie(userId: string, tmdbId: number, dto: UpdateUserMovieDto) {
+    const movie = await this.prisma.movie.findUnique({
+      where: { tmdbId },
+    });
+    if (!movie) {
+      throw new NotFoundException('Movie not found');
+    }
+
+    return this.prisma.userMovie.upsert({
+      where: {
+        userId_movieId: {
+          userId,
+          movieId: movie.id,
+        },
+      },
+      create: {
+        userId,
+        movieId: movie.id,
+        savedAt: dto.saved ? new Date() : null,
+        watchedAt: dto.watched ? new Date() : null,
+        reaction: dto.reaction,
+        rating: dto.rating,
+      },
+      update: {
+        savedAt:
+          dto.saved === undefined ? undefined : dto.saved ? new Date() : null,
+
+        watchedAt:
+          dto.watched === undefined
+            ? undefined
+            : dto.watched
+              ? new Date()
+              : null,
+
+        reaction: dto.reaction,
+        rating: dto.rating,
       },
     });
   }

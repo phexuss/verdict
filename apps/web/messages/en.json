@@ -114,5 +114,9 @@
         "description": "Curated to perfectly match your current cinematic identity."
       }
     }
+  },
+  "CuratedPage": {
+    "title": "Daily Selection",
+    "description": ""
   }
 }
