@@ -2,9 +2,9 @@
 
 import { useLocale } from 'next-intl';
 import { useGetTrendingMovies } from '@/api/generated/tmdb/tmdb';
-import Loading from '@/app/loading';
 import { MovieCard } from '@/components/sections/curated/MovieCard';
 import { Link } from '@/i18n/navigation';
+import { MoviesSkeleton } from './MoviesSkeleton';
 
 export function CuratedMovies() {
   const locale = useLocale();
@@ -27,7 +27,7 @@ export function CuratedMovies() {
     return <div>Failed to load trending movies</div>;
   }
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <MoviesSkeleton />;
 
   if (!movies) {
     return null;
