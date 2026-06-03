@@ -68,3 +68,14 @@ export function getShortOverview(overview: string, maxLength = 50) {
 
   return `${clippedOverview.slice(0, cutIndex).trimEnd()}...`;
 }
+
+export function getHumanReadableRuntime(runtime: number, locale: string) {
+  const hours = Math.floor(runtime / 60);
+  const minutes = runtime % 60;
+
+  const units = locale === 'ru' ? { h: 'ч', m: 'м' } : { h: 'h', m: 'm' };
+
+  return [hours && `${hours}${units.h}`, minutes && `${minutes}${units.m}`]
+    .filter(Boolean)
+    .join(' ');
+}

@@ -1,13 +1,14 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { TmdbService } from './tmdb.service.js';
-import { TrendingMoviesResponse } from './tmdb.types.js';
+import { TmdbMovieDetails, TrendingMoviesResponse } from './tmdb.types.js';
 
 @ApiTags('tmdb')
 @Controller('tmdb')
@@ -35,6 +36,36 @@ export class TmdbController {
     @Query('locale') locale?: 'en' | 'ru',
   ): Promise<TrendingMoviesResponse> {
     return this.tmdbService.fetchTrendingMovies({
+      language: locale === 'ru' ? 'ru-RU' : 'en-US',
+    });
+  }
+
+  @Get('movies/:tmdbId')
+  @AllowAnonymous()
+  @ApiOperation({
+    summary: 'Get movie details',
+    description: 'Returns localized details for a single TMDB movie.',
+    operationId: 'getMovieDetails',
+  })
+  @ApiParam({
+    name: 'tmdbId',
+    example: 550,
+  })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    enum: ['en', 'ru'],
+  })
+  @ApiOkResponse({
+    description: 'Movie details retrieved successfully.',
+    type: TmdbMovieDetails,
+  })
+  async getMovieDetails(
+    @Param('tmdbId', ParseIntPipe) tmdbId: number,
+    @Query('locale') locale?: 'en' | 'ru',
+  ): Promise<TmdbMovieDetails> {
+    return this.tmdbService.getMovieDetails({
+      tmdbId,
       language: locale === 'ru' ? 'ru-RU' : 'en-US',
     });
   }

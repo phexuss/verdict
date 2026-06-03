@@ -22,7 +22,9 @@ import type { ErrorType } from '../../fetcher';
 
 import { customFetch } from '../../fetcher';
 import type {
+  GetMovieDetailsParams,
   GetTrendingMoviesParams,
+  TmdbMovieDetails,
   TrendingMoviesResponse,
 } from '../models';
 
@@ -217,6 +219,215 @@ export function useGetTrendingMovies<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getGetTrendingMoviesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export type getMovieDetailsResponse200 = {
+  data: TmdbMovieDetails;
+  status: 200;
+};
+
+export type getMovieDetailsResponseSuccess = getMovieDetailsResponse200 & {
+  headers: Headers;
+};
+
+export const getGetMovieDetailsUrl = (
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}?${stringifiedParams}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}`;
+};
+
+/**
+ * Returns localized details for a single TMDB movie.
+ * @summary Get movie details
+ */
+export const getMovieDetails = async (
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+  options?: RequestInit,
+): Promise<getMovieDetailsResponseSuccess> => {
+  return customFetch<getMovieDetailsResponseSuccess>(
+    getGetMovieDetailsUrl(tmdbId, params),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getGetMovieDetailsQueryKey = (
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+) => {
+  return [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMovieDetailsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMovieDetails>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieDetails>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMovieDetailsQueryKey(tmdbId, params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMovieDetails>>> = ({
+    signal,
+  }) => getMovieDetails(tmdbId, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: tmdbId !== null && tmdbId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMovieDetails>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMovieDetailsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMovieDetails>>
+>;
+export type GetMovieDetailsQueryError = ErrorType<unknown>;
+
+export function useGetMovieDetails<
+  TData = Awaited<ReturnType<typeof getMovieDetails>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params: undefined | GetMovieDetailsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieDetails>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieDetails>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieDetails>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieDetails<
+  TData = Awaited<ReturnType<typeof getMovieDetails>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieDetails>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieDetails>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieDetails>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieDetails<
+  TData = Awaited<ReturnType<typeof getMovieDetails>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieDetails>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get movie details
+ */
+
+export function useGetMovieDetails<
+  TData = Awaited<ReturnType<typeof getMovieDetails>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieDetailsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieDetails>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMovieDetailsQueryOptions(tmdbId, params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

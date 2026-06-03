@@ -117,6 +117,12 @@
   },
   "CuratedPage": {
     "title": "Daily Selection",
-    "description": ""
+    "description": "",
+    "SlugPage": {
+      "title": "Storyline",
+      "credits": "Credits",
+      "director": "Director",
+      "cast": "Cast"
+    }
   }
 }

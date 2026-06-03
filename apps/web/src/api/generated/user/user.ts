@@ -21,11 +21,12 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import type { ErrorType } from '../../fetcher';
+import type { BodyType, ErrorType } from '../../fetcher';
 
 import { customFetch } from '../../fetcher';
 import type {
   RefreshTasteProfileParams,
+  UpdateUserMovieDto,
   UserProfileDto,
   UserTasteProfileDto,
 } from '../models';
@@ -437,6 +438,270 @@ export const useRefreshTasteProfile = <
 > => {
   return useMutation(
     getRefreshTasteProfileMutationOptions(options),
+    queryClient,
+  );
+};
+export type userControllerGetUserMoviesResponse200 = {
+  data: void;
+  status: 200;
+};
+
+export type userControllerGetUserMoviesResponseSuccess =
+  userControllerGetUserMoviesResponse200 & {
+    headers: Headers;
+  };
+
+export const getUserControllerGetUserMoviesUrl = () => {
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/user/me/movies`;
+};
+
+export const userControllerGetUserMovies = async (
+  options?: RequestInit,
+): Promise<userControllerGetUserMoviesResponseSuccess> => {
+  return customFetch<userControllerGetUserMoviesResponseSuccess>(
+    getUserControllerGetUserMoviesUrl(),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getUserControllerGetUserMoviesQueryKey = () => {
+  return [`${process.env.NEXT_PUBLIC_API_URL}/api/user/me/movies`] as const;
+};
+
+export const getUserControllerGetUserMoviesQueryOptions = <
+  TData = Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getUserControllerGetUserMoviesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof userControllerGetUserMovies>>
+  > = ({ signal }) =>
+    userControllerGetUserMovies({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type UserControllerGetUserMoviesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof userControllerGetUserMovies>>
+>;
+export type UserControllerGetUserMoviesQueryError = ErrorType<unknown>;
+
+export function useUserControllerGetUserMovies<
+  TData = Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+          TError,
+          Awaited<ReturnType<typeof userControllerGetUserMovies>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useUserControllerGetUserMovies<
+  TData = Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+          TError,
+          Awaited<ReturnType<typeof userControllerGetUserMovies>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useUserControllerGetUserMovies<
+  TData = Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useUserControllerGetUserMovies<
+  TData = Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof userControllerGetUserMovies>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getUserControllerGetUserMoviesQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export type userControllerAddUserMovieResponse200 = {
+  data: void;
+  status: 200;
+};
+
+export type userControllerAddUserMovieResponseSuccess =
+  userControllerAddUserMovieResponse200 & {
+    headers: Headers;
+  };
+
+export const getUserControllerAddUserMovieUrl = (tmdbId: number) => {
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/user/me/movies/${tmdbId}`;
+};
+
+export const userControllerAddUserMovie = async (
+  tmdbId: number,
+  updateUserMovieDto: UpdateUserMovieDto,
+  options?: RequestInit,
+): Promise<userControllerAddUserMovieResponseSuccess> => {
+  return customFetch<userControllerAddUserMovieResponseSuccess>(
+    getUserControllerAddUserMovieUrl(tmdbId),
+    {
+      ...options,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(updateUserMovieDto),
+    },
+  );
+};
+
+export const getUserControllerAddUserMovieMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof userControllerAddUserMovie>>,
+    TError,
+    { tmdbId: number; data: BodyType<UpdateUserMovieDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof userControllerAddUserMovie>>,
+  TError,
+  { tmdbId: number; data: BodyType<UpdateUserMovieDto> },
+  TContext
+> => {
+  const mutationKey = ['userControllerAddUserMovie'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof userControllerAddUserMovie>>,
+    { tmdbId: number; data: BodyType<UpdateUserMovieDto> }
+  > = (props) => {
+    const { tmdbId, data } = props ?? {};
+
+    return userControllerAddUserMovie(tmdbId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UserControllerAddUserMovieMutationResult = NonNullable<
+  Awaited<ReturnType<typeof userControllerAddUserMovie>>
+>;
+export type UserControllerAddUserMovieMutationBody =
+  BodyType<UpdateUserMovieDto>;
+export type UserControllerAddUserMovieMutationError = ErrorType<unknown>;
+
+export const useUserControllerAddUserMovie = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof userControllerAddUserMovie>>,
+      TError,
+      { tmdbId: number; data: BodyType<UpdateUserMovieDto> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof userControllerAddUserMovie>>,
+  TError,
+  { tmdbId: number; data: BodyType<UpdateUserMovieDto> },
+  TContext
+> => {
+  return useMutation(
+    getUserControllerAddUserMovieMutationOptions(options),
     queryClient,
   );
 };

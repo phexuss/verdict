@@ -3,6 +3,7 @@
 import { useLocale } from 'next-intl';
 import { useGetTrendingMovies } from '@/api/generated/tmdb/tmdb';
 import { MovieCard } from '@/components/sections/curated/MovieCard';
+import { Link } from '@/i18n/navigation';
 
 export function CuratedMovies() {
   const locale = useLocale();
@@ -39,7 +40,9 @@ export function CuratedMovies() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {filteredMovies.map((movie) => (
-        <MovieCard movie={movie} locale={locale} key={movie.id} />
+        <Link href={`/curated/${movie.id}`} key={movie.id}>
+          <MovieCard movie={movie} locale={locale} key={movie.id} />
+        </Link>
       ))}
     </div>
   );

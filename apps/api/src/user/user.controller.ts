@@ -61,7 +61,7 @@ export class UserController {
     return this.userService.getUserMovies(session.user.id);
   }
 
-  @Patch('me/movies')
+  @Patch('me/movies/:tmdbId')
   addUserMovie(
     @Session() session: UserSession<typeof auth>,
     @Param('tmdbId', ParseIntPipe) tmdbId: number,

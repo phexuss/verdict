@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { TrendingMoviesResponse } from './tmdb.types.js';
+import { TmdbMovieDetails, TrendingMoviesResponse } from './tmdb.types.js';
 
 type DiscoverMoviesParams = {
   language: string;
@@ -80,9 +80,12 @@ export class TmdbService {
     });
   }
 
-  async getMovieDetails(params: { tmdbId: number; language: string }) {
+  async getMovieDetails(params: {
+    tmdbId: number;
+    language: string;
+  }): Promise<TmdbMovieDetails> {
     const { data } = await firstValueFrom(
-      this.httpService.get<{ runtime?: number | null }>(
+      this.httpService.get<TmdbMovieDetails>(
         `${this.BASE_URL}movie/${params.tmdbId}`,
         {
           params: {
