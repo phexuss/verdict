@@ -5,7 +5,23 @@
  * OpenAPI documentation for the Verdict backend.
  * OpenAPI spec version: 1.0.0
  */
+import type { UpdateUserMovieDtoReaction } from './updateUserMovieDtoReaction';
 
 export interface UpdateUserMovieDto {
-  [key: string]: unknown;
+  /** Whether the movie is saved to the user watchlist. */
+  saved?: boolean;
+  /** Whether the user has watched the movie. */
+  watched?: boolean;
+  /**
+   * Positive or negative user reaction. Send null to clear it.
+   * @nullable
+   */
+  reaction?: UpdateUserMovieDtoReaction;
+  /**
+   * User rating from 1 to 10. Send null to clear it.
+   * @minimum 1
+   * @maximum 10
+   * @nullable
+   */
+  rating?: number | null;
 }

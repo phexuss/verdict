@@ -18,7 +18,10 @@ import {
 } from '@nestjs/swagger';
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
 import { auth } from '../auth.js';
-import { UpdateUserMovieDto } from './dto/update-user-movie.dto.js';
+import {
+  UpdateUserMovieDto,
+  UserMovieActionDto,
+} from './dto/update-user-movie.dto.js';
 import { UserProfileDto, UserTasteProfileDto } from './dto/user-profile.dto.js';
 import { UserService } from './user.service.js';
 
@@ -57,16 +60,20 @@ export class UserController {
   }
 
   @Get('me/movies')
+  @ApiOperation({ operationId: 'getUserMovies' })
+  @ApiOkResponse({ type: [UserMovieActionDto] })
   getUserMovies(@Session() session: UserSession<typeof auth>) {
     return this.userService.getUserMovies(session.user.id);
   }
 
   @Patch('me/movies/:tmdbId')
-  addUserMovie(
+  @ApiOperation({ operationId: 'updateUserMovie' })
+  @ApiOkResponse({ type: UserMovieActionDto })
+  updateUserMovie(
     @Session() session: UserSession<typeof auth>,
     @Param('tmdbId', ParseIntPipe) tmdbId: number,
     @Body() dto: UpdateUserMovieDto,
   ) {
-    return this.userService.addUserMovie(session.user.id, tmdbId, dto);
+    return this.userService.updateUserMovie(session.user.id, tmdbId, dto);
   }
 }

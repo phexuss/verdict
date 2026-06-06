@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AiModule } from '../ai/ai.module.js';
+import { TmdbModule } from '../providers/tmdb/tmdb.module.js';
 import { UserController } from './user.controller.js';
 import { UserService } from './user.service.js';
 
 @Module({
-  imports: [AiModule],
+  imports: [AiModule, TmdbModule],
   controllers: [UserController],
   providers: [UserService],
 })

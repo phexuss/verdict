@@ -7,13 +7,25 @@ import { GroqService } from '../ai/groq/groq.service.js';
 import type { Prisma } from '../generated/prisma/client.js';
 import { Locale } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { TmdbService } from '../providers/tmdb/tmdb.service.js';
 import { UpdateUserMovieDto } from './dto/update-user-movie.dto.js';
+
+type UserMovieActionWithMovie = Prisma.UserMovieGetPayload<{
+  include: {
+    movie: {
+      select: {
+        tmdbId: true;
+      };
+    };
+  };
+}>;
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly groqService: GroqService,
+    private readonly tmdbService: TmdbService,
   ) {}
 
   async findProfile(userId: string) {
@@ -137,19 +149,31 @@ export class UserService {
   async getUserMovies(userId: string) {
     const movies = await this.prisma.userMovie.findMany({
       where: { userId },
+      include: {
+        movie: {
+          select: {
+            tmdbId: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
     });
-    return movies;
+
+    return movies.map((movie) => this.toUserMovieActionDto(movie));
   }
 
-  async addUserMovie(userId: string, tmdbId: number, dto: UpdateUserMovieDto) {
-    const movie = await this.prisma.movie.findUnique({
-      where: { tmdbId },
-    });
-    if (!movie) {
-      throw new NotFoundException('Movie not found');
+  async updateUserMovie(
+    userId: string,
+    tmdbId: number,
+    dto: UpdateUserMovieDto,
+  ) {
+    if (!this.hasMovieActionChanges(dto)) {
+      throw new BadRequestException('No movie action changes provided');
     }
 
-    return this.prisma.userMovie.upsert({
+    const movie = await this.findOrCreateMovieByTmdbId(tmdbId);
+
+    const action = await this.prisma.userMovie.upsert({
       where: {
         userId_movieId: {
           userId,
@@ -178,6 +202,95 @@ export class UserService {
         reaction: dto.reaction,
         rating: dto.rating,
       },
+      include: {
+        movie: {
+          select: {
+            tmdbId: true,
+          },
+        },
+      },
     });
+
+    return this.toUserMovieActionDto(action);
+  }
+
+  private hasMovieActionChanges(dto: UpdateUserMovieDto) {
+    return (
+      dto.saved !== undefined ||
+      dto.watched !== undefined ||
+      dto.reaction !== undefined ||
+      dto.rating !== undefined
+    );
+  }
+
+  private async findOrCreateMovieByTmdbId(tmdbId: number) {
+    const existingMovie = await this.prisma.movie.findUnique({
+      where: { tmdbId },
+    });
+
+    if (existingMovie) {
+      return existingMovie;
+    }
+
+    const details = await this.tmdbService.getMovieDetails({
+      tmdbId,
+      language: 'en-US',
+    });
+
+    const movie = await this.prisma.movie.upsert({
+      where: { tmdbId },
+      create: {
+        tmdbId: details.id,
+        imdbId: details.imdb_id,
+        originalTitle: details.original_title,
+        originalLanguage: details.original_language,
+        posterPath: details.poster_path,
+        backdropPath: details.backdrop_path,
+        releaseDate: details.release_date
+          ? new Date(details.release_date)
+          : undefined,
+        runtime: details.runtime,
+        popularity: details.popularity,
+        voteAverage: details.vote_average,
+        voteCount: details.vote_count,
+        adult: details.adult,
+      },
+      update: {},
+    });
+
+    await this.prisma.movieTranslation.upsert({
+      where: {
+        movieId_locale: {
+          movieId: movie.id,
+          locale: Locale.EN,
+        },
+      },
+      create: {
+        movieId: movie.id,
+        locale: Locale.EN,
+        title: details.title,
+        overview: details.overview,
+      },
+      update: {
+        title: details.title,
+        overview: details.overview,
+      },
+    });
+
+    return movie;
+  }
+
+  private toUserMovieActionDto(action: UserMovieActionWithMovie) {
+    return {
+      id: action.id,
+      tmdbId: action.movie.tmdbId,
+      savedAt: action.savedAt?.toISOString() ?? null,
+      watchedAt: action.watchedAt?.toISOString() ?? null,
+      reaction: action.reaction,
+      rating: action.rating,
+      note: action.note,
+      createdAt: action.createdAt.toISOString(),
+      updatedAt: action.updatedAt.toISOString(),
+    };
   }
 }

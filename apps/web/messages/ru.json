@@ -125,5 +125,12 @@
       "cast": "В ролях",
       "cinematography": "Операторская работа"
     }
+  },
+  "MovieActionsBar": {
+    "want": "Хочу",
+    "watched": "Смотрел",
+    "dislike": "Дизлайк",
+    "disliked": "Не понравился",
+    "remove": "Удалить"
   }
 }

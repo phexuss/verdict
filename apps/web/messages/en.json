@@ -125,5 +125,12 @@
       "cast": "Cast",
       "cinematography": "Cinematography"
     }
+  },
+  "MovieActionsBar": {
+    "want": "Want",
+    "watched": "Watched",
+    "dislike": "Dislike",
+    "disliked": "Disliked",
+    "remove": "Remove"
   }
 }

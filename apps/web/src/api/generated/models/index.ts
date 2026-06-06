@@ -41,5 +41,8 @@ export * from './tmdbMovieCredits';
 export * from './tmdbMovieDetails';
 export * from './trendingMoviesResponse';
 export * from './updateUserMovieDto';
+export * from './updateUserMovieDtoReaction';
+export * from './userMovieActionDto';
+export * from './userMovieActionDtoReaction';
 export * from './userProfileDto';
 export * from './userTasteProfileDto';
