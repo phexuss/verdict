@@ -11,7 +11,6 @@ export default async function SignInPage() {
           <p>{t('description')}</p>
         </header>
         <SignInForm />
-        <footer></footer>
       </div>
     </div>
   );

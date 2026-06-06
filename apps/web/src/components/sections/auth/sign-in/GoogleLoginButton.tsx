@@ -4,7 +4,11 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { authClient } from '@/lib/auth-client';
 
-export default function GoogleLoginButton() {
+type GoogleLoginButtonProps = {
+  label?: string;
+};
+
+export default function GoogleLoginButton({ label }: GoogleLoginButtonProps) {
   const locale = useLocale();
   const t = useTranslations('SignInPage');
 
@@ -30,7 +34,7 @@ export default function GoogleLoginButton() {
         height={18}
         className="invert"
       />
-      {t('googleSignIn')}
+      {label ?? t('googleSignIn')}
     </Button>
   );
 }

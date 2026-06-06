@@ -23,11 +23,18 @@
     "emailLabel": "Email",
     "passwordLabel": "Password",
     "googleSignIn": "Sign in with Google",
+    "signUpPrompt": "Don't have an account? <signUp>Sign Up</signUp>",
     "description": "Welcome back! Please enter your details."
   },
   "SignUpPage": {
     "title": "Sign Up",
-    "description": "Create a new account to access the dashboard."
+    "titleLoading": "Signing Up...",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "googleSignUp": "Sign up with Google",
+    "description": "Create a new account to access the dashboard.",
+    "signInPrompt": "Already have an account? <signIn>Sign In</signIn>"
   },
   "TonightPage": {
     "title": "What are we watching tonight?",

@@ -6,30 +6,32 @@ import { Input } from '@repo/ui/components/input';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { SignInInput, signInSchema } from '@/features/auth/schemas';
+import { SignUpInput, signUpSchema } from '@/features/auth/schemas';
 import { Link, useRouter } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
-import GoogleLoginButton from './GoogleLoginButton';
-import SignInPasswordInput from './SignInPasswordInput';
+import GoogleLoginButton from '../sign-in/GoogleLoginButton';
+import SignInPasswordInput from '../sign-in/SignInPasswordInput';
 
-export default function SignInForm() {
-  const t = useTranslations('SignInPage');
+export default function SignUpForm() {
+  const t = useTranslations('SignUpPage');
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const form = useForm({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema),
     mode: 'onBlur',
     defaultValues: {
+      name: '',
       email: '',
       password: '',
     },
   });
 
-  async function onSubmit(values: SignInInput) {
+  async function onSubmit(values: SignUpInput) {
     setServerError(null);
 
-    const result = await authClient.signIn.email({
+    const result = await authClient.signUp.email({
+      name: values.name,
       email: values.email,
       password: values.password,
     });
@@ -37,7 +39,7 @@ export default function SignInForm() {
     if (result.error) {
       setServerError(
         result.error.message ??
-          'An error occurred while signing in. Please try again.',
+          'An error occurred while signing up. Please try again.',
       );
       return;
     }
@@ -53,9 +55,26 @@ export default function SignInForm() {
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <Field>
+        <FieldLabel htmlFor="name">{t('nameLabel')}</FieldLabel>
+        <Input
+          className={`bg-accent rounded-md ${form.formState.errors.name ? 'border-destructive' : ''}`}
+          id="name"
+          type="text"
+          placeholder="Alex"
+          {...form.register('name')}
+        />
+        {form.formState.errors.name && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.name.message}
+          </p>
+        )}
+      </Field>
+
+      <Field>
         <FieldLabel htmlFor="email">{t('emailLabel')}</FieldLabel>
         <Input
           className={`bg-accent rounded-md ${form.formState.errors.email ? 'border-destructive' : ''}`}
+          id="email"
           type="email"
           placeholder="name@example.com"
           {...form.register('email')}
@@ -70,6 +89,7 @@ export default function SignInForm() {
         <FieldLabel htmlFor="password">{t('passwordLabel')}</FieldLabel>
         <SignInPasswordInput
           className={`bg-accent rounded-md ${form.formState.errors.password ? 'border-destructive' : ''}`}
+          id="password"
           {...form.register('password')}
         />
 
@@ -88,13 +108,13 @@ export default function SignInForm() {
       >
         {form.formState.isSubmitting ? `${t('titleLoading')}` : `${t('title')}`}
       </Button>
-      <GoogleLoginButton />
+      <GoogleLoginButton label={t('googleSignUp')} />
 
       <p className="text-center text-muted-foreground text-sm">
-        {t.rich('signUpPrompt', {
-          signUp: (chunks) => (
+        {t.rich('signInPrompt', {
+          signIn: (chunks) => (
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className="font-medium text-primary transition-colors hover:text-primary/80"
             >
               {chunks}
