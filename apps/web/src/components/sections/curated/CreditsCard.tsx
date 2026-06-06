@@ -1,49 +1,47 @@
 import { getTranslations } from 'next-intl/server';
 import type { TmdbMovieCredits } from '@/api/generated/models';
+import {
+  getCinematographyName,
+  getDirectorName,
+  getTopCast,
+} from '@/lib/tmdb-helper';
 
 interface CreditsCardProps {
-  credits: TmdbMovieCredits;
+  movieCredits: TmdbMovieCredits;
 }
 
-export default async function CreditsCard({ credits }: CreditsCardProps) {
+export default async function CreditsCard({ movieCredits }: CreditsCardProps) {
   const t = await getTranslations('CuratedPage.SlugPage');
-  const directors = credits.crew.filter((person) => person.job === 'Director');
-  const topCast = credits.cast.slice(0, 6);
+  const directorName = getDirectorName(movieCredits);
+  const topCast = getTopCast(movieCredits, 5);
+  const cinematographyName = getCinematographyName(movieCredits);
 
   return (
-    <div className="flex flex-col py-6 gap-4">
+    <div className="flex flex-col py-6 gap-6">
       <h2 className="text-sm uppercase font-medium tracking-widest mb-2">
         {t('credits')}
       </h2>
-
       <div className="flex flex-col gap-1">
         <p className="text-sm uppercase text-muted-foreground">
           {t('director')}
         </p>
-        <p>
-          {directors.length > 0
-            ? directors.map((director) => director.name).join(', ')
-            : '-'}
-        </p>
+        <p>{directorName ?? '-'}</p>
       </div>
 
-      {topCast.length > 0 ? (
-        <div className="flex flex-col gap-2">
-          <p className="text-sm uppercase text-muted-foreground">{t('cast')}</p>
-          <ul className="grid gap-2 sm:grid-cols-2">
-            {topCast.map((person) => (
-              <li className="flex flex-col" key={person.credit_id}>
-                <span>{person.name}</span>
-                {person.character ? (
-                  <span className="text-muted-foreground text-sm">
-                    {person.character}
-                  </span>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm uppercase text-muted-foreground">{t('cast')}</p>
+        <div className="flex flex-col gap-0.5">
+          {topCast.map((actor) => (
+            <p key={actor.credit_id}>{actor.name}</p>
+          ))}
         </div>
-      ) : null}
+      </div>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm uppercase text-muted-foreground">
+          {t('cinematography')}
+        </p>
+        <p>{cinematographyName ?? '-'}</p>
+      </div>
     </div>
   );
 }

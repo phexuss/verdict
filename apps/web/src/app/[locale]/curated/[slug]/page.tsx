@@ -25,19 +25,16 @@ export default async function CuratedMoviePage({
     notFound();
   }
 
-  const normalizedLocale = locale === 'ru' ? 'ru' : 'en';
-  const [movieResponse, creditsResponse] = await Promise.all([
-    getMovieDetails(tmdbId, {
-      locale: normalizedLocale,
-    }),
-    getMovieCredits(tmdbId, {
-      locale: normalizedLocale,
-    }),
-  ]);
+  const response = await getMovieDetails(tmdbId, {
+    locale: locale === 'ru' ? 'ru' : 'en',
+  });
 
-  const movie = movieResponse.data;
+  const creditsResponse = await getMovieCredits(tmdbId, {
+    locale: locale === 'ru' ? 'ru' : 'en',
+  });
+
+  const movie = response.data;
   const credits = creditsResponse.data;
-
   return (
     <div className="flex flex-col justify-center">
       <Image
@@ -59,7 +56,7 @@ export default async function CuratedMoviePage({
             <p>{movie.vote_average.toFixed(1)}</p>
           </div>
         </div>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 mt-1">
           {movie.genres.length &&
             movie.genres.map((genre) => (
               <Badge
@@ -75,8 +72,8 @@ export default async function CuratedMoviePage({
 
       <StorylineCard description={movie.overview} />
 
-      <Separator orientation="horizontal" />
-      <CreditsCard credits={credits} />
+      <Separator className="" orientation="horizontal" />
+      <CreditsCard movieCredits={credits} />
     </div>
   );
 }

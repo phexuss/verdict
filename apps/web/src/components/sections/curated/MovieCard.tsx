@@ -14,7 +14,7 @@ export function MovieCard({ movie, locale }: MovieCardProps) {
   const releaseYear = movie.release_date.slice(0, 4);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/45">
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/45 ">
       <div className="relative aspect-2/3 overflow-hidden bg-muted">
         {movie.poster_path ? (
           <Image
