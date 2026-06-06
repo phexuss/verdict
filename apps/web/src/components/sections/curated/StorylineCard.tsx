@@ -7,7 +7,7 @@ interface VibeCardProps {
 export default function StorylineCard({ description }: VibeCardProps) {
   const t = useTranslations('CuratedPage.SlugPage');
   return (
-    <div className="flex flex-col  border border-accent-foreground/10 rounded-lg p-5 gap-2">
+    <div className="flex flex-col  border border-accent-foreground/10 rounded-lg p-5 gap-2 bg-secondary/60 my-6">
       <h2 className="text-2xl">{t('title')}</h2>
       <p className="text-secondary-foreground/75">{description}</p>
     </div>

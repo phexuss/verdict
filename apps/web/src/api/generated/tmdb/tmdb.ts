@@ -22,8 +22,10 @@ import type { ErrorType } from '../../fetcher';
 
 import { customFetch } from '../../fetcher';
 import type {
+  GetMovieCreditsParams,
   GetMovieDetailsParams,
   GetTrendingMoviesParams,
+  TmdbMovieCredits,
   TmdbMovieDetails,
   TrendingMoviesResponse,
 } from '../models';
@@ -428,6 +430,215 @@ export function useGetMovieDetails<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getGetMovieDetailsQueryOptions(tmdbId, params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export type getMovieCreditsResponse200 = {
+  data: TmdbMovieCredits;
+  status: 200;
+};
+
+export type getMovieCreditsResponseSuccess = getMovieCreditsResponse200 & {
+  headers: Headers;
+};
+
+export const getGetMovieCreditsUrl = (
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}/credits?${stringifiedParams}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}/credits`;
+};
+
+/**
+ * Returns localized cast and crew credits for a TMDB movie.
+ * @summary Get movie credits
+ */
+export const getMovieCredits = async (
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+  options?: RequestInit,
+): Promise<getMovieCreditsResponseSuccess> => {
+  return customFetch<getMovieCreditsResponseSuccess>(
+    getGetMovieCreditsUrl(tmdbId, params),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getGetMovieCreditsQueryKey = (
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+) => {
+  return [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/movies/${tmdbId}/credits`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMovieCreditsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMovieCredits>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieCredits>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMovieCreditsQueryKey(tmdbId, params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMovieCredits>>> = ({
+    signal,
+  }) => getMovieCredits(tmdbId, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: tmdbId !== null && tmdbId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMovieCredits>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMovieCreditsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMovieCredits>>
+>;
+export type GetMovieCreditsQueryError = ErrorType<unknown>;
+
+export function useGetMovieCredits<
+  TData = Awaited<ReturnType<typeof getMovieCredits>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params: undefined | GetMovieCreditsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieCredits>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieCredits>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieCredits>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieCredits<
+  TData = Awaited<ReturnType<typeof getMovieCredits>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieCredits>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieCredits>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieCredits>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieCredits<
+  TData = Awaited<ReturnType<typeof getMovieCredits>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieCredits>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get movie credits
+ */
+
+export function useGetMovieCredits<
+  TData = Awaited<ReturnType<typeof getMovieCredits>>,
+  TError = ErrorType<unknown>,
+>(
+  tmdbId: number,
+  params?: GetMovieCreditsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieCredits>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMovieCreditsQueryOptions(tmdbId, params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

@@ -134,3 +134,69 @@ export class TmdbMovieDetails {
   @ApiProperty({ example: 28500 })
   vote_count: number;
 }
+
+export class TmdbCreditPerson {
+  @ApiProperty({ example: false })
+  adult: boolean;
+
+  @ApiProperty({ example: 2 })
+  gender: number;
+
+  @ApiProperty({ example: 819 })
+  id: number;
+
+  @ApiProperty({ example: 'Acting' })
+  known_for_department: string;
+
+  @ApiProperty({ example: 'Edward Norton' })
+  name: string;
+
+  @ApiProperty({ example: 'Edward Norton' })
+  original_name: string;
+
+  @ApiProperty({ example: 37.508 })
+  popularity: number;
+
+  @ApiProperty({
+    example: '/5XBzD5WuTyVQZeS4VI25z2moMeY.jpg',
+    nullable: true,
+    type: String,
+  })
+  profile_path: string | null;
+}
+
+export class TmdbCastCredit extends TmdbCreditPerson {
+  @ApiProperty({ example: 4 })
+  cast_id: number;
+
+  @ApiProperty({ example: 'The Narrator' })
+  character: string;
+
+  @ApiProperty({ example: '52fe4250c3a36847f80149f3' })
+  credit_id: string;
+
+  @ApiProperty({ example: 0 })
+  order: number;
+}
+
+export class TmdbCrewCredit extends TmdbCreditPerson {
+  @ApiProperty({ example: '52fe4250c3a36847f80149f7' })
+  credit_id: string;
+
+  @ApiProperty({ example: 'Directing' })
+  department: string;
+
+  @ApiProperty({ example: 'Director' })
+  job: string;
+}
+
+export class TmdbMovieCredits {
+  @ApiProperty({ example: 550 })
+  id: number;
+
+  @ApiProperty({ type: [TmdbCastCredit] })
+  cast: TmdbCastCredit[];
+
+  @ApiProperty({ type: [TmdbCrewCredit] })
+  crew: TmdbCrewCredit[];
+}

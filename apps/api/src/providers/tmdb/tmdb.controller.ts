@@ -8,7 +8,11 @@ import {
 } from '@nestjs/swagger';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { TmdbService } from './tmdb.service.js';
-import { TmdbMovieDetails, TrendingMoviesResponse } from './tmdb.types.js';
+import {
+  TmdbMovieCredits,
+  TmdbMovieDetails,
+  TrendingMoviesResponse,
+} from './tmdb.types.js';
 
 @ApiTags('tmdb')
 @Controller('tmdb')
@@ -65,6 +69,36 @@ export class TmdbController {
     @Query('locale') locale?: 'en' | 'ru',
   ): Promise<TmdbMovieDetails> {
     return this.tmdbService.getMovieDetails({
+      tmdbId,
+      language: locale === 'ru' ? 'ru-RU' : 'en-US',
+    });
+  }
+
+  @Get('movies/:tmdbId/credits')
+  @AllowAnonymous()
+  @ApiOperation({
+    summary: 'Get movie credits',
+    description: 'Returns localized cast and crew credits for a TMDB movie.',
+    operationId: 'getMovieCredits',
+  })
+  @ApiParam({
+    name: 'tmdbId',
+    example: 550,
+  })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    enum: ['en', 'ru'],
+  })
+  @ApiOkResponse({
+    description: 'Movie credits retrieved successfully.',
+    type: TmdbMovieCredits,
+  })
+  async getMovieCredits(
+    @Param('tmdbId', ParseIntPipe) tmdbId: number,
+    @Query('locale') locale?: 'en' | 'ru',
+  ): Promise<TmdbMovieCredits> {
+    return this.tmdbService.getMovieCredits({
       tmdbId,
       language: locale === 'ru' ? 'ru-RU' : 'en-US',
     });

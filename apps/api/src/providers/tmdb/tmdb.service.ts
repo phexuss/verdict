@@ -2,7 +2,11 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { TmdbMovieDetails, TrendingMoviesResponse } from './tmdb.types.js';
+import {
+  TmdbMovieCredits,
+  TmdbMovieDetails,
+  TrendingMoviesResponse,
+} from './tmdb.types.js';
 
 type DiscoverMoviesParams = {
   language: string;
@@ -87,6 +91,27 @@ export class TmdbService {
     const { data } = await firstValueFrom(
       this.httpService.get<TmdbMovieDetails>(
         `${this.BASE_URL}movie/${params.tmdbId}`,
+        {
+          params: {
+            language: params.language,
+          },
+          headers: {
+            Authorization: `Bearer ${this.BEARER_TOKEN}`,
+          },
+        },
+      ),
+    );
+
+    return data;
+  }
+
+  async getMovieCredits(params: {
+    tmdbId: number;
+    language: string;
+  }): Promise<TmdbMovieCredits> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbMovieCredits>(
+        `${this.BASE_URL}movie/${params.tmdbId}/credits`,
         {
           params: {
             language: params.language,

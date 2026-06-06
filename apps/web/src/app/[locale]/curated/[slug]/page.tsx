@@ -3,7 +3,8 @@ import { Separator } from '@repo/ui/components/separator';
 import { StarBold } from '@solar-icons/react-perf';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getMovieDetails } from '@/api/generated/tmdb/tmdb';
+import { getMovieCredits, getMovieDetails } from '@/api/generated/tmdb/tmdb';
+import CreditsCard from '@/components/sections/curated/CreditsCard';
 import StorylineCard from '@/components/sections/curated/StorylineCard';
 import { getHumanReadableRuntime } from '@/lib/tmdb-helper';
 
@@ -24,11 +25,18 @@ export default async function CuratedMoviePage({
     notFound();
   }
 
-  const response = await getMovieDetails(tmdbId, {
-    locale: locale === 'ru' ? 'ru' : 'en',
-  });
+  const normalizedLocale = locale === 'ru' ? 'ru' : 'en';
+  const [movieResponse, creditsResponse] = await Promise.all([
+    getMovieDetails(tmdbId, {
+      locale: normalizedLocale,
+    }),
+    getMovieCredits(tmdbId, {
+      locale: normalizedLocale,
+    }),
+  ]);
 
-  const movie = response.data;
+  const movie = movieResponse.data;
+  const credits = creditsResponse.data;
 
   return (
     <div className="flex flex-col justify-center">
@@ -64,7 +72,11 @@ export default async function CuratedMoviePage({
             ))}
         </div>
       </div>
+
       <StorylineCard description={movie.overview} />
+
+      <Separator orientation="horizontal" />
+      <CreditsCard credits={credits} />
     </div>
   );
 }
