@@ -13,7 +13,7 @@ export default function MoodCard({ highAffinity, lowAffinity }: MoodCardProps) {
     <div className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
       <div className="mb-5 flex flex-row items-center gap-2">
         <StickerSmileCircleOutline className="size-6 shrink-0" />
-        <h3 className="text-xl">{t('title')}</h3>
+        <h3 className="font-medium text-xl">{t('title')}</h3>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -85,7 +85,7 @@ function MoodPill({ mood, sign, variant }: MoodPillProps) {
       >
         {sign}
       </span>
-      <span className="min-w-0 break-words leading-tight">{mood}</span>
+      <span className="min-w-0 wrap-break-word leading-tight">{mood}</span>
     </span>
   );
 }

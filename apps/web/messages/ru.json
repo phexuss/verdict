@@ -106,6 +106,10 @@
           "high": "Динамичный"
         }
       },
+      "FrequentlySeen": {
+        "title": "Смотрели недавно:"
+      },
+
       "Emotional": {
         "title": "Эмоциональный фон",
         "moods": {

@@ -105,6 +105,10 @@
           "high": "Frantic"
         }
       },
+      "FrequentlySeen": {
+        "title": "Also frequently seen:"
+      },
+
       "Emotional": {
         "title": "Emotional Weight",
         "moods": {
