@@ -1,3 +1,4 @@
+import { Toaster } from '@repo/ui/components/sonner';
 import type { Metadata } from 'next';
 import { Jost } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -54,6 +55,7 @@ export default async function LocaleLayout({
             <Header />
             {children}
             <Footer />
+            <Toaster position="top-center" />
           </NextIntlClientProvider>
         </QueryProvider>
       </body>

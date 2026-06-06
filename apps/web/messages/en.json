@@ -132,5 +132,9 @@
     "dislike": "Dislike",
     "disliked": "Disliked",
     "remove": "Remove"
+  },
+  "Alerts": {
+    "signInRequired": "Please sign in to access this feature.",
+    "pickError": "An error occurred while fetching your picks. Please try again."
   }
 }
