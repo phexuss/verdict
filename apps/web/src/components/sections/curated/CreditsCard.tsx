@@ -17,10 +17,8 @@ export default async function CreditsCard({ movieCredits }: CreditsCardProps) {
   const cinematographyName = getCinematographyName(movieCredits);
 
   return (
-    <div className="flex flex-col py-6 gap-6">
-      <h2 className="text-sm uppercase font-medium tracking-widest mb-2">
-        {t('credits')}
-      </h2>
+    <section className="flex flex-col gap-5 rounded-md border border-sidebar-ring/8 bg-accent p-4">
+      <h2 className="font-medium text-xl">{t('credits')}</h2>
       <div className="flex flex-col gap-1">
         <p className="text-sm uppercase text-muted-foreground">
           {t('director')}
@@ -42,6 +40,6 @@ export default async function CreditsCard({ movieCredits }: CreditsCardProps) {
         </p>
         <p>{cinematographyName ?? '-'}</p>
       </div>
-    </div>
+    </section>
   );
 }

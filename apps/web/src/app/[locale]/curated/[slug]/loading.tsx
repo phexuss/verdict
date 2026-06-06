@@ -2,31 +2,30 @@ import { Skeleton } from '@repo/ui/components/skeleton';
 
 export default function Loading() {
   return (
-    <div className="flex flex-col justify-center">
-      <Skeleton className="h-[350px] w-full max-w-[350px] rounded-lg" />
+    <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+      <Skeleton className="aspect-2/3 w-full max-w-sm justify-self-center rounded-md lg:max-w-none" />
 
-      <div className="flex flex-col gap-2 p-2">
-        <Skeleton className="h-9 w-full max-w-[280px] rounded-sm" />
-
-        <div className="flex items-center gap-3">
-          <Skeleton className="h-5 w-10 rounded-sm" />
-          <Skeleton className="h-5 w-14 rounded-sm" />
-          <Skeleton className="h-5 w-12 rounded-sm" />
+      <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex flex-col gap-4 border-border border-b pb-6">
+          <Skeleton className="h-12 w-full max-w-xl rounded-sm md:h-16" />
+          <Skeleton className="h-5 w-full max-w-md rounded-sm" />
+          <div className="flex gap-3">
+            <Skeleton className="h-5 w-10 rounded-sm" />
+            <Skeleton className="h-5 w-14 rounded-sm" />
+            <Skeleton className="h-5 w-12 rounded-sm" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Skeleton className="h-8 w-20 rounded-sm" />
+            <Skeleton className="h-8 w-24 rounded-sm" />
+            <Skeleton className="h-8 w-16 rounded-sm" />
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Skeleton className="h-9 w-20 rounded-sm" />
-          <Skeleton className="h-9 w-24 rounded-sm" />
-          <Skeleton className="h-9 w-16 rounded-sm" />
-        </div>
-      </div>
+        <Skeleton className="h-18 rounded-md" />
 
-      <div className="flex flex-col gap-2 rounded-lg border border-accent-foreground/10 p-5">
-        <Skeleton className="h-8 w-36 rounded-sm" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full max-w-2xl rounded-sm" />
-          <Skeleton className="h-4 w-full max-w-xl rounded-sm" />
-          <Skeleton className="h-4 w-full max-w-lg rounded-sm" />
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)]">
+          <Skeleton className="h-52 rounded-md" />
+          <Skeleton className="h-72 rounded-md" />
         </div>
       </div>
     </div>

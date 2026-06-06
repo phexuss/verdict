@@ -123,8 +123,20 @@ const tasteProfileJsonSchema = {
         type: 'object',
         additionalProperties: false,
         properties: {
-          title: { type: 'string' },
-          description: { type: 'string' },
+          title: {
+            type: 'string',
+            minLength: 2,
+            maxLength: 48,
+            description:
+              'Short user archetype label only, 2-4 words. No sentence, no explanation, no direct address.',
+          },
+          description: {
+            type: 'string',
+            minLength: 24,
+            maxLength: 180,
+            description:
+              'One complete sentence addressed to the user. Keep it separate from the title.',
+          },
         },
         required: ['title', 'description'],
       },
@@ -258,6 +270,18 @@ export class GroqService {
     input: GenerateTasteProfileInput,
   ): Promise<TasteProfile> {
     const language = input.locale === 'ru' ? 'Russian' : 'English';
+    const identityCardRules =
+      input.locale === 'ru'
+        ? [
+            'For identityCards.title, write a compact Russian archetype label only, for example: "Киноман-реалист".',
+            'For identityCards.description, write a separate natural Russian sentence that starts with "Вы".',
+            'Never merge the title and description. Bad: title="Киноман-реалист Ценит глубоких персонажей...". Good: title="Киноман-реалист", description="Вы цените глубоких персонажей и социальные темы больше, чем поверхностный экшн."',
+          ]
+        : [
+            'For identityCards.title, write a compact English archetype label only, for example: "Social Realist".',
+            'For identityCards.description, write a separate natural English sentence that starts with "You".',
+            'Never merge the title and description. Bad: title="Social Realist Values deep characters...". Good: title="Social Realist", description="You value deep characters and social themes more than surface-level action."',
+          ];
     const moviesJson = JSON.stringify(input.movies.slice(0, 80));
 
     const response = await this.groq.chat.completions.create({
@@ -275,7 +299,10 @@ export class GroqService {
             'DISLIKED movies and low ratings are strong negative signals.',
             'Pacing score: 0 means slow burn, 100 means fast-paced.',
             'Emotional weight score: 0 means light, 100 means heavy.',
+            'Keep the exact JSON shape from the schema. Do not rename, add, or omit fields.',
+            'All labels, arrays, descriptions, and summaries are user-facing text.',
             `Write all user-facing text in ${language}.`,
+            ...identityCardRules,
           ].join('\n'),
         },
         {

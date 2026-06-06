@@ -36,46 +36,84 @@ export default async function CuratedMoviePage({
 
   const movie = response.data;
   const credits = creditsResponse.data;
+
   return (
-    <div className="flex flex-col justify-center">
-      <Image
-        alt={movie.title}
-        className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-        width={350}
-        height={350}
-        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-      />
-      <div className="flex flex-col gap-2 p-2">
-        <h1 className="text-3xl">{movie.title}</h1>
-        <div className="flex flex-row text-sm font-medium text-primary">
-          <p>{movie.release_date.slice(0, 4)}</p>
-          <Separator orientation="vertical" className="mx-3 bg-primary/35" />
-          <p>{getHumanReadableRuntime(movie.runtime ?? 0, locale)}</p>
-          <Separator orientation="vertical" className="mx-3 bg-primary/35" />
-          <div className="flex flex-row gap-1.5 items-center">
-            <StarBold className="size-4" />
-            <p>{movie.vote_average.toFixed(1)}</p>
-          </div>
-        </div>
-        <div className="flex flex-row gap-2 mt-1">
-          {movie.genres.length &&
-            movie.genres.map((genre) => (
-              <Badge
-                variant="secondary"
-                className="rounded-sm text-[0.75rem] px-4 py-2 border border-accent-foreground/10 capitalize"
-                key={genre.id}
-              >
-                {genre.name}
-              </Badge>
-            ))}
+    <article className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+      <div className="w-full max-w-sm justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch">
+        <div className="relative aspect-2/3 overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent">
+          {movie.poster_path ? (
+            <Image
+              alt={movie.title}
+              className="object-cover"
+              fill
+              sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
+              src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center p-6 text-center text-foreground/70">
+              {movie.title}
+            </div>
+          )}
         </div>
       </div>
 
-      <StorylineCard description={movie.overview} />
+      <div className="flex min-w-0 flex-col gap-6">
+        <header className="flex flex-col gap-4 border-border border-b pb-6">
+          <div className="flex flex-col gap-3">
+            <h1 className="wrap-break-word font-medium text-4xl leading-tight md:text-5xl xl:text-6xl">
+              {movie.title}
+            </h1>
+            {movie.tagline ? (
+              <p className="text-foreground/65 text-lg leading-relaxed">
+                {movie.tagline}
+              </p>
+            ) : null}
+          </div>
 
-      <Separator className="" orientation="horizontal" />
-      <CreditsCard movieCredits={credits} />
-      <MovieActionsButtons tmdbId={movie.id} />
-    </div>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-medium text-primary text-sm">
+            {movie.release_date ? (
+              <p>{movie.release_date.slice(0, 4)}</p>
+            ) : null}
+            {movie.runtime ? (
+              <>
+                <Separator
+                  orientation="vertical"
+                  className="h-4 bg-primary/35"
+                />
+                <p>{getHumanReadableRuntime(movie.runtime, locale)}</p>
+              </>
+            ) : null}
+            <Separator orientation="vertical" className="h-4 bg-primary/35" />
+            <div className="flex flex-row items-center gap-1.5">
+              <StarBold className="size-4" />
+              <p>{movie.vote_average.toFixed(1)}</p>
+            </div>
+          </div>
+
+          {movie.genres.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {movie.genres.map((genre) => (
+                <Badge
+                  className="rounded-sm border border-accent-foreground/10 px-3 py-1.5 text-[0.75rem] capitalize"
+                  key={genre.id}
+                  variant="secondary"
+                >
+                  {genre.name}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+        </header>
+
+        <div className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <MovieActionsButtons tmdbId={movie.id} />
+        </div>
+
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)] xl:items-start">
+          <StorylineCard description={movie.overview} />
+          <CreditsCard movieCredits={credits} />
+        </div>
+      </div>
+    </article>
   );
 }

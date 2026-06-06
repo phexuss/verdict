@@ -34,6 +34,10 @@ export default function MovieActionsButtons({
   const isWanted = Boolean(action?.savedAt);
   const isWatched = Boolean(action?.watchedAt);
   const isDisliked = action?.reaction === 'DISLIKED';
+  const outlineHoverClassName =
+    'hover:border-primary/35 hover:bg-primary/5 dark:hover:bg-primary/10';
+  const dislikeOutlineHoverClassName =
+    'hover:border-destructive/35 hover:bg-destructive/5 hover:text-destructive dark:hover:bg-destructive/10';
 
   const updateMovie = useUpdateUserMovie({
     mutation: {
@@ -50,6 +54,7 @@ export default function MovieActionsButtons({
   return (
     <div className="flex flex-wrap gap-2">
       <Button
+        className={isWanted ? undefined : outlineHoverClassName}
         disabled={isPending}
         variant={isWanted ? 'default' : 'outline'}
         onClick={() => {
@@ -75,6 +80,7 @@ export default function MovieActionsButtons({
       </Button>
 
       <Button
+        className={isWatched ? undefined : outlineHoverClassName}
         disabled={isPending}
         variant={isWatched ? 'default' : 'outline'}
         onClick={() => {
@@ -97,6 +103,7 @@ export default function MovieActionsButtons({
       </Button>
 
       <Button
+        className={isDisliked ? undefined : dislikeOutlineHoverClassName}
         disabled={isPending}
         variant={isDisliked ? 'destructive' : 'outline'}
         onClick={() => {

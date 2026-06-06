@@ -117,8 +117,9 @@
         }
       },
       "Runtime": {
-        "time": "AVG. RUNTIME",
-        "skip": "USUALLY SKIP"
+        "time": "Avg. Runtime",
+        "minutesSuffix": "min",
+        "skip": "Usually Skip"
       },
       "BestPicks": {
         "title": "Best Picks for Tonight",
