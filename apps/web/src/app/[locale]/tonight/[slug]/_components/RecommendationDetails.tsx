@@ -5,6 +5,7 @@ import { ArrowLeftLinear, RefreshLinear } from '@solar-icons/react-perf';
 import Image from 'next/image';
 import { useGetRecommendationBySlug } from '@/api/generated/recommendations/recommendations';
 import { Link } from '@/i18n/navigation';
+import { RecommendationDetailsSkeleton } from './RecommendationDetailsSkeleton';
 
 type RecommendationDetailsProps = {
   slug: string;
@@ -28,13 +29,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
     },
   });
 
-  if (isLoading) {
-    return (
-      <main className="mx-auto flex min-h-[60svh] w-full max-w-5xl items-center justify-center px-4 py-10">
-        <div className="h-24 w-full max-w-md animate-pulse rounded-lg bg-muted" />
-      </main>
-    );
-  }
+  if (isLoading) return <RecommendationDetailsSkeleton />;
 
   if (error || !recommendation) {
     return (

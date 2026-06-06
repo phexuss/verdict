@@ -1,12 +1,10 @@
 'use client';
+
 import { useGetTasteProfile } from '@/api/generated/user/user';
+import { ProfileSkeleton } from './_components/ProfileSkeleton';
 
 export default function ProfilePage() {
-  const {
-    data: profile,
-    isLoading,
-    error,
-  } = useGetTasteProfile({
+  const { isLoading } = useGetTasteProfile({
     query: {
       retry: false,
       select: (response) => response.data,
@@ -14,7 +12,7 @@ export default function ProfilePage() {
   });
 
   if (isLoading) {
-    return <div>Analyzing...</div>;
+    return <ProfileSkeleton />;
   }
 
   return <div></div>;
