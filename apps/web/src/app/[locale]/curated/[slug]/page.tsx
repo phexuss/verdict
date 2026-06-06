@@ -4,6 +4,7 @@ import { StarBold } from '@solar-icons/react-perf';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getMovieCredits, getMovieDetails } from '@/api/generated/tmdb/tmdb';
+import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import CreditsCard from '@/components/sections/curated/CreditsCard';
 import StorylineCard from '@/components/sections/curated/StorylineCard';
 import { getHumanReadableRuntime } from '@/lib/tmdb-helper';
@@ -74,6 +75,7 @@ export default async function CuratedMoviePage({
 
       <Separator className="" orientation="horizontal" />
       <CreditsCard movieCredits={credits} />
+      <MovieActionsButtons tmdbId={movie.id} />
     </div>
   );
 }
