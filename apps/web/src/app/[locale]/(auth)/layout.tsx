@@ -1,6 +1,6 @@
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { hasCurrentUser } from '@/lib/auth-server';
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -8,34 +8,6 @@ type AuthLayoutProps = {
     locale: string;
   }>;
 };
-
-async function hasCurrentUser() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  if (!apiUrl) {
-    return false;
-  }
-
-  const requestHeaders = await headers();
-  const cookie = requestHeaders.get('cookie');
-
-  if (!cookie) {
-    return false;
-  }
-
-  try {
-    const response = await fetch(`${apiUrl}/api/user/me`, {
-      cache: 'no-store',
-      headers: {
-        cookie,
-      },
-    });
-
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
 
 export default async function AuthLayout({
   children,
