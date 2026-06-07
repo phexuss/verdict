@@ -90,7 +90,7 @@
   "ProfilePage": {
     "title": "Taste Profile",
     "label": "Your Cinematic Identity",
-    "description": "Analyzed from {count} watched titles",
+    "description": "Analyzed from {count} marked titles",
     "Sections": {
       "Atmosphere": {
         "title": "Atmosphere & Mood",
@@ -132,6 +132,27 @@
         "emptyTitle": "No Tonight picks yet",
         "emptyDescription": "Choose a mood and time limit to generate your first three-film lineup.",
         "fallbackTitle": "Tonight trio"
+      },
+      "RefreshProfile": {
+        "title": "Refresh your cinematic portrait",
+        "description": "Regenerate the analysis after saving, watching, rating, or disliking more films.",
+        "button": "Regenerate portrait",
+        "loading": "Regenerating...",
+        "success": "Cinematic portrait refreshed.",
+        "error": "Could not refresh the portrait."
+      },
+      "MovieShelf": {
+        "title": "Your Movie Shelf",
+        "description": "Films you saved, watched, rated, or marked along the way.",
+        "browse": "Browse curated",
+        "emptyTitle": "No marked films yet",
+        "emptyDescription": "Save, watch, rate, or dislike a film to start shaping your profile.",
+        "fallbackTitle": "Untitled film",
+        "badges": {
+          "saved": "Want",
+          "watched": "Watched",
+          "disliked": "Disliked"
+        }
       }
     }
   },

@@ -47,5 +47,6 @@ export * from './updateUserMovieDto';
 export * from './updateUserMovieDtoReaction';
 export * from './userMovieActionDto';
 export * from './userMovieActionDtoReaction';
+export * from './userMovieActionMovieDto';
 export * from './userProfileDto';
 export * from './userTasteProfileDto';

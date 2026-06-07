@@ -48,6 +48,7 @@ type BuildMovieDiscoveryStrategyInput = {
 type TasteProfileMovie = {
   title: string;
   genres: string[];
+  saved?: boolean;
   watched: boolean;
   reaction?: 'LIKED' | 'DISLIKED' | null;
   rating?: number | null;
@@ -479,6 +480,7 @@ export class GroqService {
           content: [
             'You analyze movie preferences for a cinema app.',
             'Infer a concise cinematic taste profile from user actions.',
+            'Saved movies are weak positive intent signals.',
             'Watched movies are preference signals.',
             'LIKED movies and high ratings are strong positive signals.',
             'DISLIKED movies and low ratings are strong negative signals.',

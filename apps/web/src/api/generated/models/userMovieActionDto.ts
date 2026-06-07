@@ -6,10 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UserMovieActionDtoReaction } from './userMovieActionDtoReaction';
+import type { UserMovieActionMovieDto } from './userMovieActionMovieDto';
 
 export interface UserMovieActionDto {
   id: string;
   tmdbId: number;
+  movie: UserMovieActionMovieDto;
   /** @nullable */
   savedAt: string | null;
   /** @nullable */

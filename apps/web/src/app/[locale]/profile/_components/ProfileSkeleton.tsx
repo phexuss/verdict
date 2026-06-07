@@ -56,6 +56,30 @@ export function ProfileSkeleton() {
             </div>
             <Skeleton className="h-5 w-full max-w-sm rounded-sm sm:ml-auto" />
           </section>
+
+          <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-6 w-56 rounded-sm" />
+              <Skeleton className="h-4 w-full max-w-md rounded-sm" />
+            </div>
+            <Skeleton className="h-9 w-full rounded-4xl sm:w-56" />
+          </section>
+
+          <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
+            <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-7 w-40 rounded-sm" />
+                <Skeleton className="h-4 w-full max-w-md rounded-sm" />
+              </div>
+              <Skeleton className="h-5 w-20 rounded-sm" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <ProfileMovieSkeleton />
+              <ProfileMovieSkeleton />
+              <ProfileMovieSkeleton />
+            </div>
+          </section>
         </div>
 
         <aside className="flex min-w-0 flex-col gap-6">
@@ -180,6 +204,22 @@ function ProfileRecommendationSkeleton() {
         <div className="flex gap-2 pt-1">
           <Skeleton className="h-6 w-16 rounded-full" />
           <Skeleton className="h-6 w-20 rounded-full" />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ProfileMovieSkeleton() {
+  return (
+    <article className="overflow-hidden rounded-md border border-border bg-background/30">
+      <Skeleton className="aspect-2/3 w-full rounded-none" />
+      <div className="flex flex-col gap-2 p-3">
+        <Skeleton className="h-4 w-full rounded-sm" />
+        <Skeleton className="h-4 w-2/3 rounded-sm" />
+        <div className="flex gap-1.5 pt-1">
+          <Skeleton className="h-5 w-14 rounded-full" />
+          <Skeleton className="h-5 w-16 rounded-full" />
         </div>
       </div>
     </article>

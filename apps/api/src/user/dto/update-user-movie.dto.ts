@@ -43,12 +43,50 @@ export class UpdateUserMovieDto {
   rating?: number | null;
 }
 
+export class UserMovieActionMovieDto {
+  @ApiProperty({ example: 550 })
+  tmdbId!: number;
+
+  @ApiProperty({ example: 'Fight Club', nullable: true, type: String })
+  title!: string | null;
+
+  @ApiProperty({
+    example: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
+    nullable: true,
+    type: String,
+  })
+  posterPath!: string | null;
+
+  @ApiProperty({
+    example: '/wMrV8SLne1jHLeYS0lLrA1Tf86P.jpg',
+    nullable: true,
+    type: String,
+  })
+  backdropPath!: string | null;
+
+  @ApiProperty({
+    example: '1999-10-15',
+    nullable: true,
+    type: String,
+  })
+  releaseDate!: string | null;
+
+  @ApiProperty({ example: 139, nullable: true, type: Number })
+  runtime!: number | null;
+
+  @ApiProperty({ example: 8.4, nullable: true, type: Number })
+  voteAverage!: number | null;
+}
+
 export class UserMovieActionDto {
   @ApiProperty({ example: 'clxaction123' })
   id!: string;
 
   @ApiProperty({ example: 550 })
   tmdbId!: number;
+
+  @ApiProperty({ type: UserMovieActionMovieDto })
+  movie!: UserMovieActionMovieDto;
 
   @ApiProperty({
     nullable: true,

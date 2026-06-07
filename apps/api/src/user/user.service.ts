@@ -15,6 +15,17 @@ type UserMovieActionWithMovie = Prisma.UserMovieGetPayload<{
     movie: {
       select: {
         tmdbId: true;
+        originalTitle: true;
+        posterPath: true;
+        backdropPath: true;
+        releaseDate: true;
+        runtime: true;
+        voteAverage: true;
+        translations: {
+          select: {
+            title: true;
+          };
+        };
       };
     };
   };
@@ -64,6 +75,7 @@ export class UserService {
     const where: Prisma.UserMovieWhereInput = {
       userId,
       OR: [
+        { savedAt: { not: null } },
         { watchedAt: { not: null } },
         { reaction: { not: null } },
         { rating: { not: null } },
@@ -96,28 +108,31 @@ export class UserService {
     }
 
     const prismaLocale = locale === 'ru' ? Locale.RU : Locale.EN;
-    const movies = actions.map(({ watchedAt, reaction, rating, movie }) => {
-      const translation =
-        movie.translations.find((item) => item.locale === prismaLocale) ??
-        movie.translations[0];
+    const movies = actions.map(
+      ({ savedAt, watchedAt, reaction, rating, movie }) => {
+        const translation =
+          movie.translations.find((item) => item.locale === prismaLocale) ??
+          movie.translations[0];
 
-      return {
-        watched: Boolean(watchedAt),
-        reaction,
-        rating,
-        title: translation?.title ?? movie.originalTitle ?? 'Unknown',
-        runtime: movie.runtime,
-        genres: movie.genres
-          .map(
-            ({ genre }) =>
-              genre.translations.find((item) => item.locale === prismaLocale)
-                ?.name ?? genre.translations[0]?.name,
-          )
-          .filter((name): name is string => Boolean(name)),
-        moodTags: translation?.aiMoodTags ?? [],
-        themes: translation?.aiThemes ?? [],
-      };
-    });
+        return {
+          saved: Boolean(savedAt),
+          watched: Boolean(watchedAt),
+          reaction,
+          rating,
+          title: translation?.title ?? movie.originalTitle ?? 'Unknown',
+          runtime: movie.runtime,
+          genres: movie.genres
+            .map(
+              ({ genre }) =>
+                genre.translations.find((item) => item.locale === prismaLocale)
+                  ?.name ?? genre.translations[0]?.name,
+            )
+            .filter((name): name is string => Boolean(name)),
+          moodTags: translation?.aiMoodTags ?? [],
+          themes: translation?.aiThemes ?? [],
+        };
+      },
+    );
 
     const data = await this.groqService.generateTasteProfile({
       locale,
@@ -153,6 +168,17 @@ export class UserService {
         movie: {
           select: {
             tmdbId: true,
+            originalTitle: true,
+            posterPath: true,
+            backdropPath: true,
+            releaseDate: true,
+            runtime: true,
+            voteAverage: true,
+            translations: {
+              select: {
+                title: true,
+              },
+            },
           },
         },
       },
@@ -206,6 +232,17 @@ export class UserService {
         movie: {
           select: {
             tmdbId: true,
+            originalTitle: true,
+            posterPath: true,
+            backdropPath: true,
+            releaseDate: true,
+            runtime: true,
+            voteAverage: true,
+            translations: {
+              select: {
+                title: true,
+              },
+            },
           },
         },
       },
@@ -284,6 +321,17 @@ export class UserService {
     return {
       id: action.id,
       tmdbId: action.movie.tmdbId,
+      movie: {
+        tmdbId: action.movie.tmdbId,
+        title:
+          action.movie.translations[0]?.title ?? action.movie.originalTitle,
+        posterPath: action.movie.posterPath,
+        backdropPath: action.movie.backdropPath,
+        releaseDate:
+          action.movie.releaseDate?.toISOString().slice(0, 10) ?? null,
+        runtime: action.movie.runtime,
+        voteAverage: action.movie.voteAverage,
+      },
       savedAt: action.savedAt?.toISOString() ?? null,
       watchedAt: action.watchedAt?.toISOString() ?? null,
       reaction: action.reaction,

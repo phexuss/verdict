@@ -12,11 +12,14 @@ import { useGetMyRecommendations } from '@/api/generated/recommendations/recomme
 import {
   useGetCurrentUser,
   useGetTasteProfile,
+  useGetUserMovies,
 } from '@/api/generated/user/user';
 import EmotionalWeightCard from '@/components/sections/profile/EmotionalWeightCard';
 import IdentityCard from '@/components/sections/profile/IdentityCard';
 import MoodCard from '@/components/sections/profile/MoodCard';
 import PacingCard from '@/components/sections/profile/PacingCard';
+import ProfileMovieShelf from '@/components/sections/profile/ProfileMovieShelf';
+import RefreshTasteProfileCard from '@/components/sections/profile/RefreshTasteProfileCard';
 import TonightHistory from '@/components/sections/profile/TonightHistory';
 import { ProfileSkeleton } from './ProfileSkeleton';
 
@@ -50,6 +53,16 @@ export default function ProfilePage() {
         select: (response) => response.data,
       },
     });
+
+  const { data: userMovies, isLoading: isUserMoviesLoading } = useGetUserMovies(
+    {
+      query: {
+        enabled: Boolean(user),
+        retry: false,
+        select: (response) => response.data,
+      },
+    },
+  );
 
   if (userError?.status === 401) {
     return null;
@@ -120,6 +133,13 @@ export default function ProfilePage() {
               {profile.frequentlySeen.join(', ')}
             </p>
           </div>
+
+          <RefreshTasteProfileCard />
+
+          <ProfileMovieShelf
+            isLoading={isUserMoviesLoading}
+            movies={userMovies}
+          />
         </div>
 
         <aside className="flex min-w-0 flex-col gap-6">
