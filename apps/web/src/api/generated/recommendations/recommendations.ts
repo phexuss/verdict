@@ -27,6 +27,7 @@ import { customFetch } from '../../fetcher';
 import type {
   CreateRecommendationDto,
   CreateRecommendationResponseDto,
+  RecommendationListItemDto,
   RecommendationResponseDto,
 } from '../models';
 
@@ -135,6 +136,168 @@ export const useCreateRecommendation = <
     queryClient,
   );
 };
+export type getMyRecommendationsResponse200 = {
+  data: RecommendationListItemDto[];
+  status: 200;
+};
+
+export type getMyRecommendationsResponseSuccess =
+  getMyRecommendationsResponse200 & {
+    headers: Headers;
+  };
+
+export const getGetMyRecommendationsUrl = () => {
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/me`;
+};
+
+export const getMyRecommendations = async (
+  options?: RequestInit,
+): Promise<getMyRecommendationsResponseSuccess> => {
+  return customFetch<getMyRecommendationsResponseSuccess>(
+    getGetMyRecommendationsUrl(),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getGetMyRecommendationsQueryKey = () => {
+  return [`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/me`] as const;
+};
+
+export const getGetMyRecommendationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMyRecommendations>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getMyRecommendations>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMyRecommendationsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getMyRecommendations>>
+  > = ({ signal }) => getMyRecommendations({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMyRecommendations>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyRecommendationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyRecommendations>>
+>;
+export type GetMyRecommendationsQueryError = ErrorType<unknown>;
+
+export function useGetMyRecommendations<
+  TData = Awaited<ReturnType<typeof getMyRecommendations>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMyRecommendations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyRecommendations>>,
+          TError,
+          Awaited<ReturnType<typeof getMyRecommendations>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyRecommendations<
+  TData = Awaited<ReturnType<typeof getMyRecommendations>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMyRecommendations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyRecommendations>>,
+          TError,
+          Awaited<ReturnType<typeof getMyRecommendations>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyRecommendations<
+  TData = Awaited<ReturnType<typeof getMyRecommendations>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMyRecommendations>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetMyRecommendations<
+  TData = Awaited<ReturnType<typeof getMyRecommendations>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMyRecommendations>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyRecommendationsQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export type getRecommendationBySlugResponse200 = {
   data: RecommendationResponseDto;
   status: 200;

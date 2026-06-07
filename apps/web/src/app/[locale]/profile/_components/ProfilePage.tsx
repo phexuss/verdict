@@ -8,6 +8,7 @@ import {
   StarRainbowOutline,
 } from '@solar-icons/react-perf';
 import { useTranslations } from 'next-intl';
+import { useGetMyRecommendations } from '@/api/generated/recommendations/recommendations';
 import {
   useGetCurrentUser,
   useGetTasteProfile,
@@ -16,6 +17,7 @@ import EmotionalWeightCard from '@/components/sections/profile/EmotionalWeightCa
 import IdentityCard from '@/components/sections/profile/IdentityCard';
 import MoodCard from '@/components/sections/profile/MoodCard';
 import PacingCard from '@/components/sections/profile/PacingCard';
+import TonightHistory from '@/components/sections/profile/TonightHistory';
 import { ProfileSkeleton } from './ProfileSkeleton';
 
 export default function ProfilePage() {
@@ -33,6 +35,15 @@ export default function ProfilePage() {
 
   const { data: tasteProfile, isLoading: isProfileLoading } =
     useGetTasteProfile({
+      query: {
+        enabled: Boolean(user),
+        retry: false,
+        select: (response) => response.data,
+      },
+    });
+
+  const { data: recommendations, isLoading: isRecommendationsLoading } =
+    useGetMyRecommendations({
       query: {
         enabled: Boolean(user),
         retry: false,
@@ -157,6 +168,11 @@ export default function ProfilePage() {
           </div>
         </aside>
       </div>
+
+      <TonightHistory
+        isLoading={isRecommendationsLoading}
+        recommendations={recommendations}
+      />
     </div>
   );
 }

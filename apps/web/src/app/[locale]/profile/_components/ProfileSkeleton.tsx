@@ -93,6 +93,25 @@ export function ProfileSkeleton() {
           </div>
         </aside>
       </div>
+
+      <section className="border-border border-t pt-10">
+        <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <Skeleton className="size-6 rounded-sm" />
+              <Skeleton className="h-8 w-56 rounded-sm" />
+            </div>
+            <Skeleton className="h-4 w-full max-w-xl rounded-sm" />
+          </div>
+          <Skeleton className="h-5 w-24 rounded-sm" />
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <ProfileRecommendationSkeleton />
+          <ProfileRecommendationSkeleton />
+          <ProfileRecommendationSkeleton />
+        </div>
+      </section>
     </div>
   );
 }
@@ -141,5 +160,28 @@ function ProfileMetricSkeleton() {
       <Skeleton className="h-6 w-24 rounded-sm" />
       <Skeleton className="mt-3 h-5 w-16 rounded-sm" />
     </section>
+  );
+}
+
+function ProfileRecommendationSkeleton() {
+  return (
+    <article className="min-h-52 overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent">
+      <div className="grid h-28 grid-cols-3 gap-1 bg-background/40 p-1">
+        <Skeleton className="h-full rounded-sm" />
+        <Skeleton className="h-full rounded-sm" />
+        <Skeleton className="h-full rounded-sm" />
+      </div>
+
+      <div className="flex flex-col gap-3 p-4">
+        <Skeleton className="h-4 w-24 rounded-sm" />
+        <Skeleton className="h-6 w-4/5 rounded-sm" />
+        <Skeleton className="h-4 w-full rounded-sm" />
+        <Skeleton className="h-4 w-3/4 rounded-sm" />
+        <div className="flex gap-2 pt-1">
+          <Skeleton className="h-6 w-16 rounded-full" />
+          <Skeleton className="h-6 w-20 rounded-full" />
+        </div>
+      </div>
+    </article>
   );
 }

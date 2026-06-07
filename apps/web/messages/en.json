@@ -124,6 +124,14 @@
       "BestPicks": {
         "title": "Best Picks for Tonight",
         "description": "Curated to perfectly match your current cinematic identity."
+      },
+      "TonightHistory": {
+        "title": "Your Tonight Picks",
+        "description": "Recent AI-generated trios you created for movie nights.",
+        "cta": "Create new",
+        "emptyTitle": "No Tonight picks yet",
+        "emptyDescription": "Choose a mood and time limit to generate your first three-film lineup.",
+        "fallbackTitle": "Tonight trio"
       }
     }
   },

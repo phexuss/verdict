@@ -15,6 +15,7 @@ import { auth } from '../auth.js';
 import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
 import {
   CreateRecommendationResponseDto,
+  RecommendationListItemDto,
   RecommendationResponseDto,
 } from './dto/recommendation-response.dto.js';
 import { RecommendationsService } from './recommendations.service.js';
@@ -37,6 +38,17 @@ export class RecommendationsController {
     @Session() session?: UserSession<typeof auth>,
   ): Promise<CreateRecommendationResponseDto> {
     return this.recommendationsService.create(dto, session?.user.id);
+  }
+
+  @Get('me')
+  @ApiOperation({ operationId: 'getMyRecommendations' })
+  @ApiOkResponse({
+    type: [RecommendationListItemDto],
+  })
+  findMine(
+    @Session() session: UserSession<typeof auth>,
+  ): Promise<RecommendationListItemDto[]> {
+    return this.recommendationsService.findByUser(session.user.id);
   }
 
   @Get(':slug')

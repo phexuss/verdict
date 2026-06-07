@@ -19,6 +19,7 @@ import { CreateRecommendationDto } from './dto/create-recommendation.dto.js';
 import type {
   CreateRecommendationResponseDto,
   RecommendationGenreDto,
+  RecommendationListItemDto,
   RecommendationResponseDto,
 } from './dto/recommendation-response.dto.js';
 
@@ -229,6 +230,52 @@ export class RecommendationsService {
     }
 
     return this.toRecommendationResponse(recommendation);
+  }
+
+  async findByUser(userId: string): Promise<RecommendationListItemDto[]> {
+    const recommendations = await this.prisma.recommendation.findMany({
+      where: {
+        userId,
+        status: RecommendationStatus.READY,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+      include: recommendationInclude,
+    });
+
+    return recommendations.map((recommendation) =>
+      this.toRecommendationListItem(recommendation),
+    );
+  }
+
+  private toRecommendationListItem(
+    recommendation: RecommendationWithItems,
+  ): RecommendationListItemDto {
+    return {
+      id: recommendation.id,
+      slug: recommendation.slug,
+      status: recommendation.status,
+      moods: recommendation.moods,
+      groupType: recommendation.groupType,
+      duration: recommendation.duration,
+      title: recommendation.title,
+      description: recommendation.description,
+      createdAt: recommendation.createdAt.toISOString(),
+      movies: recommendation.items.slice(0, 3).map((item) => {
+        const movie = item.movie;
+        const translation =
+          movie.translations.find(
+            (candidate) => candidate.locale === recommendation.locale,
+          ) ?? movie.translations[0];
+
+        return {
+          tmdbId: movie.tmdbId,
+          title: translation?.title ?? movie.originalTitle,
+          posterPath: movie.posterPath,
+          backdropPath: movie.backdropPath,
+        };
+      }),
+    };
   }
 
   private toRecommendationResponse(
