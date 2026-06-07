@@ -44,7 +44,7 @@ export function ProfileSkeleton() {
             </div>
           </section>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid items-start gap-4 sm:grid-cols-2">
             <ProfileIdentitySkeleton />
             <ProfileIdentitySkeleton />
           </div>
@@ -65,20 +65,16 @@ export function ProfileSkeleton() {
             <Skeleton className="h-9 w-full rounded-4xl sm:w-56" />
           </section>
 
-          <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
-            <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex flex-col gap-2">
-                <Skeleton className="h-7 w-40 rounded-sm" />
-                <Skeleton className="h-4 w-full max-w-md rounded-sm" />
+          <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Skeleton className="size-6 rounded-sm" />
+                <Skeleton className="h-7 w-44 rounded-sm" />
               </div>
-              <Skeleton className="h-5 w-20 rounded-sm" />
+              <Skeleton className="h-4 w-full max-w-md rounded-sm" />
+              <Skeleton className="h-4 w-36 rounded-sm" />
             </div>
-
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <ProfileMovieSkeleton />
-              <ProfileMovieSkeleton />
-              <ProfileMovieSkeleton />
-            </div>
+            <Skeleton className="h-9 w-full rounded-4xl sm:w-36" />
           </section>
         </div>
 
@@ -142,7 +138,7 @@ export function ProfileSkeleton() {
 
 function ProfileIdentitySkeleton() {
   return (
-    <article className="flex h-44 flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4">
+    <article className="flex flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4">
       <Skeleton className="mb-5 size-8 shrink-0 rounded-sm" />
       <div className="flex min-h-0 flex-1 flex-col gap-3">
         <Skeleton className="h-7 w-3/4 rounded-sm" />
@@ -150,6 +146,7 @@ function ProfileIdentitySkeleton() {
           <Skeleton className="h-4 w-full rounded-sm" />
           <Skeleton className="h-4 w-11/12 rounded-sm" />
           <Skeleton className="h-4 w-3/4 rounded-sm" />
+          <Skeleton className="h-4 w-5/6 rounded-sm" />
         </div>
       </div>
     </article>
@@ -204,22 +201,6 @@ function ProfileRecommendationSkeleton() {
         <div className="flex gap-2 pt-1">
           <Skeleton className="h-6 w-16 rounded-full" />
           <Skeleton className="h-6 w-20 rounded-full" />
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function ProfileMovieSkeleton() {
-  return (
-    <article className="overflow-hidden rounded-md border border-border bg-background/30">
-      <Skeleton className="aspect-2/3 w-full rounded-none" />
-      <div className="flex flex-col gap-2 p-3">
-        <Skeleton className="h-4 w-full rounded-sm" />
-        <Skeleton className="h-4 w-2/3 rounded-sm" />
-        <div className="flex gap-1.5 pt-1">
-          <Skeleton className="h-5 w-14 rounded-full" />
-          <Skeleton className="h-5 w-16 rounded-full" />
         </div>
       </div>
     </article>

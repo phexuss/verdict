@@ -1,6 +1,7 @@
 'use client';
 
 import { Skeleton } from '@repo/ui/components/skeleton';
+import { cn } from '@repo/ui/lib/utils';
 import {
   BookmarkBold,
   DislikeBold,
@@ -16,38 +17,57 @@ import { Link } from '@/i18n/navigation';
 type ProfileMovieShelfProps = {
   movies?: UserMovieActionDto[];
   isLoading?: boolean;
+  variant?: 'embedded' | 'page';
 };
 
 export default function ProfileMovieShelf({
   movies,
   isLoading,
+  variant = 'embedded',
 }: ProfileMovieShelfProps) {
   const t = useTranslations('ProfilePage.Sections.MovieShelf');
-  const visibleMovies = movies?.filter(hasMovieAction).slice(0, 6) ?? [];
+  const markedMovies = movies?.filter(hasMovieAction) ?? [];
+  const visibleMovies =
+    variant === 'page' ? markedMovies : markedMovies.slice(0, 6);
 
   return (
-    <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
-      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <h3 className="font-medium text-xl">{t('title')}</h3>
-          <p className="mt-1 text-foreground/70 text-sm leading-relaxed">
-            {t('description')}
-          </p>
+    <section
+      className={cn(
+        variant === 'embedded'
+          ? 'rounded-md border border-sidebar-ring/8 bg-accent p-4'
+          : 'w-full',
+      )}
+    >
+      {variant === 'embedded' ? (
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <h3 className="font-medium text-xl">{t('title')}</h3>
+            <p className="mt-1 text-foreground/70 text-sm leading-relaxed">
+              {t('description')}
+            </p>
+          </div>
+          <Link
+            className="w-fit font-medium text-primary text-sm transition-colors hover:text-primary/80"
+            href="/profile/movies"
+          >
+            {t('open')}
+          </Link>
         </div>
-        <Link
-          className="w-fit font-medium text-primary text-sm transition-colors hover:text-primary/80"
-          href="/curated"
-        >
-          {t('browse')}
-        </Link>
-      </div>
+      ) : null}
 
       {isLoading ? (
-        <MovieShelfSkeleton />
+        <MovieShelfSkeleton variant={variant} />
       ) : visibleMovies.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div
+          className={cn(
+            'grid gap-3',
+            variant === 'page'
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              : 'grid-cols-2 sm:grid-cols-3',
+          )}
+        >
           {visibleMovies.map((action) => (
-            <MovieShelfCard action={action} key={action.id} />
+            <MovieShelfCard action={action} key={action.id} variant={variant} />
           ))}
         </div>
       ) : (
@@ -64,9 +84,10 @@ export default function ProfileMovieShelf({
 
 type MovieShelfCardProps = {
   action: UserMovieActionDto;
+  variant?: 'embedded' | 'page';
 };
 
-function MovieShelfCard({ action }: MovieShelfCardProps) {
+function MovieShelfCard({ action, variant = 'embedded' }: MovieShelfCardProps) {
   const t = useTranslations('ProfilePage.Sections.MovieShelf');
   const movie = action.movie;
   const imagePath = movie.posterPath ?? movie.backdropPath;
@@ -84,7 +105,11 @@ function MovieShelfCard({ action }: MovieShelfCardProps) {
             alt={title}
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             fill
-            sizes="(min-width: 1280px) 10vw, (min-width: 640px) 18vw, 42vw"
+            sizes={
+              variant === 'page'
+                ? '(min-width: 1280px) 18rem, (min-width: 1024px) 28vw, (min-width: 640px) 42vw, 92vw'
+                : '(min-width: 1280px) 10vw, (min-width: 640px) 18vw, 42vw'
+            }
             src={`https://image.tmdb.org/t/p/w342${imagePath}`}
           />
         ) : (
@@ -99,9 +124,19 @@ function MovieShelfCard({ action }: MovieShelfCardProps) {
         </div>
       </div>
 
-      <div className="flex min-h-24 flex-col gap-2 p-3">
+      <div
+        className={cn(
+          'flex flex-col gap-2 p-3',
+          variant === 'page' ? 'min-h-32 sm:p-4' : 'min-h-24',
+        )}
+      >
         <div className="min-w-0">
-          <h4 className="line-clamp-2 wrap-break-word font-medium text-sm leading-tight">
+          <h4
+            className={cn(
+              'line-clamp-2 wrap-break-word font-medium leading-tight',
+              variant === 'page' ? 'text-base' : 'text-sm',
+            )}
+          >
             {title}
           </h4>
           {releaseYear ? (
@@ -150,10 +185,35 @@ function MovieActionPill({ children, icon }: MovieActionPillProps) {
   );
 }
 
-function MovieShelfSkeleton() {
+function MovieShelfSkeleton({
+  variant = 'embedded',
+}: {
+  variant?: 'embedded' | 'page';
+}) {
+  const skeletonItems =
+    variant === 'page'
+      ? [
+          'movie-shelf-1',
+          'movie-shelf-2',
+          'movie-shelf-3',
+          'movie-shelf-4',
+          'movie-shelf-5',
+          'movie-shelf-6',
+          'movie-shelf-7',
+          'movie-shelf-8',
+        ]
+      : ['movie-shelf-1', 'movie-shelf-2', 'movie-shelf-3'];
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      {['movie-shelf-1', 'movie-shelf-2', 'movie-shelf-3'].map((item) => (
+    <div
+      className={cn(
+        'grid gap-3',
+        variant === 'page'
+          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          : 'grid-cols-2 sm:grid-cols-3',
+      )}
+    >
+      {skeletonItems.map((item) => (
         <div
           className="overflow-hidden rounded-md border border-border bg-background/30"
           key={item}
@@ -173,7 +233,7 @@ function MovieShelfSkeleton() {
   );
 }
 
-function hasMovieAction(action: UserMovieActionDto) {
+export function hasMovieAction(action: UserMovieActionDto) {
   return Boolean(
     action.savedAt || action.watchedAt || action.reaction || action.rating,
   );

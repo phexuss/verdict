@@ -18,7 +18,7 @@ import EmotionalWeightCard from '@/components/sections/profile/EmotionalWeightCa
 import IdentityCard from '@/components/sections/profile/IdentityCard';
 import MoodCard from '@/components/sections/profile/MoodCard';
 import PacingCard from '@/components/sections/profile/PacingCard';
-import ProfileMovieShelf from '@/components/sections/profile/ProfileMovieShelf';
+import ProfileMovieShelfSummary from '@/components/sections/profile/ProfileMovieShelfSummary';
 import RefreshTasteProfileCard from '@/components/sections/profile/RefreshTasteProfileCard';
 import TonightHistory from '@/components/sections/profile/TonightHistory';
 import { ProfileSkeleton } from './ProfileSkeleton';
@@ -107,7 +107,7 @@ export default function ProfilePage() {
             lowAffinity={profile.lowAffinity}
           />
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid items-start gap-4 sm:grid-cols-2">
             {profile.identityCards.map((card, index) => (
               <IdentityCard
                 key={`${card.title}-${card.description}`}
@@ -136,7 +136,7 @@ export default function ProfilePage() {
 
           <RefreshTasteProfileCard />
 
-          <ProfileMovieShelf
+          <ProfileMovieShelfSummary
             isLoading={isUserMoviesLoading}
             movies={userMovies}
           />

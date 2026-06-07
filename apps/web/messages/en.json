@@ -144,7 +144,10 @@
       "MovieShelf": {
         "title": "Your Movie Shelf",
         "description": "Films you saved, watched, rated, or marked along the way.",
-        "browse": "Browse curated",
+        "open": "Open shelf",
+        "back": "Back to profile",
+        "count": "{count} marked films",
+        "countEmpty": "No marked films yet",
         "emptyTitle": "No marked films yet",
         "emptyDescription": "Save, watch, rate, or dislike a film to start shaping your profile.",
         "fallbackTitle": "Untitled film",
@@ -172,6 +175,9 @@
     "watched": "Watched",
     "dislike": "Dislike",
     "disliked": "Disliked",
+    "rate": "Rate",
+    "rating": "{rating}/10",
+    "clearRating": "Clear rating",
     "remove": "Remove"
   },
   "Alerts": {

@@ -20,7 +20,7 @@ export default function IdentityCard({
   return (
     <article
       className={cn(
-        'flex h-44 flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4 text-foreground',
+        'flex flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4 text-foreground',
         className,
       )}
     >
@@ -32,7 +32,7 @@ export default function IdentityCard({
         <h3 className="line-clamp-2 wrap-break-word font-medium text-xl leading-tight">
           {title}
         </h3>
-        <p className="line-clamp-4 wrap-break-word text-foreground/70 text-sm leading-relaxed">
+        <p className="line-clamp-6 wrap-break-word text-foreground/70 text-sm leading-relaxed">
           {description}
         </p>
       </div>

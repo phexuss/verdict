@@ -194,8 +194,22 @@ const tasteProfileJsonSchema = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    highAffinity: { type: 'array', items: { type: 'string' }, maxItems: 6 },
-    lowAffinity: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    highAffinity: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 6,
+      items: { type: 'string', minLength: 2, maxLength: 32 },
+      description:
+        'Positive atmosphere, mood, style, genre, or theme tags only. 1-3 words each. Never movie titles, franchise names, character names, or person names.',
+    },
+    lowAffinity: {
+      type: 'array',
+      minItems: 1,
+      maxItems: 4,
+      items: { type: 'string', minLength: 2, maxLength: 32 },
+      description:
+        'Negative/rarely preferred atmosphere, mood, style, genre, or theme tags only. 1-3 words each. Never movie titles, franchise names, character names, or person names.',
+    },
     pacing: {
       type: 'object',
       additionalProperties: false,
@@ -241,7 +255,13 @@ const tasteProfileJsonSchema = {
         required: ['title', 'description'],
       },
     },
-    frequentlySeen: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    frequentlySeen: {
+      type: 'array',
+      items: { type: 'string', minLength: 2, maxLength: 48 },
+      maxItems: 4,
+      description:
+        'Recurring genres, themes, motifs, tones, or storytelling patterns. Never movie titles.',
+    },
     runtimeRange: {
       type: 'object',
       additionalProperties: false,
@@ -251,7 +271,13 @@ const tasteProfileJsonSchema = {
       },
       required: ['min', 'max'],
     },
-    usuallySkip: { type: 'array', items: { type: 'string' }, maxItems: 4 },
+    usuallySkip: {
+      type: 'array',
+      items: { type: 'string', minLength: 2, maxLength: 48 },
+      maxItems: 4,
+      description:
+        'Genres, styles, moods, or storytelling patterns the user avoids. Never movie titles.',
+    },
     summary: { type: 'string' },
   },
   required: [
@@ -468,6 +494,20 @@ export class GroqService {
             'For identityCards.description, write a separate natural English sentence that starts with "You".',
             'Never merge the title and description. Bad: title="Social Realist Values deep characters...". Good: title="Social Realist", description="You value deep characters and social themes more than surface-level action."',
           ];
+    const profileTagRules =
+      input.locale === 'ru'
+        ? [
+            'For highAffinity and lowAffinity, write short Russian taste tags only: moods, tones, themes, genres, and storytelling patterns.',
+            'Never put movie titles in highAffinity, lowAffinity, frequentlySeen, usuallySkip, or identityCards. Movie titles are evidence only, not profile labels.',
+            'Bad highAffinity: ["Fight Club", "Forrest Gump", "Pulp Fiction"]. Good highAffinity: ["тёмный юмор", "социальная сатира", "глубокие персонажи", "неортодоксальный сюжет"].',
+            'Bad lowAffinity: ["The Dark Knight"]. Good lowAffinity: ["супергеройский экшн", "пафосный блокбастер", "поверхностный конфликт"].',
+          ]
+        : [
+            'For highAffinity and lowAffinity, write short English taste tags only: moods, tones, themes, genres, and storytelling patterns.',
+            'Never put movie titles in highAffinity, lowAffinity, frequentlySeen, usuallySkip, or identityCards. Movie titles are evidence only, not profile labels.',
+            'Bad highAffinity: ["Fight Club", "Forrest Gump", "Pulp Fiction"]. Good highAffinity: ["dark humor", "social satire", "deep characters", "offbeat storytelling"].',
+            'Bad lowAffinity: ["The Dark Knight"]. Good lowAffinity: ["superhero action", "grandiose blockbuster", "surface-level conflict"].',
+          ];
     const moviesJson = JSON.stringify(input.movies.slice(0, 80));
 
     const response = await this.groq.chat.completions.create({
@@ -490,6 +530,7 @@ export class GroqService {
             'All labels, arrays, descriptions, and summaries are user-facing text.',
             `Write all user-facing text in ${language}.`,
             ...identityCardRules,
+            ...profileTagRules,
           ].join('\n'),
         },
         {
@@ -513,7 +554,9 @@ export class GroqService {
       throw new Error('No response');
     }
 
-    return tasteProfileSchema.parse(JSON.parse(raw));
+    const parsed = tasteProfileSchema.parse(JSON.parse(raw));
+
+    return normalizeTasteProfile(parsed, input.movies, input.locale);
   }
 }
 
@@ -523,4 +566,156 @@ function truncateText(value: string | null | undefined, maxLength: number) {
   }
 
   return `${value.slice(0, maxLength).trimEnd()}...`;
+}
+
+function normalizeTasteProfile(
+  profile: TasteProfile,
+  movies: TasteProfileMovie[],
+  locale: 'en' | 'ru',
+): TasteProfile {
+  const forbiddenTitleKeys = movies
+    .map((movie) => normalizeProfileTextKey(movie.title))
+    .filter((titleKey) => titleKey.length > 0);
+
+  return {
+    ...profile,
+    highAffinity: sanitizeProfileTags({
+      values: profile.highAffinity,
+      forbiddenTitleKeys,
+      maxItems: 6,
+      fallback: collectProfileTagFallback(movies, 'positive', locale, 6),
+    }),
+    lowAffinity: sanitizeProfileTags({
+      values: profile.lowAffinity,
+      forbiddenTitleKeys,
+      maxItems: 4,
+      fallback: collectProfileTagFallback(movies, 'negative', locale, 4),
+    }),
+    frequentlySeen: sanitizeProfileTags({
+      values: profile.frequentlySeen,
+      forbiddenTitleKeys,
+      maxItems: 4,
+      fallback: collectProfileTagFallback(movies, 'positive', locale, 4),
+    }),
+    usuallySkip: sanitizeProfileTags({
+      values: profile.usuallySkip,
+      forbiddenTitleKeys,
+      maxItems: 4,
+      fallback: collectProfileTagFallback(movies, 'negative', locale, 4),
+    }),
+  };
+}
+
+function sanitizeProfileTags({
+  values,
+  forbiddenTitleKeys,
+  maxItems,
+  fallback,
+}: {
+  values: string[];
+  forbiddenTitleKeys: string[];
+  maxItems: number;
+  fallback: string[];
+}) {
+  const cleanTags = dedupeProfileTags(
+    values.filter((value) => {
+      const valueKey = normalizeProfileTextKey(value);
+
+      return (
+        valueKey.length > 0 &&
+        !isForbiddenTitleTag(valueKey, forbiddenTitleKeys)
+      );
+    }),
+  );
+
+  return dedupeProfileTags([...cleanTags, ...fallback]).slice(0, maxItems);
+}
+
+function collectProfileTagFallback(
+  movies: TasteProfileMovie[],
+  direction: 'positive' | 'negative',
+  locale: 'en' | 'ru',
+  limit: number,
+) {
+  const matchingMovies = movies.filter((movie) =>
+    direction === 'positive'
+      ? isPositiveTasteSignal(movie)
+      : isNegativeTasteSignal(movie),
+  );
+  const tags = matchingMovies.flatMap((movie) => [
+    ...(movie.moodTags ?? []),
+    ...(movie.themes ?? []),
+    ...movie.genres,
+  ]);
+  const fallbackTags = dedupeProfileTags(tags).slice(0, limit);
+
+  if (fallbackTags.length > 0) {
+    return fallbackTags;
+  }
+
+  if (direction === 'positive') {
+    return locale === 'ru'
+      ? ['атмосферность', 'глубокие персонажи']
+      : ['atmospheric tone', 'deep characters'];
+  }
+
+  return locale === 'ru'
+    ? ['поверхностный экшн', 'шаблонный сюжет']
+    : ['surface-level action', 'formulaic plotting'];
+}
+
+function isPositiveTasteSignal(movie: TasteProfileMovie) {
+  if (movie.reaction === 'DISLIKED') {
+    return false;
+  }
+
+  return Boolean(
+    movie.reaction === 'LIKED' ||
+      (movie.rating && movie.rating >= 7) ||
+      movie.watched ||
+      movie.saved,
+  );
+}
+
+function isNegativeTasteSignal(movie: TasteProfileMovie) {
+  return Boolean(
+    movie.reaction === 'DISLIKED' || (movie.rating && movie.rating <= 4),
+  );
+}
+
+function isForbiddenTitleTag(valueKey: string, forbiddenTitleKeys: string[]) {
+  return forbiddenTitleKeys.some(
+    (titleKey) =>
+      valueKey === titleKey ||
+      (titleKey.length >= 4 && valueKey.includes(titleKey)),
+  );
+}
+
+function dedupeProfileTags(values: string[]) {
+  const seen = new Set<string>();
+  const output: string[] = [];
+
+  for (const value of values) {
+    const trimmedValue = value.trim();
+    const valueKey = normalizeProfileTextKey(trimmedValue);
+
+    if (!trimmedValue || seen.has(valueKey)) {
+      continue;
+    }
+
+    seen.add(valueKey);
+    output.push(trimmedValue);
+  }
+
+  return output;
+}
+
+function normalizeProfileTextKey(value: string) {
+  return value
+    .toLocaleLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zа-яё0-9]+/giu, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
 }
