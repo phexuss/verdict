@@ -11,10 +11,14 @@ import {
 type DiscoverMoviesParams = {
   language: string;
   genreIds?: number[];
+  withoutGenreIds?: number[];
+  minRuntimeMinutes?: number;
   maxRuntimeMinutes?: number;
   minVoteAverage?: number;
   minVoteCount?: number;
   page?: number;
+  releaseDateGte?: string;
+  releaseDateLte?: string;
   sortBy?: string;
 };
 
@@ -53,6 +57,12 @@ export class TmdbService {
             ...(params.genreIds?.length
               ? { with_genres: params.genreIds.join('|') }
               : {}),
+            ...(params.withoutGenreIds?.length
+              ? { without_genres: params.withoutGenreIds.join(',') }
+              : {}),
+            ...(params.minRuntimeMinutes
+              ? { 'with_runtime.gte': params.minRuntimeMinutes }
+              : {}),
             ...(params.maxRuntimeMinutes
               ? { 'with_runtime.lte': params.maxRuntimeMinutes }
               : {}),
@@ -61,6 +71,12 @@ export class TmdbService {
               : {}),
             ...(params.minVoteCount
               ? { 'vote_count.gte': params.minVoteCount }
+              : {}),
+            ...(params.releaseDateGte
+              ? { 'primary_release_date.gte': params.releaseDateGte }
+              : {}),
+            ...(params.releaseDateLte
+              ? { 'primary_release_date.lte': params.releaseDateLte }
               : {}),
           },
           headers: {
