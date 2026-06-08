@@ -3,6 +3,7 @@
 import { Button } from '@repo/ui/components/button';
 import { ArrowLeftLinear, RefreshLinear } from '@solar-icons/react-perf';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useGetRecommendationBySlug } from '@/api/generated/recommendations/recommendations';
 import { Link } from '@/i18n/navigation';
 import { RecommendationDetailsSkeleton } from './RecommendationDetailsSkeleton';
@@ -11,13 +12,14 @@ type RecommendationDetailsProps = {
   slug: string;
 };
 
-const pickLabels = {
-  SAFE: 'Safe pick',
-  RISK: 'Risk pick',
-  WILDCARD: 'Wildcard',
+const pickSlugByType = {
+  SAFE: 'safe',
+  RISK: 'risk',
+  WILDCARD: 'wildcard',
 } as const;
 
 export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
+  const pickT = useTranslations('TonightPage.genreMenu.picks');
   const {
     data: recommendation,
     error,
@@ -91,17 +93,19 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
             item.movie.posterPath ?? item.movie.backdropPath,
           );
           const title = item.movie.title ?? item.movie.originalTitle ?? 'Movie';
+          const pickSlug = pickSlugByType[item.type];
 
           return (
-            <article
-              className="overflow-hidden rounded-lg border border-border bg-card"
+            <Link
+              className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/35"
+              href={`/tonight/${slug}/${pickSlug}`}
               key={item.id}
             >
               <div className="relative aspect-2/3 bg-muted">
                 {posterUrl ? (
                   <Image
                     alt={title}
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     src={posterUrl}
@@ -112,7 +116,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
               <div className="flex flex-col gap-3 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-medium text-primary text-sm">
-                    {pickLabels[item.type]}
+                    {pickT(`${pickSlug}.label`)}
                   </span>
                   {item.movie.releaseDate ? (
                     <span className="text-muted-foreground text-sm">
@@ -142,7 +146,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
                   </p>
                 ) : null}
               </div>
-            </article>
+            </Link>
           );
         })}
       </section>

@@ -75,6 +75,17 @@
         "duration": "{hours}h {minutes}m"
       }
     },
+    "pickDetails": {
+      "backToTrio": "Back to trio",
+      "aiReview": "AI Review",
+      "whyThisPick": "Why this pick",
+      "trioContext": "Trio context",
+      "notFoundTitle": "Could not load this pick",
+      "notFoundDescription": "The recommendation may still be processing or this pick link may be stale.",
+      "retry": "Retry",
+      "fallbackTitle": "Movie",
+      "noOverview": "No storyline is available yet."
+    },
     "genres": {
       "dark": "Dark",
       "tense": "Tense",

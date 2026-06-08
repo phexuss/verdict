@@ -76,6 +76,17 @@
         "duration": "{hours} ч {minutes} мин"
       }
     },
+    "pickDetails": {
+      "backToTrio": "Назад к трио",
+      "aiReview": "AI-рецензия",
+      "whyThisPick": "Почему этот фильм",
+      "trioContext": "Контекст трио",
+      "notFoundTitle": "Не получилось загрузить этот выбор",
+      "notFoundDescription": "Рекомендация ещё может обрабатываться, либо ссылка на выбор устарела.",
+      "retry": "Повторить",
+      "fallbackTitle": "Фильм",
+      "noOverview": "Описание сюжета пока недоступно."
+    },
     "genres": {
       "dark": "Тёмный",
       "tense": "Напряжённый",
