@@ -13,7 +13,7 @@ import { SettingsLinear } from '@solar-icons/react-perf';
 import { FileText, Shield, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
-import { usePathname, useRouter } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
@@ -107,32 +107,32 @@ export default function SettingsMobileButton() {
               {t('legalInfo')}
             </p>
             <div className="flex flex-col gap-2">
-              <Button
-                variant="ghost"
+              <Link
+                href={'/terms-of-use'}
                 className="flex w-full items-center gap-3 rounded-xl bg-accent p-3.5 text-left transition-colors hover:bg-muted active:bg-muted"
               >
                 <FileText className="size-5 text-muted-foreground" />
                 <span className="flex-1 text-sm font-medium text-foreground">
                   {t('tou')}
                 </span>
-              </Button>
+              </Link>
 
-              <Button
-                variant="ghost"
+              <Link
+                href={'/privacy'}
                 className="flex w-full items-center gap-3 rounded-xl bg-accent p-3.5 text-left transition-colors hover:bg-muted active:bg-muted"
               >
                 <Shield className="size-5 text-muted-foreground" />
                 <span className="flex-1 text-sm font-medium text-foreground">
                   {t('privacy')}
                 </span>
-              </Button>
+              </Link>
             </div>
           </div>
 
           <div className="h-px bg-border" />
 
           <div className="flex flex-col items-center justify-center space-y-1 pb-6 pt-4">
-            <h1 className="text-4xl font-bold tracking-widest text-white/[0.04]">
+            <h1 className="text-4xl font-bold tracking-widest text-white/4">
               VERDICT
             </h1>
             <p className="text-xs text-muted-foreground/50">{t('version')}</p>

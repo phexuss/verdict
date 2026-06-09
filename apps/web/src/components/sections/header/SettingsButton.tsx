@@ -17,7 +17,7 @@ import { SettingsLinear } from '@solar-icons/react-perf';
 import { Check, FileText, Globe, LogOut, Shield } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
-import { usePathname, useRouter } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import SettingsMobileButton from './SettingsMobileButton';
 
@@ -110,14 +110,19 @@ export default function SettingsButton() {
           <DropdownMenuSeparator className="bg-border" />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem className="cursor-pointer gap-3 focus:bg-accent">
-              <FileText className="size-4 text-muted-foreground" />
-              <span>{t('tou')}</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-3 focus:bg-accent">
-              <Shield className="size-4 text-muted-foreground" />
-              <span>{t('privacy')}</span>
-            </DropdownMenuItem>
+            <Link href="/terms-of-use">
+              <DropdownMenuItem className="cursor-pointer gap-3 focus:bg-accent">
+                <FileText className="size-4 text-muted-foreground" />
+                <span>{t('tou')}</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/privacy">
+              <DropdownMenuItem className="cursor-pointer gap-3 focus:bg-accent">
+                <Shield className="size-4 text-muted-foreground" />
+
+                <span>{t('privacy')}</span>
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator className="bg-border" />

@@ -1,9 +1,9 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
-export default function TermsOfUsePage() {
-  const t = useTranslations('TermsOfUsePage');
-  const s = useTranslations('TermsOfUsePage.sections');
+export default function PrivacyPage() {
+  const t = useTranslations('PrivacyPolicyPage');
+  const s = useTranslations('PrivacyPolicyPage.sections');
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -17,20 +17,22 @@ export default function TermsOfUsePage() {
         </header>
 
         <section className="space-y-6">
-          <LegalSection title={s('acceptanceTitle')} body={s('acceptanceBody')} />
-          <LegalSection title={s('eligibilityTitle')} body={s('eligibilityBody')} />
-          <LegalSection title={s('serviceTitle')} body={s('serviceBody')} />
-          <LegalSection title={s('tmdbTitle')} body={s('tmdbBody')} />
           <LegalSection
-            title={s('acceptableUseTitle')}
-            body={s('acceptableUseBody')}
+            title={s('dataWeCollectTitle')}
+            body={s('dataWeCollectBody')}
           />
-          <LegalSection title={s('openSourceTitle')} body={s('openSourceBody')} />
-          <LegalSection title={s('ipTitle')} body={s('ipBody')} />
-          <LegalSection title={s('availabilityTitle')} body={s('availabilityBody')} />
-          <LegalSection title={s('disclaimerTitle')} body={s('disclaimerBody')} />
-          <LegalSection title={s('liabilityTitle')} body={s('liabilityBody')} />
-          <LegalSection title={s('terminationTitle')} body={s('terminationBody')} />
+          <LegalSection title={s('howWeUseTitle')} body={s('howWeUseBody')} />
+          <LegalSection title={s('authTitle')} body={s('authBody')} />
+          <LegalSection title={s('tmdbTitle')} body={s('tmdbBody')} />
+          <LegalSection title={s('sharingTitle')} body={s('sharingBody')} />
+          <LegalSection title={s('retentionTitle')} body={s('retentionBody')} />
+          <LegalSection title={s('securityTitle')} body={s('securityBody')} />
+          <LegalSection title={s('childrenTitle')} body={s('childrenBody')} />
+          <LegalSection title={s('rightsTitle')} body={s('rightsBody')} />
+          <LegalSection
+            title={s('internationalTitle')}
+            body={s('internationalBody')}
+          />
           <LegalSection title={s('changesTitle')} body={s('changesBody')} />
           <LegalSection title={s('contactTitle')} body={s('contactBody')} />
         </section>
