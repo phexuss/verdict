@@ -1,7 +1,8 @@
 import { Button } from '@repo/ui/components/button';
-import { SettingsLinear, UserLinear } from '@solar-icons/react-perf';
+import { UserLinear } from '@solar-icons/react-perf';
 import { Link } from '@/i18n/navigation';
 import HeaderNavButtons from './HeaderNavButtons';
+import SettingsButton from './SettingsButton';
 
 export default function Header() {
   return (
@@ -20,9 +21,7 @@ export default function Header() {
           </Link>
         </Button>
 
-        <Button variant="ghost" size="icon">
-          <SettingsLinear className="size-4 text-foreground md:size-5" />
-        </Button>
+        <SettingsButton />
       </div>
     </header>
   );

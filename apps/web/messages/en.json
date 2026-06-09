@@ -4,6 +4,19 @@
       "curated": "Curated",
       "tonight": "Tonight",
       "profile": "Profile"
+    },
+    "settings": {
+      "title": "Settings",
+      "language": "Language",
+      "legalInfo": "Legal information",
+      "locale": {
+        "en": "English",
+        "ru": "Русский"
+      },
+      "tou": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "logout": "Logout",
+      "version": "Version 2.4.1 (1042)"
     }
   },
   "Footer": {
