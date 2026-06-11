@@ -273,5 +273,11 @@
       "contactTitle": "12. Contact",
       "contactBody": "For privacy questions, data requests, or deletion inquiries, contact phexuss@icloud.com."
     }
+  },
+  "WelcomePage": {
+    "title": "The last thing you'll scroll <accent>tonight.</accent>",
+    "description": "Not sure what to watch? Verdict figures it out for you. Tell it your mood, who you're watching with, or what kind of evening it is — and it'll suggest something actually worth your time. No endless scrolling, no decision fatigue.",
+    "cta": "Get Started",
+    "browse": "Browse films"
   }
 }
