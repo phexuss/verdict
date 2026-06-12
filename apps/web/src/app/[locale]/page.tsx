@@ -3,6 +3,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import BrowseButton from '@/components/motion/welcome/BrowseButtton';
+import { FloatingMoods } from '@/components/motion/welcome/FloatingMoods';
+import GetStartedButton from '@/components/motion/welcome/GetStartedButton';
+import {
+  AnimatedChunk,
+  AnimatedDescription,
+  WelcomeTitle,
+} from '@/components/motion/welcome/WelcomeTitle';
 import { routing } from '@/i18n/routing';
 
 type HomePageProps = {
@@ -119,37 +127,7 @@ export default async function HomePage({ params }: HomePageProps) {
         style={{ background: 'var(--primary)', opacity: 0.07 }}
       />
 
-      <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block">
-        {moods.map((mood, i) => {
-          const pos = MOOD_POSITIONS[i];
-          if (!pos) return null;
-
-          return (
-            <span
-              key={mood}
-              className="absolute rounded-full border px-3 py-1 font-medium"
-              style={{
-                top: pos.top,
-                right: pos.right,
-                fontSize:
-                  pos.size === 'sm'
-                    ? 'clamp(0.6rem, 1.8vw, 0.7rem)'
-                    : 'clamp(0.7rem, 2vw, 0.8rem)',
-                opacity: pos.accent ? 0.55 : 0.25,
-                borderColor: pos.accent
-                  ? 'var(--primary)'
-                  : 'color-mix(in oklch, var(--foreground) 20%, transparent)',
-                color: pos.accent
-                  ? 'var(--primary)'
-                  : 'var(--muted-foreground)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {mood}
-            </span>
-          );
-        })}
-      </div>
+      <FloatingMoods moods={moods} positions={MOOD_POSITIONS} />
 
       <div
         className="pointer-events-none absolute inset-x-0 bottom-15 z-10 flex flex-col gap-3 overflow-hidden py-6 lg:hidden"
@@ -182,23 +160,11 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </div>
 
-      <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-44 pt-24 md:px-16 lg:px-24 lg:py-24">
+      <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-27.5 pt-24 md:px-16 lg:px-24 lg:py-24">
         <div className="max-w-xl">
-          <div className="mb-8 flex items-center gap-3">
-            <div
-              className="h-px w-8"
-              style={{ background: 'var(--primary)' }}
-            />
-            <span
-              className="text-xs font-semibold uppercase tracking-[0.25em]"
-              style={{ color: 'var(--primary)' }}
-            >
-              Verdict
-            </span>
-          </div>
-
-          <h1 className="mb-6 text-5xl font-bold leading-[1.08] tracking-tight text-foreground md:text-6xl lg:text-7xl">
+          <WelcomeTitle className="mb-6 text-5xl font-bold leading-[1.08] tracking-tight text-foreground md:text-6xl lg:text-7xl">
             {t.rich('title', {
+              chunk: (chunks) => <AnimatedChunk>{chunks}</AnimatedChunk>,
               accent: (chunks) => (
                 <em
                   className="not-italic"
@@ -208,22 +174,22 @@ export default async function HomePage({ params }: HomePageProps) {
                 </em>
               ),
             })}
-          </h1>
+          </WelcomeTitle>
 
-          <p
-            className="mb-10 max-w-md text-base leading-relaxed md:text-lg"
-            style={{ color: 'var(--muted-foreground)' }}
-          >
-            {t('description')}
-          </p>
+          <AnimatedDescription
+            className="mb-10 max-w-md text-base leading-relaxed md:text-lg text-muted-foreground"
+            translations={t('description')}
+          ></AnimatedDescription>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button size="lg" asChild>
-              <Link href={`/${locale}/tonight`}>{t('cta')} →</Link>
-            </Button>
-            <Button size="lg" variant="ghost" asChild>
-              <Link href={`/${locale}/curated`}>{t('browse')}</Link>
-            </Button>
+            <GetStartedButton
+              translations={t('cta')}
+              href={`/${locale}/tonight`}
+            />
+            <BrowseButton
+              translations={t('browse')}
+              href={`/${locale}/curated`}
+            />
           </div>
         </div>
       </main>
