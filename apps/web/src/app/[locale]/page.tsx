@@ -11,28 +11,30 @@ type HomePageProps = {
 
 const MOODS = {
   en: [
-    'Adventure',
-    'Romance',
-    'Thriller',
-    'Comedy',
-    'Drama',
-    'Mystery',
-    'Horror',
-    'Sci-Fi',
-    'Animation',
+    'Dark',
+    'Tense',
+    'Weird',
+    'Atmospheric',
+    'Comfort',
+    'Smart',
+    'Fast',
+    'Emotional',
+    'Funny',
   ],
   ru: [
-    'Приключения',
-    'Романтика',
-    'Триллер',
-    'Комедия',
-    'Драма',
-    'Мистика',
-    'Ужасы',
-    'Фантастика',
-    'Анимация',
+    'Тёмный',
+    'Напряжённый',
+    'Странный',
+    'Атмосферный',
+    'Уютный',
+    'Глубокий',
+    'Динамичный',
+    'Трогательный',
+    'Смешной',
   ],
 };
+
+const ACCENT_INDEXES = new Set([1, 4, 7]);
 
 const MOOD_POSITIONS: {
   top: string;
@@ -51,23 +53,33 @@ const MOOD_POSITIONS: {
   { top: '78%', right: '5%', accent: false, size: 'sm' },
 ];
 
-const MOOD_POSITIONS_MOBILE: {
-  bottom: string;
-  left: string;
+function MoodChip({
+  label,
+  accent,
+  size = 'md',
+}: {
+  label: string;
   accent: boolean;
-  size: 'sm' | 'md';
-  rotate?: number;
-}[] = [
-  { bottom: '15%', left: '10%', accent: false, size: 'sm', rotate: -7 },
-  { bottom: '19%', left: '28%', accent: true, size: 'sm', rotate: -4 },
-  { bottom: '22%', left: '46%', accent: false, size: 'sm', rotate: -1 },
-  { bottom: '19%', left: '64%', accent: false, size: 'md', rotate: 0 },
-  { bottom: '15%', left: '82%', accent: true, size: 'sm', rotate: 4 },
-  { bottom: '7%', left: '22%', accent: false, size: 'sm', rotate: -3 },
-  { bottom: '10%', left: '40%', accent: false, size: 'sm', rotate: -1 },
-  { bottom: '10%', left: '60%', accent: true, size: 'sm', rotate: 1 },
-  { bottom: '7%', left: '78%', accent: false, size: 'sm', rotate: 3 },
-];
+  size?: 'sm' | 'md';
+}) {
+  return (
+    <span
+      className="inline-flex shrink-0 whitespace-nowrap rounded-full border font-medium"
+      style={{
+        padding: size === 'sm' ? '0.25rem 0.75rem' : '0.35rem 0.9rem',
+        fontSize: size === 'sm' ? '0.75rem' : '0.85rem',
+        opacity: accent ? 0.65 : 0.3,
+        borderColor: accent
+          ? 'var(--primary)'
+          : 'color-mix(in oklch, var(--foreground) 20%, transparent)',
+        color: accent ? 'var(--primary)' : 'var(--muted-foreground)',
+        letterSpacing: '0.02em',
+      }}
+    >
+      {label}
+    </span>
+  );
+}
 
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
@@ -81,45 +93,31 @@ export default async function HomePage({ params }: HomePageProps) {
 
   const moods = locale === 'ru' ? MOODS.ru : MOODS.en;
 
+  const rowA = [...moods, ...moods];
+  const rowB = [...moods.slice().reverse(), ...moods.slice().reverse()];
+
   return (
     <div className="relative min-h-svh overflow-hidden bg-background">
+      <style>{`
+        @keyframes marquee-left {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes marquee-right {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
+        }
+        .marquee-left { animation: marquee-left 38s linear infinite; }
+        .marquee-right { animation: marquee-right 32s linear infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-left, .marquee-right { animation: none; }
+        }
+      `}</style>
+
       <div
-        className="pointer-events-none absolute right-0 top-1/3 z-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/3 rounded-full blur-[120px]"
+        className="pointer-events-none absolute right-0 top-1/3 z-0 h-125 w-125 -translate-y-1/2 translate-x-1/3 rounded-full blur-[120px]"
         style={{ background: 'var(--primary)', opacity: 0.07 }}
       />
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[32svh] sm:h-[34svh] lg:hidden">
-        {moods.map((mood, i) => {
-          const pos = MOOD_POSITIONS_MOBILE[i];
-          if (!pos) return null;
-
-          return (
-            <span
-              key={mood}
-              className="absolute whitespace-nowrap rounded-full border px-2 py-0.5 font-medium"
-              style={{
-                bottom: pos.bottom,
-                left: pos.left,
-                transform: `translateX(-50%) rotate(${pos.rotate ?? 0}deg)`,
-                fontSize:
-                  pos.size === 'sm'
-                    ? 'clamp(0.56rem, 2.35vw, 0.67rem)'
-                    : 'clamp(0.62rem, 2.7vw, 0.74rem)',
-                opacity: pos.accent ? 0.56 : 0.26,
-                borderColor: pos.accent
-                  ? 'var(--primary)'
-                  : 'color-mix(in oklch, var(--foreground) 20%, transparent)',
-                color: pos.accent
-                  ? 'var(--primary)'
-                  : 'var(--muted-foreground)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {mood}
-            </span>
-          );
-        })}
-      </div>
 
       <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block">
         {moods.map((mood, i) => {
@@ -151,6 +149,37 @@ export default async function HomePage({ params }: HomePageProps) {
             </span>
           );
         })}
+      </div>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-15 z-10 flex flex-col gap-3 overflow-hidden py-6 lg:hidden"
+        style={{
+          maskImage:
+            'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+          WebkitMaskImage:
+            'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+        }}
+      >
+        <div className="marquee-left flex w-max gap-3">
+          {rowA.map((mood, i) => (
+            <MoodChip
+              key={`rowA-${mood}-${Math.floor(i / moods.length)}`}
+              label={mood}
+              accent={ACCENT_INDEXES.has(i % moods.length)}
+              size="sm"
+            />
+          ))}
+        </div>
+        <div className="marquee-right flex w-max gap-3">
+          {rowB.map((mood, i) => (
+            <MoodChip
+              key={`rowB-${mood}-${Math.floor(i / moods.length)}`}
+              label={mood}
+              accent={ACCENT_INDEXES.has(i % moods.length)}
+              size="sm"
+            />
+          ))}
+        </div>
       </div>
 
       <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-44 pt-24 md:px-16 lg:px-24 lg:py-24">
@@ -190,13 +219,12 @@ export default async function HomePage({ params }: HomePageProps) {
 
           <div className="flex flex-wrap items-center gap-3">
             <Button size="lg" asChild>
-              <Link href={`/${locale}/sign-up`}>{t('cta')} →</Link>
+              <Link href={`/${locale}/tonight`}>{t('cta')} →</Link>
             </Button>
             <Button size="lg" variant="ghost" asChild>
-              <Link href={`/${locale}/browse`}>{t('browse')}</Link>
+              <Link href={`/${locale}/curated`}>{t('browse')}</Link>
             </Button>
           </div>
-
         </div>
       </main>
     </div>
