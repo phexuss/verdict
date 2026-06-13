@@ -1,5 +1,3 @@
-import { Button } from '@repo/ui/components/button';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -182,14 +180,8 @@ export default async function HomePage({ params }: HomePageProps) {
           ></AnimatedDescription>
 
           <div className="flex flex-wrap items-center gap-3">
-            <GetStartedButton
-              translations={t('cta')}
-              href={`/${locale}/tonight`}
-            />
-            <BrowseButton
-              translations={t('browse')}
-              href={`/${locale}/curated`}
-            />
+            <GetStartedButton translations={t('cta')} href={`/tonight`} />
+            <BrowseButton translations={t('browse')} href={`/curated`} />
           </div>
         </div>
       </main>

@@ -17,20 +17,38 @@ export default function TermsOfUsePage() {
         </header>
 
         <section className="space-y-6">
-          <LegalSection title={s('acceptanceTitle')} body={s('acceptanceBody')} />
-          <LegalSection title={s('eligibilityTitle')} body={s('eligibilityBody')} />
+          <LegalSection
+            title={s('acceptanceTitle')}
+            body={s('acceptanceBody')}
+          />
+          <LegalSection
+            title={s('eligibilityTitle')}
+            body={s('eligibilityBody')}
+          />
           <LegalSection title={s('serviceTitle')} body={s('serviceBody')} />
           <LegalSection title={s('tmdbTitle')} body={s('tmdbBody')} />
           <LegalSection
             title={s('acceptableUseTitle')}
             body={s('acceptableUseBody')}
           />
-          <LegalSection title={s('openSourceTitle')} body={s('openSourceBody')} />
+          <LegalSection
+            title={s('openSourceTitle')}
+            body={s('openSourceBody')}
+          />
           <LegalSection title={s('ipTitle')} body={s('ipBody')} />
-          <LegalSection title={s('availabilityTitle')} body={s('availabilityBody')} />
-          <LegalSection title={s('disclaimerTitle')} body={s('disclaimerBody')} />
+          <LegalSection
+            title={s('availabilityTitle')}
+            body={s('availabilityBody')}
+          />
+          <LegalSection
+            title={s('disclaimerTitle')}
+            body={s('disclaimerBody')}
+          />
           <LegalSection title={s('liabilityTitle')} body={s('liabilityBody')} />
-          <LegalSection title={s('terminationTitle')} body={s('terminationBody')} />
+          <LegalSection
+            title={s('terminationTitle')}
+            body={s('terminationBody')}
+          />
           <LegalSection title={s('changesTitle')} body={s('changesBody')} />
           <LegalSection title={s('contactTitle')} body={s('contactBody')} />
         </section>
