@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Turbo cache
+.turbo
+**/.turbo
+
+# node_modules – Docker installs fresh inside the image
+node_modules
+**/node_modules
+
+# Build artifacts (builder stage compiles from source)
+dist
+**/dist
+.next
+**/.next
+
+# Dev / editor files
+.env*.local
+*.log
+npm-debug.log*
+.DS_Store
+.vscode
+.idea
+
+# Web app (deployed to Vercel, not needed in Docker context)
+apps/web
+
+# Test files
+**/__tests__
+**/*.test.ts
+**/*.spec.ts
+**/*.test.js
+**/*.spec.js
+
+# CI / docs
+.github
+docs
+*.md

@@ -1,0 +1,35 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: verdict-api:latest
+    container_name: verdict-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: ${DATABASE_URL}
+    env_file:
+      - apps/api/.env
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - |
+          const h=require('http');
+          const r=h.get('http://localhost:3001/health',res=>{process.exit(res.statusCode===200?0:1)});
+          r.on('error',()=>process.exit(1))
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    networks:
+      - verdict-net
+
+networks:
+  verdict-net:
+    driver: bridge
