@@ -8,11 +8,24 @@ import {
   EyeLinear,
   StarBold,
 } from '@solar-icons/react-perf';
+import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { UserMovieActionDto } from '@/api/generated/models';
 import { Link } from '@/i18n/navigation';
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.42, ease } },
+};
 
 type ProfileMovieShelfProps = {
   movies?: UserMovieActionDto[];
@@ -34,7 +47,7 @@ export default function ProfileMovieShelf({
     <section
       className={cn(
         variant === 'embedded'
-          ? 'rounded-md border border-sidebar-ring/8 bg-accent p-4'
+          ? 'rounded-xl border border-foreground/8 bg-accent p-4'
           : 'w-full',
       )}
     >
@@ -58,7 +71,10 @@ export default function ProfileMovieShelf({
       {isLoading ? (
         <MovieShelfSkeleton variant={variant} />
       ) : visibleMovies.length > 0 ? (
-        <div
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
           className={cn(
             'grid gap-3',
             variant === 'page'
@@ -67,11 +83,13 @@ export default function ProfileMovieShelf({
           )}
         >
           {visibleMovies.map((action) => (
-            <MovieShelfCard action={action} key={action.id} variant={variant} />
+            <motion.div key={action.id} variants={itemVariants}>
+              <MovieShelfCard action={action} variant={variant} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : (
-        <div className="rounded-md border border-border bg-background/30 p-4">
+        <div className="rounded-xl border border-border bg-background/30 p-4">
           <p className="font-medium text-base">{t('emptyTitle')}</p>
           <p className="mt-1 text-foreground/70 text-sm leading-relaxed">
             {t('emptyDescription')}
@@ -96,14 +114,14 @@ function MovieShelfCard({ action, variant = 'embedded' }: MovieShelfCardProps) {
 
   return (
     <Link
-      className="group flex min-w-0 flex-col overflow-hidden rounded-md border border-border bg-background/30 transition-colors hover:border-primary/35"
+      className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-background/30 ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_6px_24px_-6px_oklch(0.76_0.13_65/0.18)]"
       href={`/curated/${movie.tmdbId}`}
     >
       <div className="relative aspect-2/3 overflow-hidden bg-muted">
         {imagePath ? (
           <Image
             alt={title}
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
             fill
             sizes={
               variant === 'page'
@@ -118,7 +136,7 @@ function MovieShelfCard({ action, variant = 'embedded' }: MovieShelfCardProps) {
           </div>
         )}
 
-        <div className="absolute top-2 right-2 flex items-center gap-1 rounded-sm bg-background/90 px-1.5 py-1 font-medium text-xs backdrop-blur-sm">
+        <div className="absolute top-2 right-2 flex items-center gap-1 rounded-md border border-foreground/10 bg-background/60 px-1.5 py-1 font-medium text-xs backdrop-blur-md">
           <StarBold className="size-3 text-primary" />
           {movie.voteAverage ? movie.voteAverage.toFixed(1) : '-'}
         </div>
@@ -140,7 +158,9 @@ function MovieShelfCard({ action, variant = 'embedded' }: MovieShelfCardProps) {
             {title}
           </h4>
           {releaseYear ? (
-            <p className="mt-1 text-foreground/55 text-xs">{releaseYear}</p>
+            <p className="mt-1 text-foreground/50 text-xs tabular-nums">
+              {releaseYear}
+            </p>
           ) : null}
         </div>
 
@@ -192,17 +212,8 @@ function MovieShelfSkeleton({
 }) {
   const skeletonItems =
     variant === 'page'
-      ? [
-          'movie-shelf-1',
-          'movie-shelf-2',
-          'movie-shelf-3',
-          'movie-shelf-4',
-          'movie-shelf-5',
-          'movie-shelf-6',
-          'movie-shelf-7',
-          'movie-shelf-8',
-        ]
-      : ['movie-shelf-1', 'movie-shelf-2', 'movie-shelf-3'];
+      ? ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+      : ['s1', 's2', 's3'];
 
   return (
     <div
@@ -215,7 +226,7 @@ function MovieShelfSkeleton({
     >
       {skeletonItems.map((item) => (
         <div
-          className="overflow-hidden rounded-md border border-border bg-background/30"
+          className="overflow-hidden rounded-xl border border-border bg-background/30"
           key={item}
         >
           <Skeleton className="aspect-2/3 w-full rounded-none" />

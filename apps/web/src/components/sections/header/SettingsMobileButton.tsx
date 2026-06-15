@@ -135,7 +135,6 @@ export default function SettingsMobileButton() {
             <h1 className="text-4xl font-bold tracking-widest text-white/4">
               VERDICT
             </h1>
-            <p className="text-xs text-muted-foreground/50">{t('version')}</p>
           </div>
         </div>
       </DrawerContent>

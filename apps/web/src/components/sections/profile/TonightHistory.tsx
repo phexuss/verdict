@@ -2,10 +2,23 @@
 
 import { Skeleton } from '@repo/ui/components/skeleton';
 import { ArrowRightLinear, VideoFrameLinear } from '@solar-icons/react-perf';
+import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import type { RecommendationListItemDto } from '@/api/generated/models';
 import { Link } from '@/i18n/navigation';
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease } },
+};
 
 type TonightHistoryProps = {
   recommendations?: RecommendationListItemDto[];
@@ -44,24 +57,34 @@ export default function TonightHistory({
           href="/tonight"
         >
           {t('cta')}
-          <ArrowRightLinear className="size-4" />
+          <ArrowRightLinear className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       </div>
 
       {isLoading ? (
         <TonightHistorySkeleton />
       ) : hasRecommendations ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+        >
           {recommendations?.map((recommendation) => (
-            <RecommendationCard
+            <motion.div
               key={recommendation.id}
-              locale={locale}
-              recommendation={recommendation}
-            />
+              variants={itemVariants}
+              className="h-full"
+            >
+              <RecommendationCard
+                locale={locale}
+                recommendation={recommendation}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : (
-        <div className="rounded-md border border-sidebar-ring/8 bg-accent p-5">
+        <div className="rounded-xl border border-foreground/8 bg-accent p-5">
           <p className="font-medium text-lg">{t('emptyTitle')}</p>
           <p className="mt-2 max-w-2xl text-foreground/70 text-sm leading-relaxed">
             {t('emptyDescription')}
@@ -87,7 +110,7 @@ function RecommendationCard({
 
   return (
     <Link
-      className="group flex min-h-52 flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent transition-colors hover:border-primary/35"
+      className="group flex h-full min-h-52 flex-col overflow-hidden rounded-xl border border-foreground/8 bg-accent ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_8px_32px_-8px_oklch(0.76_0.13_65/0.18)]"
       href={`/tonight/${recommendation.slug}`}
     >
       <div className="grid h-28 grid-cols-3 gap-1 overflow-hidden bg-background/40 p-1">
@@ -111,13 +134,13 @@ function RecommendationCard({
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="mb-1 text-foreground/55 text-xs">{date}</p>
+            <p className="mb-1 text-foreground/50 text-xs">{date}</p>
             <h4 className="line-clamp-2 wrap-break-word font-medium text-lg leading-tight">
               {title}
             </h4>
           </div>
 
-          <ArrowRightLinear className="mt-1 size-5 shrink-0 text-primary opacity-70 transition-transform group-hover:translate-x-0.5" />
+          <ArrowRightLinear className="mt-1 size-5 shrink-0 text-primary opacity-60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:opacity-100" />
         </div>
 
         {recommendation.description ? (
@@ -129,7 +152,7 @@ function RecommendationCard({
         <div className="mt-auto flex flex-wrap gap-2">
           {recommendation.moods.slice(0, 3).map((mood) => (
             <span
-              className="rounded-full border border-primary/15 bg-primary/10 px-2.5 py-1 text-foreground/80 text-xs leading-none"
+              className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-foreground/80 text-xs leading-none"
               key={mood}
             >
               {formatLabel(mood)}
@@ -160,7 +183,7 @@ function PosterPreview({ movie }: PosterPreviewProps) {
     <div className="relative overflow-hidden rounded-sm bg-muted">
       <Image
         alt={movie.title ?? ''}
-        className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
         fill
         sizes="(min-width: 1280px) 10vw, (min-width: 768px) 16vw, 30vw"
         src={`https://image.tmdb.org/t/p/w342${imagePath}`}
@@ -175,7 +198,7 @@ function TonightHistorySkeleton() {
       {['tonight-history-1', 'tonight-history-2', 'tonight-history-3'].map(
         (item) => (
           <article
-            className="min-h-52 overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent"
+            className="min-h-52 overflow-hidden rounded-xl border border-foreground/8 bg-accent"
             key={item}
           >
             <div className="grid h-28 grid-cols-3 gap-1 bg-background/40 p-1">
@@ -183,7 +206,6 @@ function TonightHistorySkeleton() {
               <Skeleton className="h-full rounded-sm" />
               <Skeleton className="h-full rounded-sm" />
             </div>
-
             <div className="flex flex-col gap-3 p-4">
               <Skeleton className="h-4 w-24 rounded-sm" />
               <Skeleton className="h-6 w-4/5 rounded-sm" />
@@ -210,10 +232,6 @@ function formatDate(value: string, locale: string) {
 
 function formatLabel(value: string) {
   const trimmedValue = value.trim();
-
-  if (!trimmedValue) {
-    return trimmedValue;
-  }
-
+  if (!trimmedValue) return trimmedValue;
   return `${trimmedValue.charAt(0).toUpperCase()}${trimmedValue.slice(1)}`;
 }

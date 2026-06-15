@@ -34,7 +34,10 @@ export default function MoodButtons({
   }
 
   return (
-    <div className="space-y-4 mb-4">
+    <div className="mb-4 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+        Mood · {selected.length}/3
+      </p>
       <ToggleGroup
         type="multiple"
         value={selected}
@@ -46,11 +49,7 @@ export default function MoodButtons({
             key={genre}
             value={genre}
             disabled={!selected.includes(genre) && selected.length >= 3}
-            className="
-              rounded-full border px-4 text-sm
-              data-[state=on]:bg-primary
-              data-[state=on]:text-primary-foreground
-            "
+            className="h-9 rounded-full border px-4 text-sm transition-all duration-200 hover:border-primary/50 hover:text-foreground data-[state=on]:border-primary/60 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-[0_0_14px_-3px_oklch(0.76_0.13_65/0.6)]"
           >
             {t(`genres.${genre}`)}
           </ToggleGroupItem>
