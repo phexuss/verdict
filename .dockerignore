@@ -1,4 +1,4 @@
-# Git
+# Version control
 .git
 .gitignore
 
@@ -6,15 +6,23 @@
 .turbo
 **/.turbo
 
-# node_modules – Docker installs fresh inside the image
+# Dependencies — Docker installs fresh inside the image
 node_modules
 **/node_modules
 
-# Build artifacts (builder stage compiles from source)
+# Build artifacts — builder stage compiles from source
 dist
 **/dist
 .next
 **/.next
+
+# Web app — deployed to Vercel, never needed in the Docker build context.
+# This is the biggest win: excludes Next.js, React, and all UI deps.
+apps/web
+packages/ui
+
+# Generated Prisma client — regenerated inside the builder stage
+apps/api/src/generated
 
 # Dev / editor files
 .env*.local
@@ -24,10 +32,7 @@ npm-debug.log*
 .vscode
 .idea
 
-# Web app (deployed to Vercel, not needed in Docker context)
-apps/web
-
-# Test files
+# Tests
 **/__tests__
 **/*.test.ts
 **/*.spec.ts
