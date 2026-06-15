@@ -30,7 +30,7 @@ RUN cd apps/api && npx prisma generate --schema=prisma/schema.prisma
 
 # Build @repo/shared first (api imports from it), then the api itself.
 RUN npm run build --workspace=@repo/shared
-RUN npm run build --workspace=api
+RUN NODE_OPTIONS="--max-old-space-size=1024" npm run build --workspace=api
 
 # Drop devDependencies before we copy node_modules into the runner.
 RUN npm prune --omit=dev --ignore-scripts
