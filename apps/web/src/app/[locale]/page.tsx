@@ -158,9 +158,9 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </div>
 
-      <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-27.5 pt-24 md:px-16 lg:px-24 lg:py-24">
+      <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-36 pt-20 sm:pb-32 md:px-16 md:pt-24 lg:px-24 lg:py-24">
         <div className="max-w-xl">
-          <WelcomeTitle className="mb-6 text-5xl font-bold leading-[1.08] tracking-tight text-foreground md:text-6xl lg:text-7xl">
+          <WelcomeTitle className="mb-4 text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-5xl sm:mb-6 md:text-6xl lg:text-7xl">
             {t.rich('title', {
               chunk: (chunks) => <AnimatedChunk>{chunks}</AnimatedChunk>,
               accent: (chunks) => (
@@ -175,7 +175,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </WelcomeTitle>
 
           <AnimatedDescription
-            className="mb-10 max-w-md text-base leading-relaxed md:text-lg text-muted-foreground"
+            className="mb-7 max-w-md text-base leading-relaxed sm:mb-10 md:text-lg text-muted-foreground"
             translations={t('description')}
           ></AnimatedDescription>
 
