@@ -27,7 +27,12 @@ export function CuratedMovies() {
     return <div>Failed to load trending movies</div>;
   }
 
-  if (isLoading) return <MoviesSkeleton />;
+  if (isLoading)
+    return (
+      <main className="px-5 py-8 md:px-20 md:py-12 xl:px-30 xl:py-16">
+        <MoviesSkeleton />
+      </main>
+    );
 
   if (!movies) {
     return null;
