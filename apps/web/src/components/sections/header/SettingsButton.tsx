@@ -19,6 +19,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { authClient } from '@/lib/auth-client';
 import SettingsMobileButton from './SettingsMobileButton';
 
 export default function SettingsButton() {
@@ -128,7 +129,14 @@ export default function SettingsButton() {
           <DropdownMenuSeparator className="bg-border" />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem className="gap-3 cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">
+            <DropdownMenuItem
+              className="gap-3 cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+              onClick={() =>
+                authClient.signOut({
+                  fetchOptions: { onSuccess: () => router.push('/sign-in') },
+                })
+              }
+            >
               <LogOut className="size-4" />
               <span>{t('logout')}</span>
             </DropdownMenuItem>

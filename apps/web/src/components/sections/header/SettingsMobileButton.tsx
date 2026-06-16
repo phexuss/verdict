@@ -10,11 +10,12 @@ import {
   DrawerTrigger,
 } from '@repo/ui/components/drawer';
 import { SettingsLinear } from '@solar-icons/react-perf';
-import { FileText, Shield, X } from 'lucide-react';
+import { FileText, LogOut, Shield, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 export default function SettingsMobileButton() {
@@ -130,6 +131,19 @@ export default function SettingsMobileButton() {
           </div>
 
           <div className="h-px bg-border" />
+
+          <button
+            type="button"
+            onClick={() =>
+              authClient.signOut({
+                fetchOptions: { onSuccess: () => router.push('/sign-in') },
+              })
+            }
+            className="flex w-full items-center gap-3 rounded-xl p-3.5 text-left text-destructive transition-colors hover:bg-destructive/10 active:bg-destructive/10"
+          >
+            <LogOut className="size-5" />
+            <span className="flex-1 text-sm font-medium">{t('logout')}</span>
+          </button>
 
           <div className="flex flex-col items-center justify-center space-y-1 pb-6 pt-4">
             <h1 className="text-4xl font-bold tracking-widest text-white/4">
