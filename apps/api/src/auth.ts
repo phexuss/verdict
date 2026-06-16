@@ -26,9 +26,10 @@ export const auth = betterAuth({
   }),
 
   advanced: {
-    crossSubDomainCookies: {
-      enabled: true,
-      domain: '.phexuss.dev',
+    defaultCookieAttributes: {
+      sameSite: 'none',
+      secure: true,
+      httpOnly: true,
     },
   },
 

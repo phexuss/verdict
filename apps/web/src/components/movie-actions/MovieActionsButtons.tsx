@@ -30,10 +30,10 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   getGetUserMoviesQueryKey,
-  useGetCurrentUser,
   useGetUserMovies,
   useUpdateUserMovie,
 } from '@/api/generated/user/user';
+import { authClient } from '@/lib/auth-client';
 import { Link } from '@/i18n/navigation';
 import GoogleLoginButton from '@/components/sections/auth/sign-in/GoogleLoginButton';
 
@@ -49,14 +49,8 @@ export default function MovieActionsButtons({
   const queryClient = useQueryClient();
   const [authPromptOpen, setAuthPromptOpen] = useState(false);
 
-  const { data: user } = useGetCurrentUser({
-    query: {
-      retry: false,
-      select: (res) => res.data,
-    },
-  });
-
-  const isAuthenticated = Boolean(user);
+  const { data: session } = authClient.useSession();
+  const isAuthenticated = Boolean(session?.user);
 
   const { data: userMovies } = useGetUserMovies({
     query: {
