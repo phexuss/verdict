@@ -223,7 +223,11 @@
   },
   "Alerts": {
     "signInRequired": "Please sign in to access this feature.",
-    "pickError": "An error occurred while fetching your picks. Please try again."
+    "pickError": "An error occurred while fetching your picks. Please try again.",
+    "authPromptTitle": "Sign in to track films",
+    "authPromptDescription": "Save, rate and react to films — Verdict builds your unique cinematic portrait from every mark.",
+    "authPromptSignIn": "Sign in",
+    "authPromptSignUp": "Create account"
   },
   "TermsOfUsePage": {
     "title": "Terms of Use",
