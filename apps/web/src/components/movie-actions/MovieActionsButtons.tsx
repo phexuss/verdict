@@ -18,6 +18,7 @@ import {
 import {
   BookmarkBold,
   BookmarkOutline,
+  ClapperboardOpenLinear,
   DislikeBold,
   DislikeOutline,
   EyeClosedLinear,
@@ -218,8 +219,8 @@ export default function MovieActionsButtons({
       <Dialog open={authPromptOpen} onOpenChange={setAuthPromptOpen}>
         <DialogContent className="max-w-sm border-border bg-background p-6">
           <DialogHeader className="gap-2 text-center items-center">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-2xl">
-              🎬
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
+              <ClapperboardOpenLinear className="size-6 text-primary" />
             </div>
             <DialogTitle className="text-xl font-semibold">
               {ta('authPromptTitle')}

@@ -121,6 +121,11 @@
       "hint": "Save, watch, rate or dislike films — your portrait will build automatically.",
       "ctaCurated": "Browse curated picks",
       "ctaTonight": "Find tonight's film",
+      "progressLabel": "{count} / 5 films marked",
+      "progressHint": "Mark {remaining} more to unlock your portrait.",
+      "readyHint": "Enough data — generate your first portrait.",
+      "generateButton": "Generate portrait",
+      "generateLoading": "Generating...",
       "Sections": {
         "mood": "Your go-to atmospheres will appear here once you've marked a few films.",
         "identity": "Cinematic identity cards unlock as more data comes in.",

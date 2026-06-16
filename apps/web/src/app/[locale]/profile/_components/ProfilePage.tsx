@@ -99,7 +99,7 @@ export default function ProfilePage() {
           exit={{ opacity: 0, transition: { duration: 0.2 } }}
           transition={{ duration: 0.4 }}
         >
-          <EmptyProfile />
+          <EmptyProfile markedCount={userMovies?.length ?? 0} />
         </motion.div>
       ) : (
         <motion.div
