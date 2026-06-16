@@ -23,6 +23,7 @@ import ProfileMovieShelfSummary from '@/components/sections/profile/ProfileMovie
 import RefreshTasteProfileCard from '@/components/sections/profile/RefreshTasteProfileCard';
 import TonightHistory from '@/components/sections/profile/TonightHistory';
 import { ProfileSkeleton } from './ProfileSkeleton';
+import EmptyProfile from './EmptyProfile';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -90,7 +91,17 @@ export default function ProfilePage() {
         >
           <ProfileSkeleton />
         </motion.div>
-      ) : !tasteProfile?.data ? null : (
+      ) : !tasteProfile?.data ? (
+        <motion.div
+          key="empty"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          transition={{ duration: 0.4 }}
+        >
+          <EmptyProfile />
+        </motion.div>
+      ) : (
         <motion.div
           key="content"
           initial={{ opacity: 0 }}

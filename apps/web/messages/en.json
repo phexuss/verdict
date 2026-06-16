@@ -115,6 +115,23 @@
     "title": "Taste Profile",
     "label": "Your Cinematic Identity",
     "description": "Analyzed from {count} marked titles",
+    "emptyState": {
+      "headline": "Your cinematic portrait",
+      "tagline": "hasn't been shaped yet",
+      "hint": "Save, watch, rate or dislike films — your portrait will build automatically.",
+      "ctaCurated": "Browse curated picks",
+      "ctaTonight": "Find tonight's film",
+      "Sections": {
+        "mood": "Your go-to atmospheres will appear here once you've marked a few films.",
+        "identity": "Cinematic identity cards unlock as more data comes in.",
+        "frequentlySeen": "Directors and actors from your watch history will surface here.",
+        "pacing": "Your preferred film pacing will be calculated from your history.",
+        "emotional": "Your emotional viewing pattern will emerge after a few marks.",
+        "runtime": "Your average runtime preference will be computed from your films.",
+        "shelf": "Films you save, watch, rate or dislike will live here.",
+        "tonight": "Your AI Tonight trios will appear here after your first session."
+      }
+    },
     "Sections": {
       "Atmosphere": {
         "title": "Atmosphere & Mood",
