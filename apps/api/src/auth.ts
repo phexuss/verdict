@@ -25,6 +25,13 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
 
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: '.phexuss.dev',
+    },
+  },
+
   account: {
     accountLinking: {
       enabled: true,
