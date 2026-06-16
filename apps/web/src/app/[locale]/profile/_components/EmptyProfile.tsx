@@ -107,10 +107,10 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
             {t('title')}
           </h1>
           <div className="flex flex-wrap items-baseline gap-2">
-            <h2 className="text-4xl font-semibold leading-tight tracking-tight md:text-5xl xl:text-6xl">
+            <h2 className="wrap-break-word text-3xl font-semibold leading-tight tracking-tight md:text-5xl xl:text-6xl">
               {e('headline')}
             </h2>
-            <span className="text-3xl font-semibold leading-tight tracking-tight text-foreground/30 md:text-4xl xl:text-5xl">
+            <span className="wrap-break-word text-2xl font-semibold leading-tight tracking-tight text-foreground/30 md:text-4xl xl:text-5xl">
               {e('tagline')}
             </span>
           </div>
@@ -125,7 +125,7 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
                   transition={{ duration: 0.7, ease }}
                 />
               </div>
-              <span className="text-sm font-medium tabular-nums text-foreground/60">
+              <span className="whitespace-nowrap text-sm font-medium tabular-nums text-foreground/60">
                 {e('progressLabel', { count: markedCount })}
               </span>
             </div>
@@ -157,16 +157,16 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
                 : e('generateButton')}
             </Button>
           ) : (
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <Link
                 href="/curated"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-accent"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:border-primary/40 hover:bg-accent"
               >
                 {e('ctaCurated')}
               </Link>
               <Link
                 href="/tonight"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium whitespace-nowrap text-primary-foreground transition-opacity hover:opacity-90"
               >
                 {e('ctaTonight')}
               </Link>

@@ -119,7 +119,7 @@ export default function ProfilePage() {
               <h1 className="font-medium text-primary text-xs uppercase tracking-widest">
                 {t('title')}
               </h1>
-              <h2 className="wrap-break-word text-4xl font-semibold leading-tight tracking-tight md:text-5xl xl:text-6xl">
+              <h2 className="wrap-break-word text-3xl font-semibold leading-tight tracking-tight md:text-5xl xl:text-6xl">
                 {t('label')}
               </h2>
             </div>
