@@ -103,7 +103,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const rowB = [...moods.slice().reverse(), ...moods.slice().reverse()];
 
   return (
-    <div className="relative min-h-svh overflow-hidden bg-background">
+    <div className="relative flex min-h-svh flex-col overflow-hidden bg-background">
       <style>{`
         @keyframes marquee-left {
           from { transform: translateX(0); }
@@ -127,8 +127,36 @@ export default async function HomePage({ params }: HomePageProps) {
 
       <FloatingMoods moods={moods} positions={MOOD_POSITIONS} />
 
+      <main className="relative z-20 flex flex-1 flex-col justify-center px-6 pb-8 pt-20 md:px-16 md:pt-24 md:pb-10 lg:px-24 lg:py-24">
+        <div className="max-w-xl">
+          <WelcomeTitle className="mb-4 text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
+            {t.rich('title', {
+              chunk: (chunks) => <AnimatedChunk>{chunks}</AnimatedChunk>,
+              accent: (chunks) => (
+                <em
+                  className="not-italic"
+                  style={{ color: 'var(--primary)', fontStyle: 'italic' }}
+                >
+                  {chunks}
+                </em>
+              ),
+            })}
+          </WelcomeTitle>
+
+          <AnimatedDescription
+            className="mb-7 max-w-md text-base leading-relaxed sm:mb-10 md:text-lg text-muted-foreground"
+            translations={t('description')}
+          ></AnimatedDescription>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <GetStartedButton translations={t('cta')} href={`/tonight`} />
+            <BrowseButton translations={t('browse')} href={`/curated`} />
+          </div>
+        </div>
+      </main>
+
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-15 z-10 flex flex-col gap-3 overflow-hidden py-6 lg:hidden"
+        className="pointer-events-none z-10 flex flex-col gap-3 overflow-hidden py-5 pb-6 lg:hidden"
         style={{
           maskImage:
             'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
@@ -157,34 +185,6 @@ export default async function HomePage({ params }: HomePageProps) {
           ))}
         </div>
       </div>
-
-      <main className="relative z-20 flex min-h-svh flex-col justify-center px-6 pb-36 pt-20 sm:pb-32 md:px-16 md:pt-24 lg:px-24 lg:py-24">
-        <div className="max-w-xl">
-          <WelcomeTitle className="mb-4 text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-5xl sm:mb-6 md:text-6xl lg:text-7xl">
-            {t.rich('title', {
-              chunk: (chunks) => <AnimatedChunk>{chunks}</AnimatedChunk>,
-              accent: (chunks) => (
-                <em
-                  className="not-italic"
-                  style={{ color: 'var(--primary)', fontStyle: 'italic' }}
-                >
-                  {chunks}
-                </em>
-              ),
-            })}
-          </WelcomeTitle>
-
-          <AnimatedDescription
-            className="mb-7 max-w-md text-base leading-relaxed sm:mb-10 md:text-lg text-muted-foreground"
-            translations={t('description')}
-          ></AnimatedDescription>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <GetStartedButton translations={t('cta')} href={`/tonight`} />
-            <BrowseButton translations={t('browse')} href={`/curated`} />
-          </div>
-        </div>
-      </main>
     </div>
   );
 }
