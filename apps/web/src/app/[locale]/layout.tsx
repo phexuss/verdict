@@ -18,9 +18,35 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: 'Verdict',
+  metadataBase: new URL('https://verdict.phexuss.dev'),
+  title: {
+    default: 'Verdict',
+    template: '%s — Verdict',
+  },
   description:
-    'A clean modern starter powered by Next.js, NestJS and Turborepo.',
+    'Verdict builds your cinematic portrait from films you save, watch and rate — then picks what to watch tonight.',
+  keywords: ['movies', 'film recommendations', 'cinematic profile', 'what to watch', 'movie taste'],
+  authors: [{ name: 'phexuss', url: 'https://github.com/phexuss' }],
+  creator: 'phexuss',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Verdict',
+    title: 'Verdict',
+    description:
+      'Verdict builds your cinematic portrait from films you save, watch and rate — then picks what to watch tonight.',
+    url: 'https://verdict.phexuss.dev',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Verdict',
+    description:
+      'Verdict builds your cinematic portrait from films you save, watch and rate — then picks what to watch tonight.',
+  },
 };
 
 export function generateStaticParams() {

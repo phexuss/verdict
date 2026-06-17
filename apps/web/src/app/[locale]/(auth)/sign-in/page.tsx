@@ -1,5 +1,17 @@
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import SignInForm from '@/components/sections/auth/sign-in/SignInForm';
+
+type SignInPageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: SignInPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'SignInPage' });
+  return {
+    title: t('title'),
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function SignInPage() {
   const t = await getTranslations('SignInPage');

@@ -39,6 +39,7 @@ export default function SettingsMobileButton() {
         <Button
           variant="ghost"
           size="icon"
+          aria-label={t('title')}
           className="transition-colors hover:bg-accent"
         >
           <SettingsLinear className="size-5 text-foreground" />
@@ -55,6 +56,7 @@ export default function SettingsMobileButton() {
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Close"
               className="text-muted-foreground hover:text-foreground"
             >
               <X className="size-5" />

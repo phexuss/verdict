@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -14,6 +15,16 @@ import { routing } from '@/i18n/routing';
 type HomePageProps = {
   params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'WelcomePage' });
+  return {
+    title: null,
+    description: t('description'),
+    openGraph: { title: 'Verdict', description: t('description') },
+  };
+}
 
 const MOODS = {
   en: [
@@ -70,6 +81,7 @@ function MoodChip({
 }) {
   return (
     <span
+      aria-hidden="true"
       className="inline-flex shrink-0 whitespace-nowrap rounded-full border font-medium"
       style={{
         padding: size === 'sm' ? '0.25rem 0.75rem' : '0.35rem 0.9rem',

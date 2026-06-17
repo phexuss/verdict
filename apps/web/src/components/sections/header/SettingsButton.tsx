@@ -55,6 +55,7 @@ export default function SettingsButton() {
           <Button
             variant="ghost"
             size="icon"
+            aria-label={t('title')}
             className="transition-colors hover:bg-accent data-[state=open]:bg-accent"
           >
             <SettingsLinear className="size-4 text-foreground md:size-5" />
