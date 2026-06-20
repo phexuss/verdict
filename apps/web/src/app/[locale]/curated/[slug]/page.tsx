@@ -10,12 +10,16 @@ type CuratedMoviePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: CuratedMoviePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CuratedMoviePageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const tmdbId = Number(slug);
   if (!Number.isInteger(tmdbId)) return {};
   try {
-    const response = await getMovieDetails(tmdbId, { locale: locale === 'ru' ? 'ru' : 'en' });
+    const response = await getMovieDetails(tmdbId, {
+      locale: locale === 'ru' ? 'ru' : 'en',
+    });
     const movie = response.data;
     const title = movie?.title ?? 'Film';
     const description = movie?.overview ?? undefined;

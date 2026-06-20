@@ -4,7 +4,9 @@ import SignInForm from '@/components/sections/auth/sign-in/SignInForm';
 
 type SignInPageProps = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({ params }: SignInPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: SignInPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'SignInPage' });
   return {

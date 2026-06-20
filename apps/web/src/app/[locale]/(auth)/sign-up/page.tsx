@@ -4,7 +4,9 @@ import SignUpForm from '@/components/sections/auth/sign-up/SignUpForm';
 
 type SignUpPageProps = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({ params }: SignUpPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: SignUpPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'SignUpPage' });
   return {

@@ -149,7 +149,9 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
             >
               <RefreshLinear
                 className={
-                  refreshTasteProfile.isPending ? 'size-4 animate-spin' : 'size-4'
+                  refreshTasteProfile.isPending
+                    ? 'size-4 animate-spin'
+                    : 'size-4'
                 }
               />
               {refreshTasteProfile.isPending

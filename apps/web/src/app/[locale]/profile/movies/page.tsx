@@ -10,7 +10,9 @@ type ProfileMoviesRoutePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: ProfileMoviesRoutePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProfileMoviesRoutePageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'ProfilePage' });
   return {

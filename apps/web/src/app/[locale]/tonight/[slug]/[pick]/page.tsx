@@ -15,7 +15,9 @@ type TonightMoviePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: TonightMoviePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TonightMoviePageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'TonightPage' });
   return {
@@ -23,7 +25,6 @@ export async function generateMetadata({ params }: TonightMoviePageProps): Promi
     description: t('description'),
   };
 }
-
 
 export default async function TonightMoviePage({
   params,

@@ -10,7 +10,9 @@ type ProfileRoutePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: ProfileRoutePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProfileRoutePageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'ProfilePage' });
   return {

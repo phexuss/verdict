@@ -25,7 +25,13 @@ export const metadata: Metadata = {
   },
   description:
     'Verdict builds your cinematic portrait from films you save, watch and rate — then picks what to watch tonight.',
-  keywords: ['movies', 'film recommendations', 'cinematic profile', 'what to watch', 'movie taste'],
+  keywords: [
+    'movies',
+    'film recommendations',
+    'cinematic profile',
+    'what to watch',
+    'movie taste',
+  ],
   authors: [{ name: 'phexuss', url: 'https://github.com/phexuss' }],
   creator: 'phexuss',
   robots: {

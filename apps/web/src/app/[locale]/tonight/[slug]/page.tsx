@@ -9,13 +9,18 @@ type TonightMoviesPageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: TonightMoviesPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TonightMoviesPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'TonightPage' });
   return {
     title: t('title'),
     description: t('description'),
-    openGraph: { title: `${t('title')} — Verdict`, description: t('description') },
+    openGraph: {
+      title: `${t('title')} — Verdict`,
+      description: t('description'),
+    },
   };
 }
 

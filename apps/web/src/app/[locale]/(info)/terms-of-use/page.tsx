@@ -4,7 +4,9 @@ import { Link } from '@/i18n/navigation';
 
 type TermsPageProps = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({ params }: TermsPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TermsPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'TermsOfUsePage' });
   return {

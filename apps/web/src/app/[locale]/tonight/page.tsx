@@ -5,13 +5,18 @@ import { GenreMenu } from '@/components/sections/tonight/GenreMenu';
 
 type TonightPageProps = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({ params }: TonightPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TonightPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'TonightPage' });
   return {
     title: t('title'),
     description: t('description'),
-    openGraph: { title: `${t('title')} — Verdict`, description: t('description') },
+    openGraph: {
+      title: `${t('title')} — Verdict`,
+      description: t('description'),
+    },
   };
 }
 

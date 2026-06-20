@@ -4,7 +4,9 @@ import { Link } from '@/i18n/navigation';
 
 type PrivacyPageProps = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({ params }: PrivacyPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PrivacyPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'PrivacyPolicyPage' });
   return {
