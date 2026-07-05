@@ -2,18 +2,22 @@
 
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogDescription } from '@repo/ui/components/dialog';
 import { Separator } from '@repo/ui/components/separator';
 import {
   ArrowLeftLinear,
   RefreshLinear,
   StarBold,
 } from '@solar-icons/react-perf';
+import { useQuery } from '@tanstack/react-query';
+import { Play } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import type { TmdbMovieCredits } from '@/api/generated/models';
 import { useGetRecommendationBySlug } from '@/api/generated/recommendations/recommendations';
 import { useGetMovieCredits } from '@/api/generated/tmdb/tmdb';
+import { getMovieTrailerAction } from '@/actions/tmdb';
 import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import StorylineCard from '@/components/sections/curated/StorylineCard';
 import { Link } from '@/i18n/navigation';
@@ -57,6 +61,7 @@ const pickTypeBySlug = {
 export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
   const locale = useLocale();
   const t = useTranslations('TonightPage.pickDetails');
+  const curatedT = useTranslations('CuratedPage.SlugPage');
   const pickT = useTranslations('TonightPage.genreMenu.picks');
   const {
     data: recommendation,
@@ -74,6 +79,12 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
     { locale: locale === 'ru' ? 'ru' : 'en' },
     { query: { enabled: Boolean(item), select: (response) => response.data } },
   );
+
+  const { data: trailerUrl } = useQuery({
+    queryKey: ['movieTrailer', item?.movie.tmdbId, locale],
+    queryFn: () => getMovieTrailerAction(item!.movie.tmdbId, locale === 'ru' ? 'ru' : 'en'),
+    enabled: Boolean(item?.movie.tmdbId),
+  });
 
   return (
     <AnimatePresence mode="wait">
@@ -139,9 +150,9 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                     initial={{ scale: 0.97, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.55, delay: 0.1, ease }}
-                    className="w-full max-w-sm justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
+                    className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
                   >
-                    <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-[0_24px_48px_-12px_oklch(0_0_0/0.4)]">
+                    <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-2xl">
                       {imagePath ? (
                         <Image
                           alt={title}
@@ -156,6 +167,34 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                         </div>
                       )}
                     </div>
+                    {trailerUrl ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="secondary" className="w-full" size="lg">
+                            <Play className="fill-foreground" />
+                            {curatedT('trailer')}
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent
+                          className="w-full overflow-hidden border-none bg-transparent sm:bg-background shadow-none sm:shadow-xl p-0 sm:max-w-5xl rounded-xl sm:rounded-2xl"
+                          showCloseButton={false}
+                        >
+                          <DialogTitle className="sr-only">{curatedT('trailer')}</DialogTitle>
+                          <DialogDescription className="sr-only">
+                            {curatedT('trailerDescription')}
+                          </DialogDescription>
+                          <div className="relative aspect-video w-full">
+                            <iframe
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              className="absolute inset-0 h-full w-full"
+                              src={trailerUrl}
+                              title="Trailer"
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    ) : null}
                   </motion.div>
 
                   <motion.div
