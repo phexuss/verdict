@@ -35,7 +35,7 @@ export default function MoodButtons({
 
   return (
     <div className="mb-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+      <p className="text-xs font-semibold uppercase tracking-widest text-primary">
         Mood · {selected.length}/3
       </p>
       <ToggleGroup

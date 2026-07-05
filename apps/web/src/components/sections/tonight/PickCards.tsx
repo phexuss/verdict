@@ -35,7 +35,7 @@ export default function PickCards() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-primary">
         {t('fourthLabel')}
       </h2>
 
