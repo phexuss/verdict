@@ -1,8 +1,17 @@
 'use client';
 
 import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@repo/ui/components/dialog';
 import { Separator } from '@repo/ui/components/separator';
 import { StarBold } from '@solar-icons/react-perf';
+import { Play } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -38,12 +47,14 @@ interface CuratedMovieContentProps {
   movie: TmdbMovieDetails;
   credits: TmdbMovieCredits;
   locale: string;
+  trailerUrl: string | null;
 }
 
 export function CuratedMovieContent({
   movie,
   credits,
   locale,
+  trailerUrl,
 }: CuratedMovieContentProps) {
   const t = useTranslations('CuratedPage.SlugPage');
 
@@ -53,9 +64,9 @@ export function CuratedMovieContent({
         initial={{ scale: 0.97, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.55, delay: 0.1, ease }}
-        className="w-full max-w-sm justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
+        className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
       >
-        <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-[0_24px_48px_-12px_oklch(0_0_0/0.4)]">
+        <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-2xl">
           {movie.poster_path ? (
             <Image
               alt={movie.title}
@@ -70,6 +81,35 @@ export function CuratedMovieContent({
             </div>
           )}
         </div>
+
+        {trailerUrl ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="secondary" className="w-full" size="lg">
+                <Play className="mr-2 size-4 fill-current" />
+                {t('trailer')}
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              className="w-full overflow-hidden border-none bg-transparent sm:bg-background shadow-none sm:shadow-xl p-0 sm:max-w-5xl rounded-xl sm:rounded-2xl"
+              showCloseButton={false}
+            >
+              <DialogTitle className="sr-only">{t('trailer')}</DialogTitle>
+              <DialogDescription className="sr-only">
+                {t('trailer')}
+              </DialogDescription>
+              <div className="relative aspect-video w-full">
+                <iframe
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                  src={trailerUrl}
+                  title={`${movie.title} — Trailer`}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : null}
       </motion.div>
 
       <motion.div

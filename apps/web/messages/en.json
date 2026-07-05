@@ -213,7 +213,8 @@
       "credits": "Credits",
       "director": "Director",
       "cast": "Cast",
-      "cinematography": "Cinematography"
+      "cinematography": "Cinematography",
+      "trailer": "Trailer"
     }
   },
   "MovieActionsBar": {

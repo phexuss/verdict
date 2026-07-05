@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getMovieCredits, getMovieDetails } from '@/api/generated/tmdb/tmdb';
+import { getMovieTrailer } from '@/lib/tmdb-helper';
 import { CuratedMovieContent } from './_components/CuratedMovieContent';
 
 type CuratedMoviePageProps = {
@@ -43,9 +44,12 @@ export default async function CuratedMoviePage({
     notFound();
   }
 
-  const [response, creditsResponse] = await Promise.all([
-    getMovieDetails(tmdbId, { locale: locale === 'ru' ? 'ru' : 'en' }),
-    getMovieCredits(tmdbId, { locale: locale === 'ru' ? 'ru' : 'en' }),
+  const targetLocale = locale === 'ru' ? 'ru' : 'en';
+
+  const [response, creditsResponse, trailerUrl] = await Promise.all([
+    getMovieDetails(tmdbId, { locale: targetLocale }),
+    getMovieCredits(tmdbId, { locale: targetLocale }),
+    getMovieTrailer(tmdbId, targetLocale),
   ]);
 
   return (
@@ -53,6 +57,7 @@ export default async function CuratedMoviePage({
       credits={creditsResponse.data}
       locale={locale}
       movie={response.data}
+      trailerUrl={trailerUrl}
     />
   );
 }

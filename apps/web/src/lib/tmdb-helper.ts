@@ -55,6 +55,22 @@ const CINEMATOGRAPHY_JOBS = [
   'Cinematographer',
 ];
 
+interface TMDBVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+  size: number;
+  iso_639_1: string;
+}
+
+interface TMDBVideosResponse {
+  id: number;
+  results: TMDBVideo[];
+}
+
 export function getMovieGenreNames(ids: number[], locale: string) {
   const dictionary = locale === 'ru' ? movieGenres.ru : movieGenres.en;
 
@@ -179,4 +195,40 @@ function getPrimaryCrewMember(
 
 function isSameCreditValue(first: string, second: string) {
   return first.trim().toLowerCase() === second.trim().toLowerCase();
+}
+
+export async function getMovieTrailer(
+  movieId: number,
+  locale: string,
+): Promise<string | null> {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${movieId}/videos?language=${locale}&include_video_language=${locale},en`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
+        accept: 'application/json',
+      },
+      next: { revalidate: 86400 },
+    },
+  );
+
+  if (!res.ok) return null;
+
+  const data: TMDBVideosResponse = await res.json();
+
+  const youtubeVideos = data.results.filter((v) => v.site === 'YouTube');
+
+  const trailer =
+    youtubeVideos.find(
+      (v) => v.iso_639_1 === locale && v.type === 'Trailer' && v.official,
+    ) ??
+    youtubeVideos.find((v) => v.iso_639_1 === locale && v.type === 'Trailer') ??
+    youtubeVideos.find(
+      (v) => v.iso_639_1 === 'en' && v.type === 'Trailer' && v.official,
+    ) ??
+    youtubeVideos.find((v) => v.iso_639_1 === 'en' && v.type === 'Trailer');
+
+  return trailer
+    ? `https://www.youtube.com/embed/${trailer.key}?rel=0&modestbranding=1&controls=0&autoplay=1&iv_load_policy=3`
+    : null;
 }

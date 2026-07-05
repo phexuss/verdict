@@ -3,8 +3,9 @@ import { Skeleton } from '@repo/ui/components/skeleton';
 export default function Loading() {
   return (
     <article className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
-      <div className="w-full max-w-sm justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch">
-        <Skeleton className="aspect-2/3 w-full rounded-md border border-sidebar-ring/8 bg-accent" />
+      <div className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch">
+        <Skeleton className="aspect-2/3 w-full rounded-xl border border-sidebar-ring/8 bg-accent shadow-2xl" />
+        <Skeleton className="h-10 w-full rounded-4xl border border-sidebar-ring/8 bg-accent" />
       </div>
 
       <div className="flex min-w-0 flex-col gap-6">

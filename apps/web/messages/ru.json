@@ -214,7 +214,8 @@
       "credits": "Создатели",
       "director": "Режиссер",
       "cast": "В ролях",
-      "cinematography": "Операторская работа"
+      "cinematography": "Операторская работа",
+      "trailer": "Трейлер"
     }
   },
   "MovieActionsBar": {
