@@ -2,7 +2,13 @@
 
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogDescription } from '@repo/ui/components/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@repo/ui/components/dialog';
 import { Separator } from '@repo/ui/components/separator';
 import {
   ArrowLeftLinear,
@@ -14,19 +20,16 @@ import { Play } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import type { TmdbMovieCredits } from '@/api/generated/models';
+import { getMovieTrailerAction } from '@/actions/tmdb';
+
 import { useGetRecommendationBySlug } from '@/api/generated/recommendations/recommendations';
 import { useGetMovieCredits } from '@/api/generated/tmdb/tmdb';
-import { getMovieTrailerAction } from '@/actions/tmdb';
 import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import StorylineCard from '@/components/sections/curated/StorylineCard';
 import { Link } from '@/i18n/navigation';
-import {
-  getCinematographyName,
-  getDirectorName,
-  getHumanReadableRuntime,
-  getTopCast,
-} from '@/lib/tmdb-helper';
+import { getHumanReadableRuntime } from '@/lib/tmdb-helper';
+import { AiReviewCard } from './AiReviewCard';
+import { CreditsSkeleton, TonightCreditsCard } from './TonightCreditsCard';
 import { TonightMovieDetailsSkeleton } from './TonightMovieDetailsSkeleton';
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -82,7 +85,8 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
 
   const { data: trailerUrl } = useQuery({
     queryKey: ['movieTrailer', item?.movie.tmdbId, locale],
-    queryFn: () => getMovieTrailerAction(item!.movie.tmdbId, locale === 'ru' ? 'ru' : 'en'),
+    queryFn: () =>
+      getMovieTrailerAction(item!.movie.tmdbId, locale === 'ru' ? 'ru' : 'en'),
     enabled: Boolean(item?.movie.tmdbId),
   });
 
@@ -170,7 +174,11 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                     {trailerUrl ? (
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="secondary" className="w-full" size="lg">
+                          <Button
+                            variant="secondary"
+                            className="w-full"
+                            size="lg"
+                          >
                             <Play className="fill-foreground" />
                             {curatedT('trailer')}
                           </Button>
@@ -179,7 +187,9 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                           className="w-full overflow-hidden border-none bg-transparent sm:bg-background shadow-none sm:shadow-xl p-0 sm:max-w-5xl rounded-xl sm:rounded-2xl"
                           showCloseButton={false}
                         >
-                          <DialogTitle className="sr-only">{curatedT('trailer')}</DialogTitle>
+                          <DialogTitle className="sr-only">
+                            {curatedT('trailer')}
+                          </DialogTitle>
                           <DialogDescription className="sr-only">
                             {curatedT('trailerDescription')}
                           </DialogDescription>
@@ -319,116 +329,4 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
   );
 }
 
-type AiReviewCardProps = {
-  pickReason: string | null;
-  trioReason: string | null;
-};
 
-function AiReviewCard({ pickReason, trioReason }: AiReviewCardProps) {
-  const t = useTranslations('TonightPage.pickDetails');
-
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2, ease }}
-      className="flex flex-col gap-5 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
-    >
-      <div className="flex items-center gap-2 text-primary">
-        <StarBold className="size-5 shrink-0" />
-        <h2 className="font-medium text-xl">{t('aiReview')}</h2>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-primary/70">
-          {t('whyThisPick')}
-        </p>
-        <p className="text-foreground/80 text-sm leading-relaxed">
-          {pickReason ?? '-'}
-        </p>
-      </div>
-
-      {trioReason ? (
-        <div className="flex flex-col gap-1.5">
-          <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-primary/70">
-            {t('trioContext')}
-          </p>
-          <p className="text-foreground/70 text-sm leading-relaxed">
-            {trioReason}
-          </p>
-        </div>
-      ) : null}
-    </motion.section>
-  );
-}
-
-type TonightCreditsCardProps = {
-  movieCredits?: TmdbMovieCredits;
-};
-
-function TonightCreditsCard({ movieCredits }: TonightCreditsCardProps) {
-  const t = useTranslations('CuratedPage.SlugPage');
-  const directorName = movieCredits ? getDirectorName(movieCredits) : null;
-  const topCast = movieCredits ? getTopCast(movieCredits, 5) : [];
-  const cinematographyName = movieCredits
-    ? getCinematographyName(movieCredits)
-    : null;
-
-  return (
-    <section className="flex flex-col gap-5 rounded-xl border border-foreground/8 bg-accent p-5">
-      <h2 className="font-medium text-xl">{t('credits')}</h2>
-      <div className="flex flex-col gap-1">
-        <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-muted-foreground/60">
-          {t('director')}
-        </p>
-        <p className="text-sm text-foreground/85">{directorName ?? '-'}</p>
-      </div>
-      <div className="flex flex-col gap-1">
-        <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-muted-foreground/60">
-          {t('cast')}
-        </p>
-        <div className="flex flex-col gap-1">
-          {topCast.length > 0 ? (
-            topCast.map((actor) => (
-              <p key={actor.credit_id} className="text-sm text-foreground/85">
-                {actor.name}
-              </p>
-            ))
-          ) : (
-            <p className="text-sm text-foreground/85">-</p>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-muted-foreground/60">
-          {t('cinematography')}
-        </p>
-        <p className="text-sm text-foreground/85">
-          {cinematographyName ?? '-'}
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function CreditsSkeleton() {
-  return (
-    <section className="flex flex-col gap-5 rounded-xl border border-foreground/8 bg-accent p-5">
-      <div className="h-7 w-28 animate-pulse rounded-sm bg-muted" />
-      <div className="flex flex-col gap-2">
-        <div className="h-3 w-20 animate-pulse rounded-sm bg-muted" />
-        <div className="h-5 w-32 animate-pulse rounded-sm bg-muted" />
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="h-3 w-16 animate-pulse rounded-sm bg-muted" />
-        <div className="h-5 w-36 animate-pulse rounded-sm bg-muted" />
-        <div className="h-5 w-32 animate-pulse rounded-sm bg-muted" />
-        <div className="h-5 w-40 animate-pulse rounded-sm bg-muted" />
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="h-3 w-28 animate-pulse rounded-sm bg-muted" />
-        <div className="h-5 w-32 animate-pulse rounded-sm bg-muted" />
-      </div>
-    </section>
-  );
-}
