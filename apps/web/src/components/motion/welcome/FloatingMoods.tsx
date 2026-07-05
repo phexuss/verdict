@@ -9,17 +9,23 @@ type MoodPosition = {
   size: 'sm' | 'md';
 };
 
-export function FloatingMoods({
-  moods,
-  positions,
-}: {
-  moods: string[];
-  positions: MoodPosition[];
-}) {
+const MOOD_POSITIONS: MoodPosition[] = [
+  { top: '14%', right: '12%', accent: false, size: 'md' },
+  { top: '22%', right: '28%', accent: true, size: 'sm' },
+  { top: '31%', right: '7%', accent: false, size: 'sm' },
+  { top: '40%', right: '20%', accent: false, size: 'md' },
+  { top: '48%', right: '34%', accent: true, size: 'sm' },
+  { top: '55%', right: '9%', accent: false, size: 'md' },
+  { top: '62%', right: '23%', accent: false, size: 'sm' },
+  { top: '70%', right: '15%', accent: true, size: 'md' },
+  { top: '78%', right: '5%', accent: false, size: 'sm' },
+];
+
+export function FloatingMoods({ moods }: { moods: string[] }) {
   return (
     <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block">
       {moods.map((mood, i) => {
-        const pos = positions[i];
+        const pos = MOOD_POSITIONS[i];
         if (!pos) return null;
 
         return (
