@@ -229,6 +229,6 @@ export async function getMovieTrailer(
     youtubeVideos.find((v) => v.iso_639_1 === 'en' && v.type === 'Trailer');
 
   return trailer
-    ? `https://www.youtube.com/embed/${trailer.key}?rel=0&modestbranding=1&controls=0&autoplay=1&iv_load_policy=3`
+    ? `https://www.youtube.com/embed/${trailer.key}?rel=0&modestbranding=1&autoplay=1&iv_load_policy=3`
     : null;
 }
