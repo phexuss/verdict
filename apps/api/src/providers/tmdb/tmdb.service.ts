@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import {
   TmdbMovieCredits,
   TmdbMovieDetails,
+  TmdbSearchMoviesResponse,
   TrendingMoviesResponse,
 } from './tmdb.types.js';
 
@@ -131,6 +132,31 @@ export class TmdbService {
         {
           params: {
             language: params.language,
+          },
+          headers: {
+            Authorization: `Bearer ${this.BEARER_TOKEN}`,
+          },
+        },
+      ),
+    );
+
+    return data;
+  }
+
+  async searchMovies(params: {
+    query: string;
+    language: string;
+    page?: number;
+  }): Promise<TmdbSearchMoviesResponse> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbSearchMoviesResponse>(
+        `${this.BASE_URL}search/movie`,
+        {
+          params: {
+            query: params.query,
+            include_adult: false,
+            language: params.language,
+            page: params.page ?? 1,
           },
           headers: {
             Authorization: `Bearer ${this.BEARER_TOKEN}`,

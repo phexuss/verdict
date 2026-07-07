@@ -11,6 +11,7 @@ import { TmdbService } from './tmdb.service.js';
 import {
   TmdbMovieCredits,
   TmdbMovieDetails,
+  TmdbSearchMoviesResponse,
   TrendingMoviesResponse,
 } from './tmdb.types.js';
 
@@ -101,6 +102,45 @@ export class TmdbController {
     return this.tmdbService.getMovieCredits({
       tmdbId,
       language: locale === 'ru' ? 'ru-RU' : 'en-US',
+    });
+  }
+
+  @Get('search')
+  @AllowAnonymous()
+  @ApiOperation({
+    summary: 'Search movies',
+    description: 'Search for movies by query string.',
+    operationId: 'searchMovies',
+  })
+  @ApiQuery({
+    name: 'query',
+    required: true,
+    type: String,
+    description: 'Search query string',
+  })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    enum: ['en', 'ru'],
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+  })
+  @ApiOkResponse({
+    description: 'Search results retrieved successfully.',
+    type: TmdbSearchMoviesResponse,
+  })
+  async searchMovies(
+    @Query('query') query: string,
+    @Query('locale') locale?: 'en' | 'ru',
+    @Query('page') page?: number,
+  ): Promise<TmdbSearchMoviesResponse> {
+    return this.tmdbService.searchMovies({
+      query,
+      language: locale === 'ru' ? 'ru-RU' : 'en-US',
+      page: page ?? 1,
     });
   }
 }

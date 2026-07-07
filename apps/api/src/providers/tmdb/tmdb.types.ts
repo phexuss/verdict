@@ -200,3 +200,17 @@ export class TmdbMovieCredits {
   @ApiProperty({ type: [TmdbCrewCredit] })
   crew: TmdbCrewCredit[];
 }
+
+export class TmdbSearchMoviesResponse {
+  @ApiProperty({ example: 1 })
+  page: number;
+
+  @ApiProperty({ type: [TmdbMovie] })
+  results: TmdbMovie[];
+
+  @ApiProperty({ example: 1 })
+  total_pages: number;
+
+  @ApiProperty({ example: 4 })
+  total_results: number;
+}

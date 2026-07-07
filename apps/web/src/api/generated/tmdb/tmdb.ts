@@ -25,8 +25,10 @@ import type {
   GetMovieCreditsParams,
   GetMovieDetailsParams,
   GetTrendingMoviesParams,
+  SearchMoviesParams,
   TmdbMovieCredits,
   TmdbMovieDetails,
+  TmdbSearchMoviesResponse,
   TrendingMoviesResponse,
 } from '../models';
 
@@ -639,6 +641,174 @@ export function useGetMovieCredits<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getGetMovieCreditsQueryOptions(tmdbId, params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export type searchMoviesResponse200 = {
+  data: TmdbSearchMoviesResponse;
+  status: 200;
+};
+
+export type searchMoviesResponseSuccess = searchMoviesResponse200 & {
+  headers: Headers;
+};
+
+export const getSearchMoviesUrl = (params: SearchMoviesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/search?${stringifiedParams}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/search`;
+};
+
+/**
+ * Search for movies by query string.
+ * @summary Search movies
+ */
+export const searchMovies = async (
+  params: SearchMoviesParams,
+  options?: RequestInit,
+): Promise<searchMoviesResponseSuccess> => {
+  return customFetch<searchMoviesResponseSuccess>(getSearchMoviesUrl(params), {
+    ...options,
+    method: 'GET',
+  });
+};
+
+export const getSearchMoviesQueryKey = (params?: SearchMoviesParams) => {
+  return [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/tmdb/search`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getSearchMoviesQueryOptions = <
+  TData = Awaited<ReturnType<typeof searchMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  params: SearchMoviesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof searchMovies>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getSearchMoviesQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof searchMovies>>> = ({
+    signal,
+  }) => searchMovies(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof searchMovies>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type SearchMoviesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof searchMovies>>
+>;
+export type SearchMoviesQueryError = ErrorType<unknown>;
+
+export function useSearchMovies<
+  TData = Awaited<ReturnType<typeof searchMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  params: SearchMoviesParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof searchMovies>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof searchMovies>>,
+          TError,
+          Awaited<ReturnType<typeof searchMovies>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSearchMovies<
+  TData = Awaited<ReturnType<typeof searchMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  params: SearchMoviesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof searchMovies>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof searchMovies>>,
+          TError,
+          Awaited<ReturnType<typeof searchMovies>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSearchMovies<
+  TData = Awaited<ReturnType<typeof searchMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  params: SearchMoviesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof searchMovies>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Search movies
+ */
+
+export function useSearchMovies<
+  TData = Awaited<ReturnType<typeof searchMovies>>,
+  TError = ErrorType<unknown>,
+>(
+  params: SearchMoviesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof searchMovies>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getSearchMoviesQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
