@@ -3,6 +3,27 @@ import type {
   TmdbCrewCredit,
   TmdbMovieCredits,
 } from '@/api/generated/models';
+import { SearchMoviesLocale } from '@/api/generated/models';
+
+export function getSearchLocale(locale: string): SearchMoviesLocale {
+  if (locale in SearchMoviesLocale) {
+    return SearchMoviesLocale[locale as keyof typeof SearchMoviesLocale];
+  }
+  return SearchMoviesLocale.en;
+}
+
+export function detectQueryLocale(
+  query: string,
+  appLocale: string,
+): SearchMoviesLocale {
+  const hasCyrillic = /[а-яА-ЯёЁ]/.test(query);
+  if (hasCyrillic) return SearchMoviesLocale.ru;
+
+  const hasLatin = /[a-zA-Z]/.test(query);
+  if (hasLatin) return SearchMoviesLocale.en;
+
+  return getSearchLocale(appLocale);
+}
 
 const movieGenres: Record<'en' | 'ru', Record<number, string>> = {
   en: {

@@ -8,7 +8,13 @@
         "buttonPlaceholder": "Search",
         "inputPlaceholder": "Search for films...",
         "open": "Open search",
-        "close": "Close search"
+        "close": "Close search",
+        "minChars": "Type at least 2 characters",
+        "noResults": "No films found for \"{query}\"",
+        "error": "Search failed. Try again.",
+        "loading": "Searching...",
+        "showAll": "Show all results",
+        "hint": "Search for films by title"
       }
     },
     "settings": {
