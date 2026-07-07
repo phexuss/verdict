@@ -1,4 +1,5 @@
 import { Film, Star } from 'lucide-react';
+import { motion } from 'motion/react';
 import Image from 'next/image';
 import type { TmdbMovie } from '@/api/generated/models';
 import { getMovieGenreNames } from '@/lib/tmdb-helper';
@@ -10,6 +11,7 @@ interface SearchResultItemProps {
   onClick: () => void;
   onMouseEnter: () => void;
   itemRef: (el: HTMLButtonElement | null) => void;
+  index: number;
 }
 
 export function SearchResultItem({
@@ -19,13 +21,21 @@ export function SearchResultItem({
   onClick,
   onMouseEnter,
   itemRef,
+  index,
 }: SearchResultItemProps) {
   const year = movie.release_date?.slice(0, 4) || '—';
   const genres = getMovieGenreNames(movie.genre_ids.slice(0, 2), locale);
   const rating = movie.vote_average > 0 ? movie.vote_average.toFixed(1) : null;
 
   return (
-    <button
+    <motion.button
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.2,
+        delay: index * 0.05,
+        ease: 'easeOut',
+      }}
       type="button"
       ref={itemRef}
       data-selected={isSelected}
@@ -73,6 +83,6 @@ export function SearchResultItem({
           )}
         </div>
       </div>
-    </button>
+    </motion.button>
   );
 }

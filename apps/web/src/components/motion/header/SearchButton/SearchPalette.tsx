@@ -120,16 +120,43 @@ export function SearchPalette({
 
           <motion.div
             key="panel"
-            initial={{ opacity: 0, scale: 0.96, y: -12 }}
+            initial={{ opacity: 0, scale: 0.9, y: -16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: -12 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            exit={{ opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.15 } }}
+            transition={{
+              type: 'spring',
+              stiffness: 500,
+              damping: 25,
+              mass: 0.8,
+            }}
             role="dialog"
             aria-modal="true"
             aria-label={t('search.open')}
             onKeyDown={handleKeyDown}
-            className="fixed inset-x-4 top-20 z-101 mx-auto flex max-w-xl flex-col overflow-hidden rounded-2xl border border-amber-500/25 bg-card shadow-[0_0_0_1px_rgba(245,180,91,0.08),0_24px_64px_-16px_rgba(0,0,0,0.65)] md:inset-x-auto md:left-1/2 md:top-32 md:w-full md:-translate-x-1/2"
+            className="fixed inset-x-4 top-20 z-101 mx-auto flex max-w-xl flex-col rounded-2xl shadow-[0_0_0_1px_rgba(245,180,91,0.08),0_24px_64px_-16px_rgba(0,0,0,0.65)] md:inset-x-auto md:left-1/2 md:top-32 md:w-full md:-translate-x-1/2"
           >
+            <div className="relative flex flex-col overflow-hidden rounded-2xl bg-card">
+              <motion.div
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                animate={{
+                  backgroundPosition: ['0% 0%', '200% 0%'],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: 'linear',
+                }}
+                style={{
+                  background:
+                    'linear-gradient(90deg, oklch(from var(--primary) l c h / 0.5), oklch(from var(--primary) l c h / 0.65), oklch(from var(--primary) l c h / 0.8), var(--primary), oklch(from var(--primary) l c h / 0.8), oklch(from var(--primary) l c h / 0.65), oklch(from var(--primary) l c h / 0.5))',
+                  backgroundSize: '200% 100%',
+                  WebkitMask:
+                    'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                  padding: '2px',
+                }}
+              />
             <div className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
               <Search className="h-5 w-5 shrink-0 text-amber-400" />
               <input
@@ -196,6 +223,7 @@ export function SearchPalette({
                         key={movie.id}
                         movie={movie}
                         locale={locale}
+                        index={idx}
                         isSelected={idx === selectedIndex}
                         onClick={() => navigateToMovie(movie)}
                         onMouseEnter={() => setSelectedIndex(idx)}
@@ -219,6 +247,7 @@ export function SearchPalette({
                 )}
               </motion.div>
             </AnimatePresence>
+            </div>
           </motion.div>
         </>
       )}
