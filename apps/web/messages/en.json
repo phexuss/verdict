@@ -3,7 +3,13 @@
     "navigation": {
       "curated": "Curated",
       "tonight": "Tonight",
-      "profile": "Profile"
+      "profile": "Profile",
+      "search": {
+        "buttonPlaceholder": "Search",
+        "inputPlaceholder": "Search for films...",
+        "open": "Open search",
+        "close": "Close search"
+      }
     },
     "settings": {
       "title": "Settings",

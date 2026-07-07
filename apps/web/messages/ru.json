@@ -3,7 +3,13 @@
     "navigation": {
       "curated": "Подборка",
       "tonight": "Сегодня",
-      "profile": "Профиль"
+      "profile": "Профиль",
+      "search": {
+        "buttonPlaceholder": "Поиск",
+        "inputPlaceholder": "Ищи фильмы...",
+        "open": "Открыть поиск",
+        "close": "Закрыть поиск"
+      }
     },
     "settings": {
       "title": "Настройки",

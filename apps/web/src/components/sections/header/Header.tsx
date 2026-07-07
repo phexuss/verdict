@@ -1,5 +1,6 @@
 import { Button } from '@repo/ui/components/button';
 import { UserLinear } from '@solar-icons/react-perf';
+import { SearchButton } from '@/components/motion/header/SearchButton';
 import { Link } from '@/i18n/navigation';
 import HeaderNavButtons from './HeaderNavButtons';
 import SettingsButton from './SettingsButton';
@@ -14,10 +15,12 @@ export default function Header() {
       </Link>
 
       <HeaderNavButtons />
-      <div className="col-start-3  flex flex-row justify-self-end md:gap-1.5">
+
+      <div className="col-start-3 flex flex-row items-center justify-self-end gap-1 md:gap-1.5">
+        {/* <SearchButton /> -> future search button */}
         <Button asChild variant="ghost" size="icon" className="hidden md:flex">
-          <Link href="/profile" aria-label="Profile" className="">
-            <UserLinear className="size-4 text-foreground md:size-5 " />
+          <Link href="/profile" aria-label="Profile">
+            <UserLinear className="size-4 text-foreground md:size-5" />
           </Link>
         </Button>
 
