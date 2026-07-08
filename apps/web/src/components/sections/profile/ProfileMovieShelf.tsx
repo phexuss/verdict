@@ -115,7 +115,7 @@ function MovieShelfCard({ action, variant = 'embedded' }: MovieShelfCardProps) {
   return (
     <Link
       className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-background/30 ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_6px_24px_-6px_oklch(0.76_0.13_65/0.18)]"
-      href={`/curated/${movie.tmdbId}`}
+      href={`/movie/${movie.tmdbId}`}
     >
       <div className="relative aspect-2/3 overflow-hidden bg-muted">
         {imagePath ? (

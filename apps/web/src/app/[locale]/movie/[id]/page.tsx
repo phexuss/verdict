@@ -4,18 +4,18 @@ import { getMovieCredits, getMovieDetails } from '@/api/generated/tmdb/tmdb';
 import { getMovieTrailer } from '@/lib/tmdb-helper';
 import { CuratedMovieContent } from './_components/CuratedMovieContent';
 
-type CuratedMoviePageProps = {
+type MoviePageProps = {
   params: Promise<{
     locale: string;
-    slug: string;
+    id: string;
   }>;
 };
 
 export async function generateMetadata({
   params,
-}: CuratedMoviePageProps): Promise<Metadata> {
-  const { locale, slug } = await params;
-  const tmdbId = Number(slug);
+}: MoviePageProps): Promise<Metadata> {
+  const { locale, id } = await params;
+  const tmdbId = Number(id);
   if (!Number.isInteger(tmdbId)) return {};
   try {
     const response = await getMovieDetails(tmdbId, {
@@ -34,11 +34,9 @@ export async function generateMetadata({
   }
 }
 
-export default async function CuratedMoviePage({
-  params,
-}: CuratedMoviePageProps) {
-  const { locale, slug } = await params;
-  const tmdbId = Number(slug);
+export default async function MoviePage({ params }: MoviePageProps) {
+  const { locale, id } = await params;
+  const tmdbId = Number(id);
 
   if (!Number.isInteger(tmdbId)) {
     notFound();
