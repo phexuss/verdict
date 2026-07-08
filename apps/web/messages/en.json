@@ -14,6 +14,7 @@
         "error": "Search failed. Try again.",
         "loading": "Searching...",
         "showAll": "Show all results",
+        "showAllResults": "Show all results",
         "hint": "Search for films by title"
       }
     },
@@ -227,6 +228,19 @@
       "cast": "Cast",
       "cinematography": "Cinematography",
       "trailer": "Trailer"
+    }
+  },
+  "SearchPage": {
+    "title": "Search",
+    "resultsFor": "Results for \"{query}\"",
+    "totalResults": "{count} films found",
+    "noResults": "No films found for \"{query}\"",
+    "noResultsHint": "Try a different search term",
+    "error": "Search failed. Please try again.",
+    "pagination": {
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {page} of {total}"
     }
   },
   "MovieActionsBar": {

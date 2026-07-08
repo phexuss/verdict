@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { TmdbMovie } from '@/api/generated/models';
+import { useRouter } from '@/i18n/navigation';
 import { SearchEmptyState } from './SearchEmptyState';
 import { SearchResultItem } from './SearchResultItem';
 
@@ -37,6 +38,7 @@ export function SearchPalette({
   const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const itemRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+  const router = useRouter();
 
   useEffect(() => setMounted(true), []);
 
@@ -68,9 +70,22 @@ export function SearchPalette({
     [close],
   );
 
+  const navigateToSearchPage = useCallback(() => {
+    if (debouncedQuery.length >= 2) {
+      router.push(`/search?q=${encodeURIComponent(debouncedQuery)}`);
+      close();
+    }
+  }, [debouncedQuery, router, close]);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!results.length) return;
+      if (!results.length) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          navigateToSearchPage();
+        }
+        return;
+      }
 
       switch (e.key) {
         case 'ArrowDown': {
@@ -91,15 +106,19 @@ export function SearchPalette({
         }
         case 'Enter': {
           e.preventDefault();
-          const selected = results[selectedIndex];
-          if (selectedIndex >= 0 && selected) {
-            navigateToMovie(selected);
+          if (selectedIndex === -1) {
+            navigateToSearchPage();
+          } else {
+            const selected = results[selectedIndex];
+            if (selected) {
+              navigateToMovie(selected);
+            }
           }
           break;
         }
       }
     },
-    [results, selectedIndex, navigateToMovie],
+    [results, selectedIndex, navigateToMovie, navigateToSearchPage],
   );
 
   if (!mounted) return null;
@@ -247,6 +266,18 @@ export function SearchPalette({
                 )}
               </motion.div>
             </AnimatePresence>
+
+            {isQueryValid && results.length > 0 && (
+              <div className="border-t border-border/50 px-5 py-3">
+                <button
+                  type="button"
+                  onClick={navigateToSearchPage}
+                  className="w-full rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-center text-muted-foreground text-sm transition-colors hover:border-primary/50 hover:bg-accent hover:text-foreground"
+                >
+                  {t('search.showAllResults')}
+                </button>
+              </div>
+            )}
             </div>
           </motion.div>
         </>
