@@ -212,7 +212,7 @@ export function SearchPalette({
               <button
                 type="button"
                 onClick={close}
-                className="shrink-0 rounded-md border border-border/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                className="hidden shrink-0 rounded-md border border-border/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground md:block"
               >
                 ESC
               </button>
