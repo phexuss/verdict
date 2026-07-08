@@ -1,4 +1,3 @@
-
 # Verdict
 
 A mood-based movie discovery application that translates your current state into the perfect watch.
@@ -6,15 +5,22 @@ A mood-based movie discovery application that translates your current state into
 ### Mobile
 
 <p align="center">
-  <img  src="https://github.com/user-attachments/assets/ff5699a4-12b4-494c-94b7-da4c0eebb515"  width="280" />
-  <img src="https://github.com/user-attachments/assets/a8513a6a-5108-438e-8825-4299510ed9ad" width="280" />
+  <img width="280" src="https://github.com/user-attachments/assets/89432d73-c850-4162-8fc8-9ab3f1b57931" />
+  <img width="280" src="https://github.com/user-attachments/assets/006af920-ec42-4822-a657-f2e6e1553bca" />
 </p>
 
 ### Desktop — Curated & Taste Profile
 
 <p align="center">
-  <img  src="https://github.com/user-attachments/assets/56c94d68-f502-4b64-8623-92810c1124a9" width="800" />
-  <img src="https://github.com/user-attachments/assets/c704fd71-ce5b-4f08-bd55-ba959184cf90" width="800" />
+  <img width="800" src="https://github.com/user-attachments/assets/0c421326-7ae5-4a8d-bd6a-65b6f4427e4e" />
+  <img width="800" src="https://github.com/user-attachments/assets/ea33010f-35ab-4cde-b330-cffe1b61a913" />
+</p>
+
+### ✨ NEW — Movies Search Bar & Search Results Page
+
+<p align="center">
+<img width="800" src="https://github.com/user-attachments/assets/4ab11243-3b9b-4427-bcb7-c8662493ab7c" />
+<img width="800" src="https://github.com/user-attachments/assets/5a8f6e8e-9867-4620-b76e-0dc982b0903f" />
 </p>
 
 ## The Problem
