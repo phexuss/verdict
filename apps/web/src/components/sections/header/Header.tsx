@@ -17,7 +17,7 @@ export default function Header() {
       <HeaderNavButtons />
 
       <div className="col-start-3 flex flex-row items-center justify-self-end gap-1 md:gap-1.5">
-        {/* <SearchButton /> */}
+        <SearchButton />
         <Button asChild variant="ghost" size="icon" className="hidden md:flex">
           <Link href="/profile" aria-label="Profile">
             <UserLinear className="size-4 text-foreground md:size-5" />
