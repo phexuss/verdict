@@ -28,8 +28,8 @@ export default function FooterNavButtons() {
   const t = useTranslations('Footer.navigation');
 
   return (
-    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-white/10 border-t bg-background/80 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] ">
-      <div className="grid grid-cols-3 gap-1">
+    <nav className="fixed bottom-0 left-0 z-50 w-full border-white/10 border-t bg-background/80 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] ">
+      <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
         {navItems.map((item) => {
           const isActive = isActivePath(pathname, item.href);
           const Icon = item.icon;
