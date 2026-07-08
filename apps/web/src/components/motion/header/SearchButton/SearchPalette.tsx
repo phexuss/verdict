@@ -64,10 +64,11 @@ export function SearchPalette({
   }, [isOpen, close]);
 
   const navigateToMovie = useCallback(
-    (_movie: TmdbMovie) => {
+    (movie: TmdbMovie) => {
+      router.push(`/movie/${movie.id}`);
       close();
     },
-    [close],
+    [router, close],
   );
 
   const navigateToSearchPage = useCallback(() => {
