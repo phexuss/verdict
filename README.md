@@ -1,5 +1,13 @@
 # Verdict
 
+![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-Latest-000000?logo=next.js&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-Latest-E0234E?logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-4169E1?logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0+-38B2AC?logo=tailwind-css&logoColor=white)
+![Turborepo](https://img.shields.io/badge/Turborepo-Latest-EF4444?logo=turborepo&logoColor=white)
+
 A mood-based movie discovery application that translates your current state into the perfect watch.
 
 ### Mobile
