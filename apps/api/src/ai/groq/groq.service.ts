@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Groq from 'groq-sdk';
 import {
+  type MovieAiReview,
+  movieAiReviewJsonSchema,
+  movieAiReviewSchema,
+} from '../schemas/movie-ai-review.schema.js';
+import {
   type MovieDiscoveryStrategy,
   movieDiscoveryStrategySchema,
   tmdbDiscoverSortBy,
@@ -60,6 +65,15 @@ type TasteProfileMovie = {
 type GenerateTasteProfileInput = {
   locale: 'en' | 'ru';
   movies: TasteProfileMovie[];
+};
+
+type GenerateMovieAiReviewInput = {
+  title: string;
+  overview: string | null;
+  genres: string[];
+  releaseDate: string | null;
+  runtime: number | null;
+  voteAverage: number | null;
 };
 
 const movieDiscoveryStrategyJsonSchema = {
@@ -557,6 +571,60 @@ export class GroqService {
     const parsed = tasteProfileSchema.parse(JSON.parse(raw));
 
     return normalizeTasteProfile(parsed, input.movies, input.locale);
+  }
+
+  async generateMovieAiReview(
+    input: GenerateMovieAiReviewInput,
+  ): Promise<MovieAiReview> {
+    const response = await this.groq.chat.completions.create({
+      model: this.model,
+      temperature: 0.3,
+      max_completion_tokens: 4000,
+      messages: [
+        {
+          role: 'system',
+          content: [
+            'You are a film critic and analyst for a movie discovery app called Verdict.',
+            'Analyze the given movie and provide a concise, insightful review.',
+            'Write summary, analysis, verdict, and reason in BOTH English and Russian.',
+            'Each locale block (en, ru) must contain: summary, analysis, verdict, reason.',
+            'moodTags, themes, and genres are English-only internal tags (lowercase).',
+            'moodTags: 3-5 atmospheric/mood tags (e.g. "dark", "atmospheric", "tense", "uplifting").',
+            'themes: 2-4 thematic tags (e.g. "identity crisis", "moral ambiguity").',
+            'genres: 2-3 AI-perceived genre tags that may differ from official TMDB genres.',
+            'score: 0-100 overall quality assessment based on story, direction, acting, and cultural impact.',
+            'Be opinionated and specific. Avoid generic praise.',
+          ].join('\n'),
+        },
+        {
+          role: 'user',
+          content: [
+            `Title: ${input.title}`,
+            `Overview: ${input.overview ?? 'N/A'}`,
+            `Genres: ${input.genres.length > 0 ? input.genres.join(', ') : 'N/A'}`,
+            `Release year: ${input.releaseDate ? input.releaseDate.slice(0, 4) : 'N/A'}`,
+            `Runtime: ${input.runtime ? `${input.runtime} min` : 'N/A'}`,
+            `TMDB rating: ${input.voteAverage ? input.voteAverage.toFixed(1) : 'N/A'}`,
+          ].join('\n'),
+        },
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'movie_ai_review',
+          strict: true,
+          schema: movieAiReviewJsonSchema,
+        },
+      },
+    });
+
+    const raw = response.choices[0]?.message?.content;
+
+    if (!raw) {
+      throw new Error('No response from Groq for movie AI review');
+    }
+
+    return movieAiReviewSchema.parse(JSON.parse(raw));
   }
 }
 

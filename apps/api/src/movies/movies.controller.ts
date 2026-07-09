@@ -1,0 +1,45 @@
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiTooManyRequestsResponse,
+} from '@nestjs/swagger';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
+import { AiReviewResponseDto, GenerateAiReviewDto } from './dto/ai-review.dto.js';
+import { MoviesService } from './movies.service.js';
+
+@ApiTags('movies')
+@Controller('movies')
+export class MoviesController {
+  constructor(private readonly moviesService: MoviesService) {}
+
+  @Post(':tmdbId/ai-review')
+  @AllowAnonymous()
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ operationId: 'generateMovieAiReview' })
+  @ApiParam({ name: 'tmdbId', example: 550, type: Number })
+  @ApiOkResponse({ type: AiReviewResponseDto })
+  @ApiTooManyRequestsResponse({
+    description: 'Rate limit exceeded. Try again later.',
+  })
+  async generateAiReview(
+    @Param('tmdbId', ParseIntPipe) tmdbId: number,
+    @Body() dto: GenerateAiReviewDto,
+  ): Promise<AiReviewResponseDto> {
+    return this.moviesService.generateAiReview(tmdbId, dto.locale);
+  }
+}

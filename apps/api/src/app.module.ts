@@ -6,6 +6,7 @@ import { AiModule } from './ai/ai.module.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { auth } from './auth.js';
+import { MoviesModule } from './movies/movies.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { TmdbModule } from './providers/tmdb/tmdb.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
@@ -41,6 +42,7 @@ import { UserModule } from './user/user.module.js';
     AiModule,
     RecommendationsModule,
     UserModule,
+    MoviesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
