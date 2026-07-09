@@ -6,12 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './aiReviewResponseDto';
 export * from './createRecommendationDto';
 export * from './createRecommendationDtoDuration';
 export * from './createRecommendationDtoGroup';
 export * from './createRecommendationDtoLocale';
 export * from './createRecommendationDtoMoodsItem';
 export * from './createRecommendationResponseDto';
+export * from './generateAiReviewDto';
+export * from './generateAiReviewDtoLocale';
 export * from './getMovieCreditsLocale';
 export * from './getMovieCreditsParams';
 export * from './getMovieDetailsLocale';
