@@ -12,7 +12,7 @@ export default function MoodCard({ highAffinity, lowAffinity }: MoodCardProps) {
   return (
     <div className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
       <div className="mb-5 flex flex-row items-center gap-2">
-        <StickerSmileCircleOutline className="size-6 shrink-0" />
+        <StickerSmileCircleOutline className="size-6 shrink-0 bg-primary" />
         <h3 className="font-medium text-xl">{t('title')}</h3>
       </div>
 
