@@ -26,6 +26,7 @@ import {
   getHumanReadableRuntime,
   getTopCast,
 } from '@/lib/tmdb-helper';
+import { AiMovieReview } from '@/components/movie/AiMovieReview';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -176,6 +177,10 @@ export function CuratedMovieContent({
           className="rounded-xl border border-foreground/8 bg-accent p-4"
         >
           <MovieActionsButtons tmdbId={movie.id} />
+        </motion.div>
+
+        <motion.div variants={secVariants}>
+          <AiMovieReview tmdbId={movie.id} locale={locale} />
         </motion.div>
 
         <motion.div
