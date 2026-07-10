@@ -7,22 +7,245 @@
  */
 
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
 } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type { BodyType, ErrorType } from '../../fetcher';
 
 import { customFetch } from '../../fetcher';
-import type { AiReviewResponseDto, GenerateAiReviewDto } from '../models';
+import type {
+  AiReviewResponseDto,
+  GenerateAiReviewDto,
+  GetMovieAiReviewParams,
+} from '../models';
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+export type getMovieAiReviewResponse200 = {
+  data: AiReviewResponseDto;
+  status: 200;
+};
+
+export type getMovieAiReviewResponse404 = {
+  data: void;
+  status: 404;
+};
+
+export type getMovieAiReviewResponseSuccess = getMovieAiReviewResponse200 & {
+  headers: Headers;
+};
+export type getMovieAiReviewResponseError = getMovieAiReviewResponse404 & {
+  headers: Headers;
+};
+
+export const getGetMovieAiReviewUrl = (
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value));
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api/movies/${tmdbId}/ai-review?${stringifiedParams}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/movies/${tmdbId}/ai-review`;
+};
+
+export const getMovieAiReview = async (
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options?: RequestInit,
+): Promise<getMovieAiReviewResponseSuccess> => {
+  return customFetch<getMovieAiReviewResponseSuccess>(
+    getGetMovieAiReviewUrl(tmdbId, params),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getGetMovieAiReviewQueryKey = (
+  tmdbId: number,
+  params?: GetMovieAiReviewParams,
+) => {
+  return [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/movies/${tmdbId}/ai-review`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMovieAiReviewQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMovieAiReview>>,
+  TError = ErrorType<void>,
+>(
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieAiReview>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMovieAiReviewQueryKey(tmdbId, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getMovieAiReview>>
+  > = ({ signal }) =>
+    getMovieAiReview(tmdbId, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: tmdbId !== null && tmdbId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMovieAiReview>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMovieAiReviewQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMovieAiReview>>
+>;
+export type GetMovieAiReviewQueryError = ErrorType<void>;
+
+export function useGetMovieAiReview<
+  TData = Awaited<ReturnType<typeof getMovieAiReview>>,
+  TError = ErrorType<void>,
+>(
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieAiReview>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieAiReview>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieAiReview>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieAiReview<
+  TData = Awaited<ReturnType<typeof getMovieAiReview>>,
+  TError = ErrorType<void>,
+>(
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieAiReview>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMovieAiReview>>,
+          TError,
+          Awaited<ReturnType<typeof getMovieAiReview>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMovieAiReview<
+  TData = Awaited<ReturnType<typeof getMovieAiReview>>,
+  TError = ErrorType<void>,
+>(
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieAiReview>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetMovieAiReview<
+  TData = Awaited<ReturnType<typeof getMovieAiReview>>,
+  TError = ErrorType<void>,
+>(
+  tmdbId: number,
+  params: GetMovieAiReviewParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getMovieAiReview>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMovieAiReviewQueryOptions(tmdbId, params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export type generateMovieAiReviewResponse200 = {
   data: AiReviewResponseDto;

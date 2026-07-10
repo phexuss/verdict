@@ -6,7 +6,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { AiReviewResponseDto } from '@/api/generated/models';
-import { useGenerateMovieAiReview } from '@/api/generated/movies/movies';
+import {
+  useGenerateMovieAiReview,
+  useGetMovieAiReview,
+} from '@/api/generated/movies/movies';
 import { AiMovieReviewCard } from './AiMovieReviewCard';
 import { AiMovieReviewSkeleton } from './AiMovieReviewSkeleton';
 
@@ -19,16 +22,27 @@ type AiMovieReviewProps = {
 
 export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
   const t = useTranslations('AiReview');
-  const [review, setReview] = useState<AiReviewResponseDto | null>(null);
+  const targetLocale = locale === 'ru' ? 'ru' : 'en';
+  const [generatedReview, setGeneratedReview] =
+    useState<AiReviewResponseDto | null>(null);
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
 
-  const { mutate, isPending, isError } = useGenerateMovieAiReview({
+  const { data: existingReview, isLoading: isLoadingExisting } =
+    useGetMovieAiReview(tmdbId, { locale: targetLocale }, {
+      query: {
+        retry: false,
+      },
+    });
+
+  const { mutate, isPending: isGenerating, isError } = useGenerateMovieAiReview({
     mutation: {
       onSuccess: (response) => {
-        setReview(response.data);
+        setGeneratedReview(response.data);
       },
       onError: (error: unknown) => {
-        const err = error as { response?: { data?: { retryAfterSec?: number } } };
+        const err = error as {
+          response?: { data?: { retryAfterSec?: number } };
+        };
         const retryAfter = err?.response?.data?.retryAfterSec;
         if (retryAfter) {
           setRateLimitSeconds(retryAfter);
@@ -41,12 +55,18 @@ export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
   const handleGenerate = () => {
     mutate({
       tmdbId,
-      data: { locale: locale === 'ru' ? 'ru' : 'en' },
+      data: { locale: targetLocale },
     });
   };
 
+  const review = generatedReview ?? existingReview?.data ?? null;
+
   if (review) {
     return <AiMovieReviewCard review={review} />;
+  }
+
+  if (isLoadingExisting) {
+    return null;
   }
 
   return (
@@ -62,7 +82,7 @@ export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
       </div>
 
       <AnimatePresence mode="wait">
-        {isPending ? (
+        {isGenerating ? (
           <motion.div
             key="skeleton"
             initial={{ opacity: 0 }}

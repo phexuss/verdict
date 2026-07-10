@@ -15,6 +15,8 @@ export * from './createRecommendationDtoMoodsItem';
 export * from './createRecommendationResponseDto';
 export * from './generateAiReviewDto';
 export * from './generateAiReviewDtoLocale';
+export * from './getMovieAiReviewLocale';
+export * from './getMovieAiReviewParams';
 export * from './getMovieCreditsLocale';
 export * from './getMovieCreditsParams';
 export * from './getMovieDetailsLocale';
