@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { GroqService } from '../ai/groq/groq.service.js';
 import { Locale } from '../generated/prisma/enums.js';
@@ -18,6 +19,33 @@ export class MoviesService {
     private readonly tmdbService: TmdbService,
     private readonly groqService: GroqService,
   ) {}
+
+  async getAiReview(
+    tmdbId: number,
+    locale: 'en' | 'ru',
+  ): Promise<AiReviewResponseDto> {
+    const prismaLocale = locale === 'ru' ? Locale.RU : Locale.EN;
+
+    const movie = await this.prisma.movie.findUnique({
+      where: { tmdbId },
+    });
+
+    if (!movie) {
+      throw new NotFoundException('AI review not found for this movie.');
+    }
+
+    const translation = await this.prisma.movieTranslation.findUnique({
+      where: {
+        movieId_locale: { movieId: movie.id, locale: prismaLocale },
+      },
+    });
+
+    if (!translation?.aiGeneratedAt) {
+      throw new NotFoundException('AI review not found for this movie.');
+    }
+
+    return this.toAiReviewResponse(translation);
+  }
 
   async generateAiReview(
     tmdbId: number,
