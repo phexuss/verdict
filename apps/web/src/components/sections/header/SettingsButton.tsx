@@ -22,6 +22,21 @@ import type { Locale } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
 import SettingsMobileButton from './SettingsMobileButton';
 
+import { motion } from 'motion/react';
+
+const MotionButton = motion.create(Button);
+
+const buttonVariants = {
+  initial: { scale: 1 },
+  hover: { scale: 1.05 },
+  tap: { scale: 0.95 },
+};
+
+const iconVariants = {
+  initial: { rotate: 0 },
+  hover: { rotate: 90 },
+};
+
 export default function SettingsButton() {
   const t = useTranslations('Header.settings');
   const locale = useLocale();
@@ -52,14 +67,24 @@ export default function SettingsButton() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
+          <MotionButton
             variant="ghost"
             size="icon"
             aria-label={t('title')}
             className="transition-colors hover:bg-accent data-[state=open]:bg-accent"
+            initial="initial"
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           >
-            <SettingsLinear className="size-4 text-foreground md:size-5" />
-          </Button>
+            <motion.div
+              variants={iconVariants}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            >
+              <SettingsLinear className="size-4 text-foreground md:size-5" />
+            </motion.div>
+          </MotionButton>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
