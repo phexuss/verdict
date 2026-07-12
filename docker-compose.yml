@@ -1,9 +1,6 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    image: verdict-api:latest
+    image: ghcr.io/${GITHUB_REPOSITORY:-phexuss/verdict}-api:latest
     container_name: verdict-api
     restart: unless-stopped
     ports:
