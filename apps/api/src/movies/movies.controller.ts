@@ -21,7 +21,10 @@ import {
 } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
-import { AiReviewResponseDto, GenerateAiReviewDto } from './dto/ai-review.dto.js';
+import {
+  AiReviewResponseDto,
+  GenerateAiReviewDto,
+} from './dto/ai-review.dto.js';
 import { MoviesService } from './movies.service.js';
 
 @ApiTags('movies')
@@ -35,7 +38,9 @@ export class MoviesController {
   @ApiParam({ name: 'tmdbId', example: 550, type: Number })
   @ApiQuery({ name: 'locale', enum: ['en', 'ru'], example: 'en' })
   @ApiOkResponse({ type: AiReviewResponseDto })
-  @ApiNotFoundResponse({ description: 'AI review not yet generated for this movie.' })
+  @ApiNotFoundResponse({
+    description: 'AI review not yet generated for this movie.',
+  })
   async getAiReview(
     @Param('tmdbId', ParseIntPipe) tmdbId: number,
     @Query('locale') locale: 'en' | 'ru' = 'en',

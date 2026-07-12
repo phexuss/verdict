@@ -28,13 +28,21 @@ export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
 
   const { data: existingReview, isLoading: isLoadingExisting } =
-    useGetMovieAiReview(tmdbId, { locale: targetLocale }, {
-      query: {
-        retry: false,
+    useGetMovieAiReview(
+      tmdbId,
+      { locale: targetLocale },
+      {
+        query: {
+          retry: false,
+        },
       },
-    });
+    );
 
-  const { mutate, isPending: isGenerating, isError } = useGenerateMovieAiReview({
+  const {
+    mutate,
+    isPending: isGenerating,
+    isError,
+  } = useGenerateMovieAiReview({
     mutation: {
       onSuccess: (response) => {
         setGeneratedReview(response.data);

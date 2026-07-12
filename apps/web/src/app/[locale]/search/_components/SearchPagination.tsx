@@ -25,8 +25,12 @@ export function SearchPagination({
     router.push(`/search?${params.toString()}`);
   };
 
-  const getPageNumbers = (): Array<{ type: 'page'; value: number } | { type: 'ellipsis'; id: string }> => {
-    const items: Array<{ type: 'page'; value: number } | { type: 'ellipsis'; id: string }> = [];
+  const getPageNumbers = (): Array<
+    { type: 'page'; value: number } | { type: 'ellipsis'; id: string }
+  > => {
+    const items: Array<
+      { type: 'page'; value: number } | { type: 'ellipsis'; id: string }
+    > = [];
     const maxVisible = 5;
 
     if (totalPages <= maxVisible) {

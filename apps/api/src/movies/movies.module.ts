@@ -11,7 +11,8 @@ import { MoviesService } from './movies.service.js';
     TmdbModule,
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60000, limit: 10 }],
-      errorMessage: 'Rate limit exceeded. Please wait before generating another review.',
+      errorMessage:
+        'Rate limit exceeded. Please wait before generating another review.',
     }),
   ],
   controllers: [MoviesController],

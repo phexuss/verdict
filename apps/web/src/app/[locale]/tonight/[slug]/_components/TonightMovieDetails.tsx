@@ -328,5 +328,3 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
     </AnimatePresence>
   );
 }
-
-

@@ -55,15 +55,14 @@ export class MoviesService {
 
     const movie = await this.ensureMovieExists(tmdbId);
 
-    const existingTranslation =
-      await this.prisma.movieTranslation.findUnique({
-        where: {
-          movieId_locale: {
-            movieId: movie.id,
-            locale: prismaLocale,
-          },
+    const existingTranslation = await this.prisma.movieTranslation.findUnique({
+      where: {
+        movieId_locale: {
+          movieId: movie.id,
+          locale: prismaLocale,
         },
-      });
+      },
+    });
 
     if (existingTranslation?.aiGeneratedAt) {
       return this.toAiReviewResponse(existingTranslation);
@@ -82,7 +81,10 @@ export class MoviesService {
       });
 
       const movieTitle =
-        enTranslation?.title ?? ruTranslation?.title ?? movie.originalTitle ?? 'Unknown';
+        enTranslation?.title ??
+        ruTranslation?.title ??
+        movie.originalTitle ??
+        'Unknown';
       const movieOverview =
         enTranslation?.overview ?? ruTranslation?.overview ?? null;
 

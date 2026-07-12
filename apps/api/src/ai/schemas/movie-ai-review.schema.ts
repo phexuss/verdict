@@ -72,8 +72,7 @@ export const movieAiReviewJsonSchema = {
         },
         reason: {
           type: 'string',
-          description:
-            '1 предложение: главная причина посмотреть.',
+          description: '1 предложение: главная причина посмотреть.',
         },
       },
       required: ['summary', 'analysis', 'verdict', 'reason'],

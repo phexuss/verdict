@@ -142,7 +142,12 @@ export function SearchPalette({
             key="panel"
             initial={{ opacity: 0, scale: 0.9, y: -16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.15 } }}
+            exit={{
+              opacity: 0,
+              scale: 0.95,
+              y: -8,
+              transition: { duration: 0.15 },
+            }}
             transition={{
               type: 'spring',
               stiffness: 500,
@@ -177,108 +182,108 @@ export function SearchPalette({
                   padding: '2px',
                 }}
               />
-            <div className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
-              <Search className="h-5 w-5 shrink-0 text-amber-400" />
-              <input
-                ref={inputRef}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={t('search.inputPlaceholder')}
-                role="combobox"
-                aria-expanded={results.length > 0}
-                aria-controls="search-palette-listbox"
-                aria-activedescendant={
-                  selectedIndex >= 0
-                    ? `search-result-${selectedIndex}`
-                    : undefined
-                }
-                aria-autocomplete="list"
-                className="h-full flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
-              />
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setQuery('');
-                    setSelectedIndex(-1);
-                    inputRef.current?.focus();
-                  }}
-                  className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label={t('search.close')}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={close}
-                className="hidden shrink-0 rounded-md border border-border/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground md:block"
-              >
-                ESC
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={
-                  isLoading
-                    ? 'loading'
-                    : error
-                      ? 'error'
-                      : `results-${debouncedQuery}`
-                }
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                {results.length > 0 ? (
-                  <div
-                    role="listbox"
-                    id="search-palette-listbox"
-                    className="max-h-[min(50vh,28rem)] overflow-y-auto py-1"
+              <div className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
+                <Search className="h-5 w-5 shrink-0 text-amber-400" />
+                <input
+                  ref={inputRef}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={t('search.inputPlaceholder')}
+                  role="combobox"
+                  aria-expanded={results.length > 0}
+                  aria-controls="search-palette-listbox"
+                  aria-activedescendant={
+                    selectedIndex >= 0
+                      ? `search-result-${selectedIndex}`
+                      : undefined
+                  }
+                  aria-autocomplete="list"
+                  className="h-full flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
+                />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuery('');
+                      setSelectedIndex(-1);
+                      inputRef.current?.focus();
+                    }}
+                    className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground"
+                    aria-label={t('search.close')}
                   >
-                    {results.map((movie, idx) => (
-                      <SearchResultItem
-                        key={movie.id}
-                        movie={movie}
-                        locale={locale}
-                        index={idx}
-                        isSelected={idx === selectedIndex}
-                        onClick={() => navigateToMovie(movie)}
-                        onMouseEnter={() => setSelectedIndex(idx)}
-                        itemRef={(el) => {
-                          if (el) itemRefs.current.set(idx, el);
-                          else itemRefs.current.delete(idx);
-                        }}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <SearchEmptyState
-                    query={query}
-                    debouncedQuery={debouncedQuery}
-                    isLoading={isLoading}
-                    isQueryValid={isQueryValid}
-                    error={error}
-                    hasResults={results.length > 0}
-                    t={t}
-                  />
+                    <X className="h-4 w-4" />
+                  </button>
                 )}
-              </motion.div>
-            </AnimatePresence>
-
-            {isQueryValid && results.length > 0 && (
-              <div className="border-t border-border/50 px-5 py-3">
                 <button
                   type="button"
-                  onClick={navigateToSearchPage}
-                  className="w-full rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-center text-muted-foreground text-sm transition-colors hover:border-primary/50 hover:bg-accent hover:text-foreground"
+                  onClick={close}
+                  className="hidden shrink-0 rounded-md border border-border/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground md:block"
                 >
-                  {t('search.showAllResults')}
+                  ESC
                 </button>
               </div>
-            )}
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={
+                    isLoading
+                      ? 'loading'
+                      : error
+                        ? 'error'
+                        : `results-${debouncedQuery}`
+                  }
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {results.length > 0 ? (
+                    <div
+                      role="listbox"
+                      id="search-palette-listbox"
+                      className="max-h-[min(50vh,28rem)] overflow-y-auto py-1"
+                    >
+                      {results.map((movie, idx) => (
+                        <SearchResultItem
+                          key={movie.id}
+                          movie={movie}
+                          locale={locale}
+                          index={idx}
+                          isSelected={idx === selectedIndex}
+                          onClick={() => navigateToMovie(movie)}
+                          onMouseEnter={() => setSelectedIndex(idx)}
+                          itemRef={(el) => {
+                            if (el) itemRefs.current.set(idx, el);
+                            else itemRefs.current.delete(idx);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <SearchEmptyState
+                      query={query}
+                      debouncedQuery={debouncedQuery}
+                      isLoading={isLoading}
+                      isQueryValid={isQueryValid}
+                      error={error}
+                      hasResults={results.length > 0}
+                      t={t}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
+              {isQueryValid && results.length > 0 && (
+                <div className="border-t border-border/50 px-5 py-3">
+                  <button
+                    type="button"
+                    onClick={navigateToSearchPage}
+                    className="w-full rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-center text-muted-foreground text-sm transition-colors hover:border-primary/50 hover:bg-accent hover:text-foreground"
+                  >
+                    {t('search.showAllResults')}
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         </>
