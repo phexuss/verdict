@@ -1,3 +1,4 @@
+import { AiMovieReviewSkeleton } from '@/components/movie/AiMovieReviewSkeleton';
 import { Skeleton } from '@repo/ui/components/skeleton';
 
 export default function Loading() {
@@ -31,6 +32,17 @@ export default function Loading() {
             <Skeleton className="h-9 w-24 rounded-full" />
           </div>
         </div>
+
+        <section className="flex flex-col gap-5 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Skeleton className="size-5 shrink-0 rounded-full bg-primary/15" />
+              <Skeleton className="h-6 w-32 bg-primary/15" />
+            </div>
+            <Skeleton className="h-7 w-16 rounded-full bg-primary/15" />
+          </div>
+          <AiMovieReviewSkeleton />
+        </section>
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)]">
           <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
