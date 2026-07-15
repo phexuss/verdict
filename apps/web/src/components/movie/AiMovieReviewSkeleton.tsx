@@ -1,9 +1,6 @@
 import { Skeleton } from '@repo/ui/components/skeleton';
-import { useTranslations } from 'next-intl';
 
 export function AiMovieReviewSkeleton() {
-  const t = useTranslations('AiReview');
-
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
@@ -42,8 +39,6 @@ export function AiMovieReviewSkeleton() {
           <Skeleton className="h-6 w-28 rounded-full bg-primary/15" />
         </div>
       </div>
-
-      <p className="text-primary/60 text-xs">{t('generating')}</p>
     </div>
   );
 }
