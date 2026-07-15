@@ -18,21 +18,29 @@ const ease = [0.22, 1, 0.36, 1] as const;
 type AiMovieReviewProps = {
   tmdbId: number;
   locale: string;
+  initialReview: AiReviewResponseDto | null;
 };
 
-export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
+export function AiMovieReview({ tmdbId, locale, initialReview }: AiMovieReviewProps) {
   const t = useTranslations('AiReview');
   const targetLocale = locale === 'ru' ? 'ru' : 'en';
   const [generatedReview, setGeneratedReview] =
     useState<AiReviewResponseDto | null>(null);
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
 
-  const { data: existingReview, isLoading: isLoadingExisting } =
+  const isPendingBackgroundJob = initialReview !== null && !initialReview.aiAnalysis;
+
+  const { data: existingReview } =
     useGetMovieAiReview(
       tmdbId,
       { locale: targetLocale },
       {
         query: {
+          initialData: initialReview
+            ? { data: initialReview, status: 200, headers: new Headers() }
+            : undefined,
+          enabled: isPendingBackgroundJob,
+          refetchInterval: isPendingBackgroundJob ? 3000 : false,
           retry: false,
         },
       },
@@ -67,14 +75,37 @@ export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
     });
   };
 
-  const review = generatedReview ?? existingReview?.data ?? null;
+  const review = generatedReview ?? existingReview?.data ?? initialReview ?? null;
 
-  if (review) {
+  if (review && review.aiAnalysis) {
     return <AiMovieReviewCard review={review} />;
   }
 
-  if (isLoadingExisting) {
-    return null;
+  if (isGenerating || (review && !review.aiAnalysis)) {
+    return (
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease }}
+        className="flex flex-col gap-4 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
+      >
+        <div className="flex items-center gap-2 text-primary">
+          <StarBold className="size-5 shrink-0" />
+          <h2 className="font-medium text-xl">{t('title')}</h2>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key="skeleton"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <AiMovieReviewSkeleton />
+          </motion.div>
+        </AnimatePresence>
+      </motion.section>
+    );
   }
 
   return (
@@ -90,47 +121,35 @@ export function AiMovieReview({ tmdbId, locale }: AiMovieReviewProps) {
       </div>
 
       <AnimatePresence mode="wait">
-        {isGenerating ? (
-          <motion.div
-            key="skeleton"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <AiMovieReviewSkeleton />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="cta"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex flex-col gap-3"
-          >
-            <p className="text-foreground/60 text-sm leading-relaxed">
-              {t('generateHint')}
+        <motion.div
+          key="cta"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="flex flex-col gap-3"
+        >
+          <p className="text-foreground/60 text-sm leading-relaxed">
+            {t('generateHint')}
+          </p>
+
+          {isError && (
+            <p className="text-destructive text-sm">
+              {rateLimitSeconds > 0
+                ? t('rateLimited', { seconds: rateLimitSeconds })
+                : t('error')}
             </p>
+          )}
 
-            {isError && (
-              <p className="text-destructive text-sm">
-                {rateLimitSeconds > 0
-                  ? t('rateLimited', { seconds: rateLimitSeconds })
-                  : t('error')}
-              </p>
-            )}
-
-            <Button
-              onClick={handleGenerate}
-              variant="outline"
-              className="w-fit border-primary/30 text-primary hover:bg-primary/15 hover:text-primary"
-            >
-              <StarBold className="size-4" />
-              {isError ? t('retry') : t('generateButton')}
-            </Button>
-          </motion.div>
-        )}
+          <Button
+            onClick={handleGenerate}
+            variant="outline"
+            className="w-fit border-primary/30 text-primary hover:bg-primary/15 hover:text-primary"
+          >
+            <StarBold className="size-4" />
+            {isError ? t('retry') : t('generateButton')}
+          </Button>
+        </motion.div>
       </AnimatePresence>
     </motion.section>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getMovieCredits, getMovieDetails } from '@/api/generated/tmdb/tmdb';
 import { getMovieTrailer } from '@/lib/tmdb-helper';
+import { getMovieAiReview } from '@/api/generated/movies/movies';
 import { CuratedMovieContent } from './_components/CuratedMovieContent';
 
 type MoviePageProps = {
@@ -44,10 +45,11 @@ export default async function MoviePage({ params }: MoviePageProps) {
 
   const targetLocale = locale === 'ru' ? 'ru' : 'en';
 
-  const [response, creditsResponse, trailerUrl] = await Promise.all([
+  const [response, creditsResponse, trailerUrl, aiReviewResponse] = await Promise.all([
     getMovieDetails(tmdbId, { locale: targetLocale }),
     getMovieCredits(tmdbId, { locale: targetLocale }),
     getMovieTrailer(tmdbId, targetLocale),
+    getMovieAiReview(tmdbId, { locale: targetLocale }).catch(() => null),
   ]);
 
   return (
@@ -56,6 +58,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
       locale={locale}
       movie={response.data}
       trailerUrl={trailerUrl}
+      initialAiReview={aiReviewResponse?.data ?? null}
     />
   );
 }

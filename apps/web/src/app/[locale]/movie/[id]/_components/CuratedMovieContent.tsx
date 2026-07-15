@@ -16,6 +16,7 @@ import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type {
+  AiReviewResponseDto,
   TmdbMovieCredits,
   TmdbMovieDetails,
 } from '@/api/generated/models';
@@ -49,6 +50,7 @@ interface CuratedMovieContentProps {
   credits: TmdbMovieCredits;
   locale: string;
   trailerUrl: string | null;
+  initialAiReview: AiReviewResponseDto | null;
 }
 
 export function CuratedMovieContent({
@@ -56,6 +58,7 @@ export function CuratedMovieContent({
   credits,
   locale,
   trailerUrl,
+  initialAiReview,
 }: CuratedMovieContentProps) {
   const t = useTranslations('CuratedPage.SlugPage');
 
@@ -180,7 +183,7 @@ export function CuratedMovieContent({
         </motion.div>
 
         <motion.div variants={secVariants}>
-          <AiMovieReview tmdbId={movie.id} locale={locale} />
+          <AiMovieReview tmdbId={movie.id} locale={locale} initialReview={initialAiReview} />
         </motion.div>
 
         <motion.div
