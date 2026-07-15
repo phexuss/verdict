@@ -33,8 +33,8 @@ import {
   useGetUserMovies,
   useUpdateUserMovie,
 } from '@/api/generated/user/user';
-import { Link } from '@/i18n/navigation';
 import GoogleLoginButton from '@/components/sections/auth/sign-in/GoogleLoginButton';
+import { Link } from '@/i18n/navigation';
 
 interface MovieActionsButtonsProps {
   tmdbId: number;

@@ -20,6 +20,7 @@ import type {
   TmdbMovieCredits,
   TmdbMovieDetails,
 } from '@/api/generated/models';
+import { AiMovieReview } from '@/components/movie/AiMovieReview';
 import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import {
   getCinematographyName,
@@ -27,7 +28,6 @@ import {
   getHumanReadableRuntime,
   getTopCast,
 } from '@/lib/tmdb-helper';
-import { AiMovieReview } from '@/components/movie/AiMovieReview';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -183,7 +183,11 @@ export function CuratedMovieContent({
         </motion.div>
 
         <motion.div variants={secVariants}>
-          <AiMovieReview tmdbId={movie.id} locale={locale} initialReview={initialAiReview} />
+          <AiMovieReview
+            tmdbId={movie.id}
+            locale={locale}
+            initialReview={initialAiReview}
+          />
         </motion.div>
 
         <motion.div

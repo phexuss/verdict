@@ -15,14 +15,13 @@ import {
 } from '@repo/ui/components/dropdown-menu';
 import { SettingsLinear } from '@solar-icons/react-perf';
 import { Check, FileText, Globe, LogOut, Shield } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
 import SettingsMobileButton from './SettingsMobileButton';
-
-import { motion } from 'motion/react';
 
 const MotionButton = motion.create(Button);
 

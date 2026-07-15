@@ -22,8 +22,8 @@ import PacingCard from '@/components/sections/profile/PacingCard';
 import ProfileMovieShelfSummary from '@/components/sections/profile/ProfileMovieShelfSummary';
 import RefreshTasteProfileCard from '@/components/sections/profile/RefreshTasteProfileCard';
 import TonightHistory from '@/components/sections/profile/TonightHistory';
-import { ProfileSkeleton } from './ProfileSkeleton';
 import EmptyProfile from './EmptyProfile';
+import { ProfileSkeleton } from './ProfileSkeleton';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 

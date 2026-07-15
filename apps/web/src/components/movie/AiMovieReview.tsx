@@ -21,30 +21,34 @@ type AiMovieReviewProps = {
   initialReview: AiReviewResponseDto | null;
 };
 
-export function AiMovieReview({ tmdbId, locale, initialReview }: AiMovieReviewProps) {
+export function AiMovieReview({
+  tmdbId,
+  locale,
+  initialReview,
+}: AiMovieReviewProps) {
   const t = useTranslations('AiReview');
   const targetLocale = locale === 'ru' ? 'ru' : 'en';
   const [generatedReview, setGeneratedReview] =
     useState<AiReviewResponseDto | null>(null);
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
 
-  const isPendingBackgroundJob = initialReview !== null && !initialReview.aiAnalysis;
+  const isPendingBackgroundJob =
+    initialReview !== null && !initialReview.aiAnalysis;
 
-  const { data: existingReview } =
-    useGetMovieAiReview(
-      tmdbId,
-      { locale: targetLocale },
-      {
-        query: {
-          initialData: initialReview
-            ? { data: initialReview, status: 200, headers: new Headers() }
-            : undefined,
-          enabled: isPendingBackgroundJob,
-          refetchInterval: isPendingBackgroundJob ? 3000 : false,
-          retry: false,
-        },
+  const { data: existingReview } = useGetMovieAiReview(
+    tmdbId,
+    { locale: targetLocale },
+    {
+      query: {
+        initialData: initialReview
+          ? { data: initialReview, status: 200, headers: new Headers() }
+          : undefined,
+        enabled: isPendingBackgroundJob,
+        refetchInterval: isPendingBackgroundJob ? 3000 : false,
+        retry: false,
       },
-    );
+    },
+  );
 
   const {
     mutate,
@@ -75,9 +79,10 @@ export function AiMovieReview({ tmdbId, locale, initialReview }: AiMovieReviewPr
     });
   };
 
-  const review = generatedReview ?? existingReview?.data ?? initialReview ?? null;
+  const review =
+    generatedReview ?? existingReview?.data ?? initialReview ?? null;
 
-  if (review && review.aiAnalysis) {
+  if (review?.aiAnalysis) {
     return <AiMovieReviewCard review={review} />;
   }
 
