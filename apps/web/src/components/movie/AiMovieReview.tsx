@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@repo/ui/components/button';
+import { Skeleton } from '@repo/ui/components/skeleton';
 import { StarBold } from '@solar-icons/react-perf';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
@@ -92,11 +93,14 @@ export function AiMovieReview({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease }}
-        className="flex flex-col gap-4 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
+        className="flex flex-col gap-5 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
       >
-        <div className="flex items-center gap-2 text-primary">
-          <StarBold className="size-5 shrink-0" />
-          <h2 className="font-medium text-xl">{t('title')}</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-primary">
+            <StarBold className="size-5 shrink-0" />
+            <h2 className="font-medium text-xl">{t('title')}</h2>
+          </div>
+          <Skeleton className="h-7 w-16 rounded-full bg-primary/15" />
         </div>
         <AnimatePresence mode="wait">
           <motion.div
@@ -118,7 +122,7 @@ export function AiMovieReview({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease }}
-      className="flex flex-col gap-4 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
+      className="flex flex-col gap-5 rounded-xl border border-primary/25 bg-primary/10 p-5 shadow-[0_0_0_1px_oklch(0.76_0.13_65/0.04)]"
     >
       <div className="flex items-center gap-2 text-primary">
         <StarBold className="size-5 shrink-0" />
