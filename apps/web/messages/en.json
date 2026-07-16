@@ -347,5 +347,10 @@
     "error": "Failed to generate review",
     "retry": "Try again",
     "rateLimited": "Too many requests. Please wait {seconds}s."
+  },
+  "NotFoundPage": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "cta": "Back to Home"
   }
 }
