@@ -352,5 +352,11 @@
     "title": "Page Not Found",
     "description": "The page you are looking for does not exist or has been moved.",
     "cta": "Back to Home"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "home": "Back to Home"
   }
 }
