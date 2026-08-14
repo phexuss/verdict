@@ -1,4 +1,4 @@
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import { customFetch, type ErrorType } from './fetcher';
 
 export type ImdbImportSkippedItemDto = {
@@ -49,11 +49,7 @@ export const importImdbRatings = async (
 };
 
 export const useImportImdbRatings = (options?: {
-  mutation?: UseMutationOptions<
-    ImdbImportResultDto,
-    ErrorType,
-    { file: File }
-  >;
+  mutation?: UseMutationOptions<ImdbImportResultDto, ErrorType, { file: File }>;
 }) => {
   const { mutation: mutationOptions } = options ?? {};
 

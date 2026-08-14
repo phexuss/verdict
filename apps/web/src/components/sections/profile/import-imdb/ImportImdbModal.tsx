@@ -4,6 +4,7 @@ import { Button } from '@repo/ui/components/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/components/dialog';
@@ -12,7 +13,10 @@ import { InfoCircleLinear } from '@solar-icons/react-perf';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { getGetTasteProfileQueryKey, getGetUserMoviesQueryKey } from '@/api/generated/user/user';
+import {
+  getGetTasteProfileQueryKey,
+  getGetUserMoviesQueryKey,
+} from '@/api/generated/user/user';
 import { type ImdbImportResultDto, useImportImdbRatings } from '@/api/import';
 import { useImdbImportInstruction } from '@/hooks/useImdbImportInstruction';
 import ImportFileUploader from './ImportFileUploader';
@@ -61,7 +65,6 @@ export default function ImportImdbModal({
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      // Reset modal mode on close
       setMode(hasSeenInstruction ? 'upload' : 'instruction');
       setImportResult(null);
       onClose();
@@ -92,24 +95,31 @@ export default function ImportImdbModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-lg border-foreground/10 bg-card p-6 shadow-2xl sm:rounded-2xl">
-        <DialogHeader className="flex flex-row items-center justify-between border-border/40 border-b pb-4">
-          <DialogTitle className="font-semibold text-xl">
-            {t('modalTitle')}
-          </DialogTitle>
+      <DialogContent className="max-w-[95vw] sm:max-w-xl border-foreground/10 bg-card p-6 shadow-2xl rounded-2xl">
+        <DialogHeader className="border-border/40 border-b pb-4 pr-10">
+          <div className="flex items-center justify-between gap-3">
+            <DialogTitle className="font-semibold text-xl leading-none">
+              {t('modalTitle')}
+            </DialogTitle>
 
-          {mode === 'upload' && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleReopenInstruction}
-              className="mr-6 flex items-center gap-1.5 text-foreground/70 hover:text-foreground"
-            >
-              <InfoCircleLinear className="size-4 text-primary" />
-              <span className="text-xs">{t('reopenInstruction')}</span>
-            </Button>
-          )}
+            {mode === 'upload' && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleReopenInstruction}
+                className="flex shrink-0 items-center gap-1.5 text-foreground/70 hover:text-foreground"
+              >
+                <InfoCircleLinear className="size-4 text-primary" />
+                <span className="text-xs font-medium">
+                  {t('reopenInstruction')}
+                </span>
+              </Button>
+            )}
+          </div>
+          <DialogDescription className="sr-only">
+            {t('cardDescription')}
+          </DialogDescription>
         </DialogHeader>
 
         {mode === 'instruction' && (

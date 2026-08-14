@@ -15,7 +15,7 @@ type ImportFileUploaderProps = {
   isUploading: boolean;
 };
 
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
 export default function ImportFileUploader({
   onUpload,
@@ -47,7 +47,7 @@ export default function ImportFileUploader({
     }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     setIsDragOver(false);
 
@@ -57,12 +57,12 @@ export default function ImportFileUploader({
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     setIsDragOver(true);
   };
 
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     setIsDragOver(false);
   };
@@ -90,28 +90,15 @@ export default function ImportFileUploader({
         className="hidden"
       />
 
-      {/* Drag & Drop Area */}
-      <div
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={() => !selectedFile && fileInputRef.current?.click()}
-        className={`flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center transition-all ${
-          isDragOver
-            ? 'border-primary bg-primary/10 scale-[0.99]'
-            : selectedFile
-              ? 'border-primary/40 bg-accent/60'
-              : 'border-foreground/15 bg-accent/30 hover:border-primary/50 hover:bg-accent/60'
-        }`}
-      >
-        {selectedFile ? (
+      {selectedFile ? (
+        <div className="flex min-h-48 flex-col items-center justify-center rounded-xl border-2 border-dashed border-primary/40 bg-accent/60 p-6 text-center">
           <div className="flex flex-col items-center gap-3">
             <div className="flex size-12 items-center justify-center rounded-full bg-primary/20 text-primary">
               <FileCheckLinear className="size-6" />
             </div>
             <div className="flex flex-col gap-0.5">
               <p className="font-semibold text-sm">{selectedFile.name}</p>
-              <p className="text-foreground/50 text-xs font-mono">
+              <p className="text-foreground/50 font-mono text-xs">
                 {formatFileSize(selectedFile.size)}
               </p>
             </div>
@@ -119,8 +106,7 @@ export default function ImportFileUploader({
               type="button"
               variant="outline"
               size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 setSelectedFile(null);
                 if (fileInputRef.current) fileInputRef.current.value = '';
               }}
@@ -129,7 +115,20 @@ export default function ImportFileUploader({
               {t('changeFile')}
             </Button>
           </div>
-        ) : (
+        </div>
+      ) : (
+        <button
+          type="button"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={() => fileInputRef.current?.click()}
+          className={`flex min-h-48 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center transition-all ${
+            isDragOver
+              ? 'scale-[0.99] border-primary bg-primary/10'
+              : 'border-foreground/15 bg-accent/30 hover:border-primary/50 hover:bg-accent/60'
+          }`}
+        >
           <div className="flex flex-col items-center gap-3">
             <div className="flex size-12 items-center justify-center rounded-full bg-foreground/5 text-primary">
               <DocumentAddLinear className="size-6" />
@@ -139,26 +138,30 @@ export default function ImportFileUploader({
               <p className="text-foreground/50 text-xs">{t('dropzoneHint')}</p>
             </div>
           </div>
-        )}
-      </div>
+        </button>
+      )}
 
-      {/* Action Button & Status */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         <Button
           type="button"
           disabled={!selectedFile || isUploading}
           onClick={handleSubmit}
-          className="w-full py-5 text-sm font-semibold"
+          className="w-full py-5 font-semibold text-sm"
         >
           {isUploading ? (
-            <>
+            <div className="flex items-center gap-2">
               <RefreshLinear className="size-4 animate-spin" />
-              <span>{t('uploading')}</span>
-            </>
+              <span>{t('uploadingShort')}</span>
+            </div>
           ) : (
             t('uploadButton')
           )}
         </Button>
+        {isUploading && (
+          <p className="animate-pulse text-center text-foreground/50 text-xs">
+            {t('uploadingHint')}
+          </p>
+        )}
       </div>
     </div>
   );

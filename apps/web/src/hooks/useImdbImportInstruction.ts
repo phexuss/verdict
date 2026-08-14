@@ -22,18 +22,14 @@ export function useImdbImportInstruction() {
   const markAsSeen = () => {
     try {
       localStorage.setItem(STORAGE_KEY, 'true');
-    } catch {
-      // ignore storage errors
-    }
+    } catch {}
     setHasSeenInstruction(true);
   };
 
   const resetInstruction = () => {
     try {
       localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignore storage errors
-    }
+    } catch {}
     setHasSeenInstruction(false);
   };
 

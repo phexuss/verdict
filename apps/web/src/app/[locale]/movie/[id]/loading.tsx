@@ -1,5 +1,5 @@
-import { AiMovieReviewCtaSkeleton } from '@/components/movie/AiMovieReviewCtaSkeleton';
 import { Skeleton } from '@repo/ui/components/skeleton';
+import { AiMovieReviewCtaSkeleton } from '@/components/movie/AiMovieReviewCtaSkeleton';
 
 export default function Loading() {
   return (

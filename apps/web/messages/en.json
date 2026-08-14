@@ -225,16 +225,24 @@
         "reopenInstruction": "Instruction",
         "steps": {
           "step1": {
-            "title": "1. Open Your Ratings on IMDb",
-            "description": "Log into your IMDb account, open your profile menu, and select \"Your Ratings\"."
+            "title": "1. Open \"Your ratings\"",
+            "description": "Log into your IMDb account, click your profile menu, and select \"Your ratings\"."
           },
           "step2": {
-            "title": "2. Export CSV file",
-            "description": "Click the three dots menu (...) at the top right of your ratings list and choose \"Export\"."
+            "title": "2. Click Export",
+            "description": "Click the \"Actions\" (or three dots) menu at the top right of your ratings page and select \"Export\"."
           },
           "step3": {
-            "title": "3. Upload file to Verdict",
-            "description": "Upload your downloaded CSV file. We will automatically match films via TMDB and sync your ratings."
+            "title": "3. Open exports page",
+            "description": "In the pop-up window, click \"Open exports page\" to view your generated export."
+          },
+          "step4": {
+            "title": "4. Download CSV file",
+            "description": "Wait for the status to change to \"Ready\" and click the download button to get the .csv file."
+          },
+          "step5": {
+            "title": "5. Upload file to Verdict",
+            "description": "Proceed to upload, select your downloaded .csv file, and click \"Start import\"."
           },
           "next": "Next",
           "prev": "Back",
@@ -247,7 +255,9 @@
           "selectedFile": "Selected file: {name}",
           "changeFile": "Choose another file",
           "uploadButton": "Start import",
-          "uploading": "Importing ratings... This may take a few moments."
+          "uploading": "Importing ratings... This may take a few moments.",
+          "uploadingShort": "Importing ratings...",
+          "uploadingHint": "Please wait. Matching movies with TMDB may take a minute."
         },
         "result": {
           "title": "Import Completed",
@@ -265,7 +275,6 @@
           "importFailed": "Failed to import IMDb ratings. Please try again."
         }
       }
-    }
     }
   },
   "CuratedPage": {
