@@ -24,11 +24,20 @@ A mood-based movie discovery application that translates your current state into
   <img width="800" src="https://github.com/user-attachments/assets/ea33010f-35ab-4cde-b330-cffe1b61a913" />
 </p>
 
-### ✨ NEW — Movies Search Bar & Search Results Page
+### Movies Search Bar & Search Results Page
 
 <p align="center">
 <img width="800" src="https://github.com/user-attachments/assets/4ab11243-3b9b-4427-bcb7-c8662493ab7c" />
 <img width="800" src="https://github.com/user-attachments/assets/5a8f6e8e-9867-4620-b76e-0dc982b0903f" />
+</p>
+
+### ✨ NEW — IMDb CSV Ratings Import
+
+Seamlessly import your rating history directly from an IMDb CSV export into your Verdict movie shelf — featuring a 5-step guided interactive tutorial, automatic TMDB ID resolution, rate-limited batching, and smart duplicate rating preservation.
+
+<p align="center">
+<img width="800" src="https://github.com/user-attachments/assets/19d9d292-2fb0-4e87-b25a-a5c401ef8988" />
+<img width="800" src="https://github.com/user-attachments/assets/e881b11d-05b2-43aa-97d4-9c04508fc006" />
 </p>
 
 ## The Problem
@@ -64,6 +73,7 @@ Verdict introduces the "Tonight" flow:
 * **Groq SDK** — High-speed LLM integration for rapid mood analysis and translation.
 
 ### Frontend
+
 
 * **Next.js (App Router)** — React framework optimized for Server-Side Rendering (SSR) and seamless routing.
 * **React Query & Orval** — Type-safe API client generation and robust state management.
