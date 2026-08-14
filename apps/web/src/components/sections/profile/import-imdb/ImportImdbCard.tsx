@@ -21,7 +21,7 @@ export default function ImportImdbCard() {
               alt="IMDb"
               width={28}
               height={28}
-              className="size-7 rounded-md object-contain"
+              className="size-7 rounded-md bg-primary p-0.5 object-contain"
             />
             <h3 className="font-semibold text-xl leading-snug">
               {t('cardTitle')}
