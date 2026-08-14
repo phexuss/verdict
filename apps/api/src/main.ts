@@ -35,6 +35,7 @@ async function bootstrap() {
     .addTag('tmdb', 'TMDB provider endpoints')
     .addTag('recommendations', 'Movie recommendation endpoints')
     .addTag('user', 'Current user profile endpoints')
+    .addTag('import', 'IMDb import endpoints')
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import {
+  TmdbFindResponse,
   TmdbMovieCredits,
   TmdbMovieDetails,
   TmdbSearchMoviesResponse,
@@ -166,5 +167,21 @@ export class TmdbService {
     );
 
     return data;
+  }
+
+  async findByImdbId(imdbId: string): Promise<number | null> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbFindResponse>(`${this.BASE_URL}find/${imdbId}`, {
+        params: {
+          external_source: 'imdb_id',
+        },
+        headers: {
+          Authorization: `Bearer ${this.BEARER_TOKEN}`,
+        },
+      }),
+    );
+
+    const movie = data.movie_results[0];
+    return movie?.id ?? null;
   }
 }

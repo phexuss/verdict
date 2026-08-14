@@ -214,3 +214,11 @@ export class TmdbSearchMoviesResponse {
   @ApiProperty({ example: 4 })
   total_results: number;
 }
+
+export class TmdbFindResponse {
+  movie_results: TmdbMovie[];
+  tv_results: unknown[];
+  person_results: unknown[];
+  tv_episode_results: unknown[];
+  tv_season_results: unknown[];
+}

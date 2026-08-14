@@ -37,6 +37,7 @@
   "devDependencies": {
     "@nestjs/schematics": "^11.1.0",
     "@repo/tsconfig": "*",
+    "@types/multer": "^2.2.0",
     "@types/node": "^25.9.5",
     "prisma": "^7.9.1"
   }
