@@ -215,7 +215,57 @@
           "watched": "Watched",
           "disliked": "Disliked"
         }
+      },
+      "ImdbImport": {
+        "newBadge": "NEW",
+        "cardTitle": "Import from IMDb",
+        "cardDescription": "Transfer your ratings from IMDb CSV export directly to your Verdict movie shelf.",
+        "cardButton": "Import ratings",
+        "modalTitle": "Import IMDb Ratings",
+        "reopenInstruction": "Instruction",
+        "steps": {
+          "step1": {
+            "title": "1. Open Your Ratings on IMDb",
+            "description": "Log into your IMDb account, open your profile menu, and select \"Your Ratings\"."
+          },
+          "step2": {
+            "title": "2. Export CSV file",
+            "description": "Click the three dots menu (...) at the top right of your ratings list and choose \"Export\"."
+          },
+          "step3": {
+            "title": "3. Upload file to Verdict",
+            "description": "Upload your downloaded CSV file. We will automatically match films via TMDB and sync your ratings."
+          },
+          "next": "Next",
+          "prev": "Back",
+          "startUpload": "Proceed to upload",
+          "skipInstruction": "Skip tutorial"
+        },
+        "upload": {
+          "dropzoneTitle": "Drop your IMDb ratings CSV file here",
+          "dropzoneHint": "or click to browse (.csv, max 5MB)",
+          "selectedFile": "Selected file: {name}",
+          "changeFile": "Choose another file",
+          "uploadButton": "Start import",
+          "uploading": "Importing ratings... This may take a few moments."
+        },
+        "result": {
+          "title": "Import Completed",
+          "total": "Total parsed",
+          "imported": "Imported",
+          "skipped": "Skipped",
+          "failed": "Not found / Failed",
+          "doneButton": "Done",
+          "skippedReasonTitle": "Skipped items",
+          "failedReasonTitle": "Failed items"
+        },
+        "errors": {
+          "invalidFileType": "Please select a valid CSV file.",
+          "fileTooLarge": "File size exceeds the 5MB limit.",
+          "importFailed": "Failed to import IMDb ratings. Please try again."
+        }
       }
+    }
     }
   },
   "CuratedPage": {

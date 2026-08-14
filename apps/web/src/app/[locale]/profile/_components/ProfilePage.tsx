@@ -17,6 +17,7 @@ import {
 } from '@/api/generated/user/user';
 import EmotionalWeightCard from '@/components/sections/profile/EmotionalWeightCard';
 import IdentityCard from '@/components/sections/profile/IdentityCard';
+import ImportImdbCard from '@/components/sections/profile/import-imdb/ImportImdbCard';
 import MoodCard from '@/components/sections/profile/MoodCard';
 import PacingCard from '@/components/sections/profile/PacingCard';
 import ProfileMovieShelfSummary from '@/components/sections/profile/ProfileMovieShelfSummary';
@@ -249,6 +250,10 @@ export default function ProfilePage() {
                     ))}
                   </div>
                 </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <ImportImdbCard />
               </motion.div>
             </motion.aside>
           </div>

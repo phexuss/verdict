@@ -16,6 +16,7 @@ import {
   getGetTasteProfileQueryKey,
   useRefreshTasteProfile,
 } from '@/api/generated/user/user';
+import ImportImdbCard from '@/components/sections/profile/import-imdb/ImportImdbCard';
 import { Link } from '@/i18n/navigation';
 
 const MIN_MOVIES = 5;
@@ -287,6 +288,10 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
                 </p>
               </div>
             </div>
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <ImportImdbCard />
           </motion.div>
 
           <motion.div variants={itemVariants}>

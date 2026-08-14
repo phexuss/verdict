@@ -216,7 +216,57 @@
           "watched": "Смотрел",
           "disliked": "Дизлайк"
         }
+      },
+      "ImdbImport": {
+        "newBadge": "НОВОЕ",
+        "cardTitle": "Импорт с IMDb",
+        "cardDescription": "Перенесите свои оценки из CSV-файла IMDb прямо на кинополку Verdict.",
+        "cardButton": "Импортировать оценки",
+        "modalTitle": "Импорт оценок с IMDb",
+        "reopenInstruction": "Инструкция",
+        "steps": {
+          "step1": {
+            "title": "1. Перейдите в Your Ratings на IMDb",
+            "description": "Войдите на страницу своего профиля IMDb и откройте раздел «Your Ratings»."
+          },
+          "step2": {
+            "title": "2. Экспортируйте файл CSV",
+            "description": "Нажмите на меню с тремя точками (...) в правом верхнем углу списка и выберите «Export»."
+          },
+          "step3": {
+            "title": "3. Загрузите файл в Verdict",
+            "description": "Выберите скачанный CSV-файл. Мы автоматически найдём фильмы через TMDB и добавим ваши оценки на кинополку."
+          },
+          "next": "Далее",
+          "prev": "Назад",
+          "startUpload": "Перейти к загрузке",
+          "skipInstruction": "Пропустить инструкцию"
+        },
+        "upload": {
+          "dropzoneTitle": "Перетащите сюда CSV-файл из IMDb",
+          "dropzoneHint": "или нажмите для выбора файла (.csv, до 5МБ)",
+          "selectedFile": "Выбранный файл: {name}",
+          "changeFile": "Выбрать другой",
+          "uploadButton": "Начать импорт",
+          "uploading": "Импортируем оценки... Это может занять некоторое время."
+        },
+        "result": {
+          "title": "Импорт завершён",
+          "total": "Всего в файле",
+          "imported": "Импортировано",
+          "skipped": "Пропущено",
+          "failed": "Ошибки / Не найдено",
+          "doneButton": "Готово",
+          "skippedReasonTitle": "Пропущенные фильмы",
+          "failedReasonTitle": "Ошибки при импорте"
+        },
+        "errors": {
+          "invalidFileType": "Пожалуйста, выберите корректный CSV-файл.",
+          "fileTooLarge": "Размер файла превышает лимит 5МБ.",
+          "importFailed": "Не удалось импортировать оценки. Попробуйте ещё раз."
+        }
       }
+    }
     }
   },
   "CuratedPage": {
