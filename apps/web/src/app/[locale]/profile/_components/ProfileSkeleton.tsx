@@ -111,6 +111,18 @@ export function ProfileSkeleton() {
             <ProfileMetricSkeleton />
             <ProfileMetricSkeleton />
           </div>
+
+          <section className="flex flex-col justify-between rounded-2xl border border-sidebar-ring/8 bg-accent p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="size-7 rounded-md" />
+                <Skeleton className="h-6 w-36 rounded-sm" />
+              </div>
+              <Skeleton className="h-5 w-12 rounded-full" />
+            </div>
+            <Skeleton className="my-4 h-4 w-full rounded-sm" />
+            <Skeleton className="h-10 w-full rounded-full" />
+          </section>
         </aside>
       </div>
 
