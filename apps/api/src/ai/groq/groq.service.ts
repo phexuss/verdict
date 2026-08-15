@@ -522,55 +522,101 @@ export class GroqService {
             'Bad highAffinity: ["Fight Club", "Forrest Gump", "Pulp Fiction"]. Good highAffinity: ["dark humor", "social satire", "deep characters", "offbeat storytelling"].',
             'Bad lowAffinity: ["The Dark Knight"]. Good lowAffinity: ["superhero action", "grandiose blockbuster", "surface-level conflict"].',
           ];
-    const moviesJson = JSON.stringify(input.movies.slice(0, 80));
+    const createCompactPayload = (sample: TasteProfileMovie[]) => {
+      const compact = sample.map((m) => {
+        const item: Record<string, unknown> = { title: m.title };
+        if (m.rating) item.rating = m.rating;
+        if (m.reaction) item.reaction = m.reaction;
+        if (m.genres && m.genres.length > 0) item.genres = m.genres.slice(0, 3);
+        if (m.moodTags && m.moodTags.length > 0)
+          item.moods = m.moodTags.slice(0, 2);
+        return item;
+      });
+      return JSON.stringify(compact);
+    };
 
-    const response = await this.groq.chat.completions.create({
-      model: this.model,
-      temperature: 0.3,
-      max_completion_tokens: 4000,
-      messages: [
-        {
-          role: 'system',
-          content: [
-            'You analyze movie preferences for a cinema app.',
-            'Infer a concise cinematic taste profile from user actions.',
-            'Saved movies are weak positive intent signals.',
-            'Watched movies are preference signals.',
-            'LIKED movies and high ratings are strong positive signals.',
-            'DISLIKED movies and low ratings are strong negative signals.',
-            'Pacing score: 0 means slow burn, 100 means fast-paced.',
-            'Emotional weight score: 0 means light, 100 means heavy.',
-            'Keep the exact JSON shape from the schema. Do not rename, add, or omit fields.',
-            'All labels, arrays, descriptions, and summaries are user-facing text.',
-            `Write all user-facing text in ${language}.`,
-            ...identityCardRules,
-            ...profileTagRules,
-          ].join('\n'),
-        },
-        {
-          role: 'user',
-          content: `User movie actions:\n${moviesJson}`,
-        },
-      ],
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
-          name: 'user_taste_profile',
-          strict: true,
-          schema: tasteProfileJsonSchema,
-        },
-      },
-    });
+    let sampleSize = Math.min(input.movies.length, 35);
+    let attempts = 0;
+    const maxAttempts = 3;
 
-    const raw = response.choices[0]?.message?.content;
+    while (attempts < maxAttempts) {
+      attempts++;
+      const currentSample = input.movies.slice(0, sampleSize);
+      const moviesJson = createCompactPayload(currentSample);
 
-    if (!raw) {
-      throw new Error('No response');
+      try {
+        const response = await this.groq.chat.completions.create({
+          model: this.model,
+          temperature: 0.3,
+          max_completion_tokens: 3000,
+          messages: [
+            {
+              role: 'system',
+              content: [
+                'You analyze movie preferences for a cinema app.',
+                'Infer a concise cinematic taste profile from user actions.',
+                'Saved movies are weak positive intent signals.',
+                'Watched movies are preference signals.',
+                'LIKED movies and high ratings are strong positive signals.',
+                'DISLIKED movies and low ratings are strong negative signals.',
+                'Pacing score: 0 means slow burn, 100 means fast-paced.',
+                'Emotional weight score: 0 means light, 100 means heavy.',
+                'Keep the exact JSON shape from the schema. Do not rename, add, or omit fields.',
+                'All labels, arrays, descriptions, and summaries are user-facing text.',
+                `Write all user-facing text in ${language}.`,
+                ...identityCardRules,
+                ...profileTagRules,
+              ].join('\n'),
+            },
+            {
+              role: 'user',
+              content: `User movie actions:\n${moviesJson}`,
+            },
+          ],
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: 'user_taste_profile',
+              strict: true,
+              schema: tasteProfileJsonSchema,
+            },
+          },
+        });
+
+        const raw = response.choices[0]?.message?.content;
+
+        if (!raw) {
+          throw new Error('No response');
+        }
+
+        const parsed = tasteProfileSchema.parse(JSON.parse(raw));
+
+        return normalizeTasteProfile(parsed, input.movies, input.locale);
+      } catch (err: unknown) {
+        const errMessage =
+          err && typeof err === 'object' && 'message' in err
+            ? String((err as { message: unknown }).message)
+            : String(err);
+        const errStatus =
+          err && typeof err === 'object' && 'status' in err
+            ? (err as { status: unknown }).status
+            : null;
+
+        const isTokenLimit =
+          errStatus === 413 ||
+          errMessage.includes('rate_limit_exceeded') ||
+          errMessage.includes('tokens per minute');
+
+        if (isTokenLimit && sampleSize > 10 && attempts < maxAttempts) {
+          sampleSize = Math.max(10, Math.floor(sampleSize / 2));
+          continue;
+        }
+
+        throw err;
+      }
     }
 
-    const parsed = tasteProfileSchema.parse(JSON.parse(raw));
-
-    return normalizeTasteProfile(parsed, input.movies, input.locale);
+    throw new Error('Failed to generate taste profile after retries');
   }
 
   async generateMovieAiReview(

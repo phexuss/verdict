@@ -98,7 +98,7 @@ export class UserService {
           },
         },
         orderBy: { updatedAt: 'desc' },
-        take: 80,
+        take: 150,
       }),
       this.prisma.userMovie.count({ where }),
     ]);
@@ -108,7 +108,7 @@ export class UserService {
     }
 
     const prismaLocale = locale === 'ru' ? Locale.RU : Locale.EN;
-    const movies = actions.map(
+    const allMovies = actions.map(
       ({ savedAt, watchedAt, reaction, rating, movie }) => {
         const translation =
           movie.translations.find((item) => item.locale === prismaLocale) ??
@@ -133,6 +133,20 @@ export class UserService {
         };
       },
     );
+
+    const sortedMovies = [...allMovies].sort((a, b) => {
+      const getSignalWeight = (m: (typeof allMovies)[number]) => {
+        let weight = 0;
+        if (m.reaction === 'LIKED' || m.reaction === 'DISLIKED') weight += 10;
+        if (m.rating !== null && m.rating !== undefined) {
+          weight += Math.abs(m.rating - 5.5) * 2;
+        }
+        return weight;
+      };
+      return getSignalWeight(b) - getSignalWeight(a);
+    });
+
+    const movies = sortedMovies.slice(0, 40);
 
     const data = await this.groqService.generateTasteProfile({
       locale,
