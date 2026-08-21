@@ -99,7 +99,6 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="flex flex-wrap items-center gap-3">
             <GetStartedButton translations={t('cta')} href={`/tonight`} />
             <BrowseButton translations={t('browse')} href={`/curated`} />
-            <TestImdbImportButton />
           </div>
         </div>
       </main>
