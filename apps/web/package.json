@@ -17,14 +17,14 @@
     "@repo/ui": "*",
     "@solar-icons/react-perf": "^2.1.1",
     "@tailwindcss/postcss": "^4.3.3",
-    "@tanstack/react-query": "^5.101.4",
-    "better-auth": "^1.7.1",
+    "@tanstack/react-query": "^5.102.8",
+    "better-auth": "^1.7.2",
     "motion": "^12.43.0",
-    "next": "^16.3.1",
-    "next-intl": "^4.13.7",
+    "next": "^16.3.4",
+    "next-intl": "^4.14.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.85.0",
+    "react-hook-form": "^7.87.0",
     "tailwindcss": "^4.3.0",
     "zod": "^3.25.76"
   },
@@ -32,7 +32,7 @@
     "@repo/tsconfig": "*",
     "@types/node": "^25.9.5",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "orval": "^8.24.0"
+    "@types/react-dom": "^19.2.7",
+    "orval": "^8.28.1"
   }
 }
