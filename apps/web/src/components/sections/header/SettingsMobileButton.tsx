@@ -47,7 +47,7 @@ export default function SettingsMobileButton() {
       </DrawerTrigger>
 
       <DrawerContent className="px-4">
-        <DrawerHeader className="flex items-center justify-between px-0 pb-2 pt-6">
+        <DrawerHeader className="flex flex-row items-center justify-between px-0 pb-2 pt-6 text-left">
           <DrawerTitle className="text-2xl font-semibold text-foreground">
             {t('title')}
           </DrawerTitle>
