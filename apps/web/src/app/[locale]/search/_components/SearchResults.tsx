@@ -87,7 +87,7 @@ export function SearchResults({ query, page, locale }: SearchResultsProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {movies.map((movie, index) => (
           <Link href={`/movie/${movie.id}`} key={movie.id}>
             <MovieCard movie={movie} locale={locale} index={index} />

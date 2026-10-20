@@ -46,7 +46,7 @@ export default function SettingsMobileButton() {
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="border-border bg-background px-4">
+      <DrawerContent className="px-4">
         <DrawerHeader className="flex items-center justify-between px-0 pb-2 pt-6">
           <DrawerTitle className="text-2xl font-semibold text-foreground">
             {t('title')}
@@ -70,15 +70,15 @@ export default function SettingsMobileButton() {
               {t('language')}
             </p>
 
-            <div className="flex rounded-xl bg-accent p-1">
+            <div className="flex rounded-2xl border border-white/8 bg-white/[0.03] p-1">
               <Button
                 variant="ghost"
                 onClick={() => switchLanguage('ru')}
                 disabled={isPending}
                 className={cn(
-                  'flex-1 rounded-lg py-2.5 text-sm font-medium transition-all duration-200',
+                  'flex-1 rounded-xl py-2.5 text-sm font-medium transition-all duration-200',
                   locale === 'ru'
-                    ? 'border border-border bg-card text-primary shadow-sm'
+                    ? 'border border-primary/25 bg-primary/10 text-primary shadow-[0_0_16px_-6px_oklch(0.76_0.13_65/0.6)]'
                     : 'text-muted-foreground hover:text-foreground',
                   isPending && 'opacity-80',
                 )}
@@ -91,9 +91,9 @@ export default function SettingsMobileButton() {
                 onClick={() => switchLanguage('en')}
                 disabled={isPending}
                 className={cn(
-                  'flex-1 rounded-lg py-2.5 text-sm font-medium transition-all duration-200',
+                  'flex-1 rounded-xl py-2.5 text-sm font-medium transition-all duration-200',
                   locale === 'en'
-                    ? 'border border-border bg-card text-primary shadow-sm'
+                    ? 'border border-primary/25 bg-primary/10 text-primary shadow-[0_0_16px_-6px_oklch(0.76_0.13_65/0.6)]'
                     : 'text-muted-foreground hover:text-foreground',
                   isPending && 'opacity-80',
                 )}
@@ -112,7 +112,7 @@ export default function SettingsMobileButton() {
             <div className="flex flex-col gap-2">
               <Link
                 href={'/terms-of-use'}
-                className="flex w-full items-center gap-3 rounded-xl bg-accent p-3.5 text-left transition-colors hover:bg-muted active:bg-muted"
+                className="flex w-full items-center gap-3 rounded-2xl border border-white/6 bg-white/[0.03] p-3.5 text-left transition-colors hover:border-white/12 hover:bg-white/[0.06] active:bg-white/[0.06]"
               >
                 <FileText className="size-5 text-muted-foreground" />
                 <span className="flex-1 text-sm font-medium text-foreground">
@@ -122,7 +122,7 @@ export default function SettingsMobileButton() {
 
               <Link
                 href={'/privacy'}
-                className="flex w-full items-center gap-3 rounded-xl bg-accent p-3.5 text-left transition-colors hover:bg-muted active:bg-muted"
+                className="flex w-full items-center gap-3 rounded-2xl border border-white/6 bg-white/[0.03] p-3.5 text-left transition-colors hover:border-white/12 hover:bg-white/[0.06] active:bg-white/[0.06]"
               >
                 <Shield className="size-5 text-muted-foreground" />
                 <span className="flex-1 text-sm font-medium text-foreground">
@@ -148,7 +148,7 @@ export default function SettingsMobileButton() {
           </button>
 
           <div className="flex flex-col items-center justify-center space-y-1 pb-6 pt-4">
-            <h1 className="text-4xl font-bold tracking-widest text-white/4">
+            <h1 className="text-4xl font-bold tracking-widest text-primary/10">
               VERDICT
             </h1>
           </div>

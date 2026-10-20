@@ -86,18 +86,14 @@ export default function SettingsButton() {
           </MotionButton>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent
-          className="w-56 border-border bg-background shadow-md"
-          align="end"
-          sideOffset={8}
-        >
+        <DropdownMenuContent className="w-56" align="end" sideOffset={8}>
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="cursor-pointer gap-3 focus:bg-accent data-[state=open]:bg-accent">
                 <Globe className="size-4 text-muted-foreground" />
                 <span>{t('language')}</span>
 
-                <span className="ml-auto flex items-center justify-center rounded-sm border border-border bg-card px-1.5 py-0.5 text-[10px] font-medium text-primary uppercase shadow-sm">
+                <span className="ml-auto flex items-center justify-center rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary uppercase shadow-[0_0_12px_-4px_oklch(0.76_0.13_65/0.6)]">
                   {locale}
                 </span>
               </DropdownMenuSubTrigger>
@@ -106,7 +102,7 @@ export default function SettingsButton() {
                 <DropdownMenuSubContent
                   sideOffset={6}
                   alignOffset={-4}
-                  className="min-w-35 border-border bg-background shadow-md"
+                  className="min-w-35"
                 >
                   <DropdownMenuItem
                     className="cursor-pointer gap-2 focus:bg-accent"

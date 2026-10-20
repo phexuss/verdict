@@ -21,12 +21,12 @@ export default function EmotionalWeightCard({
   return (
     <section
       className={cn(
-        'flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4 text-foreground',
+        'flex flex-col rounded-2xl surface p-4 text-foreground',
         className,
       )}
     >
       <div className="mb-5 flex flex-row items-center gap-2">
-        <ScaleBold className="size-6 shrink-0 text-primary" />
+        <ScaleBold className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
         <h3 className="font-medium text-xl">{t('title')}</h3>
       </div>
 

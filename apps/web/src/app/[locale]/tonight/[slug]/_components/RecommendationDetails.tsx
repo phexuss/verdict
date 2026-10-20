@@ -108,7 +108,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
                 <span>{recommendation.locale}</span>
               </div>
 
-              <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
+              <h1 className="max-w-3xl bg-linear-to-b from-foreground via-foreground to-foreground/60 bg-clip-text text-3xl font-semibold leading-tight tracking-tight text-transparent md:text-5xl">
                 {recommendation.title ?? 'Your movie trio'}
               </h1>
 
@@ -142,10 +142,10 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
                   className="will-change-transform transform-gpu"
                 >
                   <Link
-                    className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_8px_32px_-8px_oklch(0.76_0.13_65/0.2)]"
+                    className="surface surface-interactive group flex h-full flex-col overflow-hidden rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/40"
                     href={`/tonight/${slug}/${pickSlug}`}
                   >
-                    <div className="relative aspect-2/3 bg-muted">
+                    <div className="relative aspect-2/3 overflow-hidden bg-muted">
                       {posterUrl ? (
                         <Image
                           alt={title}
@@ -155,11 +155,19 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
                           src={posterUrl}
                         />
                       ) : null}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-card via-card/40 to-transparent"
+                      />
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,oklch(0.76_0.13_65/0.25),transparent_60%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      />
                     </div>
 
                     <div className="flex flex-col gap-3 p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="inline-flex rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                        <span className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary shadow-[0_0_16px_-4px_oklch(0.76_0.13_65/0.6)]">
                           {pickT(`${pickSlug}.label`)}
                         </span>
                         {item.movie.releaseDate ? (
@@ -170,7 +178,7 @@ export function RecommendationDetails({ slug }: RecommendationDetailsProps) {
                       </div>
 
                       <div>
-                        <h2 className="font-semibold text-lg leading-snug">
+                        <h2 className="font-semibold text-lg leading-snug transition-colors duration-300 group-hover:text-gold-soft">
                           {title}
                         </h2>
                         {item.movie.voteAverage ? (

@@ -37,7 +37,7 @@ export default function TonightPage() {
       />
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-4 pt-10 pb-16 sm:px-6 sm:pt-14 md:pt-18 lg:px-8">
         <div className="flex w-full max-w-3xl flex-col items-center pb-2 text-center">
-          <h1 className="text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="bg-linear-to-b from-foreground via-foreground to-foreground/60 bg-clip-text text-3xl font-semibold leading-[1.1] tracking-tight text-transparent sm:text-4xl md:text-5xl">
             {t('title')}
           </h1>
           <p className="mt-3 max-w-lg text-base leading-relaxed text-muted-foreground/80 md:text-lg">

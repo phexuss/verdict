@@ -50,10 +50,10 @@ export default function PickCards() {
             key={key}
             variants={itemVariants}
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-            className="flex min-h-30.5 w-full flex-row items-center gap-4 rounded-xl border border-border bg-card p-4 ring-1 ring-foreground/5 md:flex-col md:items-start lg:flex-row lg:items-center"
+            className="surface surface-interactive group/pick flex min-h-30.5 w-full flex-row items-center gap-4 rounded-2xl p-4 md:flex-col md:items-start lg:flex-row lg:items-center"
           >
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-muted/80">
-              <Icon className="size-6 text-primary" />
+            <div className="relative flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-[radial-gradient(circle_at_30%_25%,oklch(0.76_0.13_65/0.28),oklch(0.76_0.13_65/0.06)_70%)] shadow-[inset_0_1px_0_oklch(1_0_0/0.1),0_0_20px_-6px_oklch(0.76_0.13_65/0.55)] transition-shadow duration-300 group-hover/pick:shadow-[inset_0_1px_0_oklch(1_0_0/0.12),0_0_28px_-4px_oklch(0.76_0.13_65/0.75)]">
+              <Icon className="size-6 text-primary drop-shadow-[0_0_6px_oklch(0.76_0.13_65/0.6)]" />
             </div>
 
             <div className="flex flex-1 flex-col gap-0.5">

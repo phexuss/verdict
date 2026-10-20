@@ -25,6 +25,7 @@ export default function GoogleLoginButton({ label }: GoogleLoginButtonProps) {
     <Button
       onClick={signInWithGoogle}
       type="button"
+      variant="outline"
       className="w-full max-w-md flex items-center justify-center gap-2.5"
     >
       <Image
@@ -32,7 +33,6 @@ export default function GoogleLoginButton({ label }: GoogleLoginButtonProps) {
         alt="Google Icon"
         width={18}
         height={18}
-        className="invert"
       />
       {label ?? t('googleSignIn')}
     </Button>

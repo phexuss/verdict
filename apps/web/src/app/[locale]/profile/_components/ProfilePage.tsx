@@ -117,10 +117,10 @@ export default function ProfilePage() {
             className="flex flex-col gap-5 border-border border-b pb-6 md:flex-row md:items-end md:justify-between md:gap-8"
           >
             <div className="flex min-w-0 flex-col gap-3">
-              <h1 className="font-medium text-primary text-xs uppercase tracking-widest">
+              <h1 className="font-medium text-primary text-xs uppercase tracking-widest text-glow">
                 {t('title')}
               </h1>
-              <h2 className="wrap-break-word text-3xl font-semibold leading-tight tracking-tight md:text-5xl xl:text-6xl">
+              <h2 className="wrap-break-word bg-linear-to-b from-foreground via-foreground to-foreground/60 bg-clip-text text-3xl font-semibold leading-tight tracking-tight text-transparent md:text-5xl xl:text-6xl">
                 {t('label')}
               </h2>
             </div>
@@ -169,10 +169,10 @@ export default function ProfilePage() {
 
               <motion.div
                 variants={itemVariants}
-                className="flex flex-col rounded-xl border border-foreground/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                className="flex flex-col rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
               >
                 <div className="mb-4 flex flex-row items-center gap-2 sm:mb-0">
-                  <ClapperboardOutline className="size-6 shrink-0 text-primary" />
+                  <ClapperboardOutline className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
                   <h3 className="font-medium text-xl">
                     {t('Sections.FrequentlySeen.title')}
                   </h3>
@@ -214,9 +214,9 @@ export default function ProfilePage() {
                 variants={itemVariants}
                 className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2"
               >
-                <div className="flex min-h-36 flex-col rounded-xl border border-foreground/8 bg-accent p-4">
+                <div className="flex min-h-36 flex-col rounded-2xl surface p-4">
                   <div className="mb-5 flex flex-row items-center gap-2">
-                    <ClockCircleLinear className="size-6 shrink-0 text-primary" />
+                    <ClockCircleLinear className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
                     <h3 className="font-medium text-xl">
                       {t('Sections.Runtime.time')}
                     </h3>
@@ -230,9 +230,9 @@ export default function ProfilePage() {
                   </p>
                 </div>
 
-                <div className="flex min-h-36 flex-col rounded-xl border border-foreground/8 bg-accent p-4">
+                <div className="flex min-h-36 flex-col rounded-2xl surface p-4">
                   <div className="mb-5 flex flex-row items-center gap-2">
-                    <SkipNextLinear className="size-6 shrink-0 text-primary" />
+                    <SkipNextLinear className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
                     <h3 className="font-medium text-xl">
                       {t('Sections.Runtime.skip')}
                     </h3>

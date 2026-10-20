@@ -24,7 +24,7 @@ export default function BrowseButton({
     >
       <Link
         href={href}
-        className="group relative flex h-10 items-center justify-center rounded-4xl border border-white/10 bg-white/5 px-6 text-sm font-medium text-foreground transition-all duration-300 hover:bg-white/10 active:scale-95"
+        className="group relative flex h-11 items-center justify-center rounded-4xl border border-white/10 bg-white/[0.04] px-7 text-sm font-medium text-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.08] hover:shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_0_28px_-10px_oklch(0.76_0.13_65/0.5)] active:scale-95"
       >
         <span className="transition-transform duration-300 ease-out group-hover:-translate-x-2.5">
           {translations}

@@ -21,6 +21,7 @@ import type {
   TmdbMovieDetails,
 } from '@/api/generated/models';
 import { AiMovieReview } from '@/components/movie/AiMovieReview';
+import { AmbientBackdrop, PosterGlow } from '@/components/movie/PosterAmbience';
 import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import {
   getCinematographyName,
@@ -63,27 +64,39 @@ export function CuratedMovieContent({
   const t = useTranslations('CuratedPage.SlugPage');
 
   return (
-    <article className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+    <article className="relative isolate mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+      {movie.backdrop_path || movie.poster_path ? (
+        <AmbientBackdrop
+          src={`https://image.tmdb.org/t/p/w780${movie.backdrop_path ?? movie.poster_path}`}
+        />
+      ) : null}
       <motion.div
         initial={{ scale: 0.97, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.55, delay: 0.1, ease }}
         className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
       >
-        <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-2xl">
+        <div className="relative isolate">
           {movie.poster_path ? (
-            <Image
-              alt={movie.title}
-              className="object-cover"
-              fill
-              sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
-              src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
+            <PosterGlow
+              src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
             />
-          ) : (
-            <div className="flex h-full items-center justify-center p-6 text-center text-foreground/70">
-              {movie.title}
-            </div>
-          )}
+          ) : null}
+          <div className="relative aspect-2/3 overflow-hidden rounded-2xl surface shadow-2xl">
+            {movie.poster_path ? (
+              <Image
+                alt={movie.title}
+                className="object-cover"
+                fill
+                sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
+                src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center p-6 text-center text-foreground/70">
+                {movie.title}
+              </div>
+            )}
+          </div>
         </div>
 
         {trailerUrl ? (
@@ -164,7 +177,7 @@ export function CuratedMovieContent({
             <div className="flex flex-wrap gap-2">
               {movie.genres.map((genre) => (
                 <Badge
-                  className="rounded-full border border-accent-foreground/10 px-3 py-1 text-xs capitalize"
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs capitalize shadow-[inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md"
                   key={genre.id}
                   variant="secondary"
                 >
@@ -175,10 +188,7 @@ export function CuratedMovieContent({
           ) : null}
         </motion.header>
 
-        <motion.div
-          variants={secVariants}
-          className="rounded-xl border border-foreground/8 bg-accent p-4"
-        >
+        <motion.div variants={secVariants} className="rounded-2xl surface p-4">
           <MovieActionsButtons tmdbId={movie.id} />
         </motion.div>
 
@@ -194,14 +204,14 @@ export function CuratedMovieContent({
           variants={secVariants}
           className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)] xl:items-start"
         >
-          <section className="flex flex-col gap-3 rounded-xl border border-foreground/8 bg-accent p-5">
+          <section className="flex flex-col gap-3 rounded-2xl surface p-5">
             <h2 className="font-medium text-xl">{t('title')}</h2>
             <p className="text-foreground/70 text-sm leading-relaxed">
               {movie.overview}
             </p>
           </section>
 
-          <section className="flex flex-col gap-5 rounded-xl border border-foreground/8 bg-accent p-5">
+          <section className="flex flex-col gap-5 rounded-2xl surface p-5">
             <h2 className="font-medium text-xl">{t('credits')}</h2>
             <CreditsSection credits={credits} t={t} />
           </section>

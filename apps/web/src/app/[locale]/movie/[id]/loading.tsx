@@ -5,8 +5,8 @@ export default function Loading() {
   return (
     <article className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
       <div className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch">
-        <Skeleton className="aspect-2/3 w-full rounded-xl border border-sidebar-ring/8 bg-accent shadow-2xl" />
-        <Skeleton className="h-10 w-full rounded-4xl border border-sidebar-ring/8 bg-accent" />
+        <Skeleton className="aspect-2/3 w-full rounded-2xl surface shadow-2xl" />
+        <Skeleton className="h-10 w-full rounded-4xl surface" />
       </div>
 
       <div className="flex min-w-0 flex-col gap-6">
@@ -25,7 +25,7 @@ export default function Loading() {
           </div>
         </div>
 
-        <div className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
+        <div className="rounded-2xl surface p-4">
           <div className="flex flex-wrap gap-2">
             <Skeleton className="h-9 w-24 rounded-full" />
             <Skeleton className="h-9 w-28 rounded-full" />
@@ -42,7 +42,7 @@ export default function Loading() {
         </section>
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)]">
-          <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <section className="rounded-2xl surface p-4">
             <Skeleton className="mb-5 h-7 w-32 rounded-sm" />
             <div className="flex flex-col gap-2">
               <Skeleton className="h-4 w-full rounded-sm" />
@@ -52,7 +52,7 @@ export default function Loading() {
             </div>
           </section>
 
-          <section className="rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <section className="rounded-2xl surface p-4">
             <Skeleton className="mb-5 h-7 w-28 rounded-sm" />
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">

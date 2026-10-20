@@ -4,11 +4,11 @@ const ITEMS = Array.from({ length: 8 }, (_, i) => `movie-skeleton-${i}`);
 
 export function MoviesSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
       {ITEMS.map((key) => (
         <article
           key={key}
-          className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card ring-1 ring-foreground/5"
+          className="flex h-full flex-col overflow-hidden surface rounded-2xl"
         >
           <div className="relative aspect-2/3 overflow-hidden bg-muted">
             <Skeleton className="h-full w-full rounded-none" />
@@ -30,7 +30,7 @@ export function MoviesSkeleton() {
               <Skeleton className="h-5 w-16 rounded-full" />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="hidden space-y-1.5 sm:block">
               <Skeleton className="h-3.5 w-full rounded-sm" />
               <Skeleton className="h-3.5 w-11/12 rounded-sm" />
               <Skeleton className="h-3.5 w-4/5 rounded-sm" />

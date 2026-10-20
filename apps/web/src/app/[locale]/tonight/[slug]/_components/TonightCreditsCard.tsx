@@ -19,7 +19,7 @@ export function TonightCreditsCard({ movieCredits }: TonightCreditsCardProps) {
     : null;
 
   return (
-    <section className="flex flex-col gap-5 rounded-xl border border-foreground/8 bg-accent p-5">
+    <section className="flex flex-col gap-5 rounded-2xl surface p-5">
       <h2 className="font-medium text-xl">{t('credits')}</h2>
       <div className="flex flex-col gap-1">
         <p className="text-[0.65rem] font-semibold tracking-widest uppercase text-muted-foreground/60">
@@ -57,7 +57,7 @@ export function TonightCreditsCard({ movieCredits }: TonightCreditsCardProps) {
 
 export function CreditsSkeleton() {
   return (
-    <section className="flex flex-col gap-5 rounded-xl border border-foreground/8 bg-accent p-5">
+    <section className="flex flex-col gap-5 rounded-2xl surface p-5">
       <div className="h-7 w-28 animate-pulse rounded-sm bg-muted" />
       <div className="flex flex-col gap-2">
         <div className="h-3 w-20 animate-pulse rounded-sm bg-muted" />

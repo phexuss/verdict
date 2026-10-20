@@ -21,10 +21,10 @@ export default function ProfileMovieShelfSummary({
   const markedMovieCount = movies?.filter(hasMovieAction).length ?? 0;
 
   return (
-    <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+    <section className="flex flex-col gap-4 rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
       <div className="min-w-0">
         <div className="mb-2 flex items-center gap-2">
-          <BookmarkBold className="size-6 shrink-0 text-primary" />
+          <BookmarkBold className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
           <h3 className="font-medium text-xl">{t('title')}</h3>
         </div>
         <p className="text-foreground/70 text-sm leading-relaxed">

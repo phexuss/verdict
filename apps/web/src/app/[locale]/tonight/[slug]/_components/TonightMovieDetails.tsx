@@ -24,6 +24,7 @@ import { getMovieTrailerAction } from '@/actions/tmdb';
 
 import { useGetRecommendationBySlug } from '@/api/generated/recommendations/recommendations';
 import { useGetMovieCredits } from '@/api/generated/tmdb/tmdb';
+import { AmbientBackdrop, PosterGlow } from '@/components/movie/PosterAmbience';
 import MovieActionsButtons from '@/components/movie-actions/MovieActionsButtons';
 import StorylineCard from '@/components/sections/curated/StorylineCard';
 import { Link } from '@/i18n/navigation';
@@ -149,27 +150,39 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                   </Link>
                 </Button>
 
-                <article className="grid w-full gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+                <article className="relative isolate grid w-full gap-8 lg:grid-cols-[minmax(16rem,22rem)_minmax(0,1fr)] xl:gap-12">
+                  {imagePath ? (
+                    <AmbientBackdrop
+                      src={`https://image.tmdb.org/t/p/w780${movie.backdropPath ?? imagePath}`}
+                    />
+                  ) : null}
                   <motion.div
                     initial={{ scale: 0.97, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.55, delay: 0.1, ease }}
                     className="flex w-full max-w-sm flex-col gap-4 justify-self-center lg:sticky lg:top-8 lg:max-w-none lg:justify-self-stretch"
                   >
-                    <div className="relative aspect-2/3 overflow-hidden rounded-xl border border-foreground/8 bg-accent shadow-2xl">
+                    <div className="relative isolate">
                       {imagePath ? (
-                        <Image
-                          alt={title}
-                          className="object-cover"
-                          fill
-                          sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
-                          src={`https://image.tmdb.org/t/p/w780${imagePath}`}
+                        <PosterGlow
+                          src={`https://image.tmdb.org/t/p/w342${imagePath}`}
                         />
-                      ) : (
-                        <div className="flex h-full items-center justify-center p-6 text-center text-foreground/70">
-                          {title}
-                        </div>
-                      )}
+                      ) : null}
+                      <div className="relative aspect-2/3 overflow-hidden rounded-2xl surface shadow-2xl">
+                        {imagePath ? (
+                          <Image
+                            alt={title}
+                            className="object-cover"
+                            fill
+                            sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
+                            src={`https://image.tmdb.org/t/p/w780${imagePath}`}
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center p-6 text-center text-foreground/70">
+                            {title}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     {trailerUrl ? (
                       <Dialog>
@@ -263,7 +276,7 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
                         <div className="flex flex-wrap gap-2">
                           {movie.genres.map((genre) => (
                             <Badge
-                              className="rounded-full border border-accent-foreground/10 px-3 py-1 text-xs capitalize"
+                              className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs capitalize shadow-[inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md"
                               key={genre.id}
                               variant="secondary"
                             >
@@ -276,7 +289,7 @@ export function TonightMovieDetails({ slug, pick }: TonightMovieDetailsProps) {
 
                     <motion.div
                       variants={secVariants}
-                      className="rounded-xl border border-foreground/8 bg-accent p-4"
+                      className="rounded-2xl surface p-4"
                     >
                       <MovieActionsButtons tmdbId={movie.tmdbId} />
                     </motion.div>

@@ -30,7 +30,7 @@ export default function RefreshTasteProfileCard() {
   });
 
   return (
-    <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="flex flex-col gap-4 rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
         <h3 className="font-medium text-lg">{t('title')}</h3>
         <p className="mt-1 max-w-xl text-foreground/70 text-sm leading-relaxed">

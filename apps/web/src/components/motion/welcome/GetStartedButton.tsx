@@ -25,7 +25,7 @@ export default function GetStartedButton({
     >
       <Link
         href={href}
-        className="group relative inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all duration-300 outline-none select-none focus-visible:ring-3 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/80 h-10 px-6 min-w-35"
+        className="sheen group relative inline-flex h-11 min-w-35 shrink-0 items-center justify-center rounded-4xl border border-transparent bg-primary bg-[linear-gradient(180deg,oklch(0.83_0.12_72),var(--primary)_60%,oklch(0.7_0.13_60))] bg-clip-padding px-7 text-sm font-medium whitespace-nowrap text-primary-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.35),0_8px_28px_-8px_oklch(0.76_0.13_65/0.7)] transition-all duration-300 outline-none select-none hover:shadow-[inset_0_1px_0_oklch(1_0_0/0.4),0_0_0_1px_oklch(0.76_0.13_65/0.4),0_12px_40px_-6px_oklch(0.76_0.13_65/0.85)] hover:brightness-110 focus-visible:ring-3 focus-visible:ring-ring/40 active:scale-95"
       >
         <span className="transition-transform duration-300 ease-out group-hover:-translate-x-2.5">
           {translations}

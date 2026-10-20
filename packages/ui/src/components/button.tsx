@@ -4,15 +4,16 @@ import { Slot } from 'radix-ui';
 import type * as React from 'react';
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:scale-[0.97] duration-200 ease-out disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+        default:
+          'bg-primary bg-[linear-gradient(180deg,oklch(0.83_0.12_72),var(--primary)_60%,oklch(0.7_0.13_60))] text-primary-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.35),0_6px_20px_-8px_oklch(0.76_0.13_65/0.55)] hover:brightness-110 hover:shadow-[inset_0_1px_0_oklch(1_0_0/0.4),0_0_0_1px_oklch(0.76_0.13_65/0.35),0_10px_30px_-6px_oklch(0.76_0.13_65/0.7)]',
         outline:
-          'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-transparent dark:hover:bg-input/30',
+          'border-white/10 bg-white/[0.03] shadow-[inset_0_1px_0_oklch(1_0_0/0.05)] backdrop-blur-md hover:border-white/20 hover:bg-white/[0.07] hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+          'border-white/8 bg-secondary/80 text-secondary-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md hover:border-white/15 hover:bg-secondary aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:
           'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50',
         destructive:

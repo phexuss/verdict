@@ -17,7 +17,7 @@ export function ProfileSkeleton() {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(22rem,0.95fr)] lg:items-start">
         <div className="flex min-w-0 flex-col gap-6">
-          <section className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <section className="flex flex-col rounded-2xl surface p-4">
             <div className="mb-5 flex items-center gap-2">
               <Skeleton className="size-6 rounded-sm" />
               <Skeleton className="h-7 w-56 rounded-sm" />
@@ -49,7 +49,7 @@ export function ProfileSkeleton() {
             <ProfileIdentitySkeleton />
           </div>
 
-          <section className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <section className="flex flex-col rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
             <div className="mb-4 flex items-center gap-2 sm:mb-0">
               <Skeleton className="size-6 rounded-sm" />
               <Skeleton className="h-7 w-48 rounded-sm" />
@@ -57,7 +57,7 @@ export function ProfileSkeleton() {
             <Skeleton className="h-5 w-full max-w-sm rounded-sm sm:ml-auto" />
           </section>
 
-          <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between">
+          <section className="flex flex-col gap-4 rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-2">
               <Skeleton className="h-6 w-56 rounded-sm" />
               <Skeleton className="h-4 w-full max-w-md rounded-sm" />
@@ -65,7 +65,7 @@ export function ProfileSkeleton() {
             <Skeleton className="h-9 w-full rounded-4xl sm:w-56" />
           </section>
 
-          <section className="flex flex-col gap-4 rounded-md border border-sidebar-ring/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between">
+          <section className="flex flex-col gap-4 rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 flex-col gap-2">
               <div className="flex items-center gap-2">
                 <Skeleton className="size-6 rounded-sm" />
@@ -79,7 +79,7 @@ export function ProfileSkeleton() {
         </div>
 
         <aside className="flex min-w-0 flex-col gap-6">
-          <section className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <section className="flex flex-col rounded-2xl surface p-4">
             <div className="mb-5 flex items-center gap-2">
               <Skeleton className="size-6 rounded-sm" />
               <Skeleton className="h-7 w-52 rounded-sm" />
@@ -96,7 +96,7 @@ export function ProfileSkeleton() {
             </div>
           </section>
 
-          <section className="flex flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
+          <section className="flex flex-col rounded-2xl surface p-4">
             <div className="mb-5 flex items-center gap-2">
               <Skeleton className="size-6 rounded-sm" />
               <Skeleton className="h-7 w-56 rounded-sm" />
@@ -112,7 +112,7 @@ export function ProfileSkeleton() {
             <ProfileMetricSkeleton />
           </div>
 
-          <section className="flex flex-col justify-between rounded-2xl border border-sidebar-ring/8 bg-accent p-5">
+          <section className="flex flex-col justify-between rounded-2xl surface p-5">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Skeleton className="size-7 rounded-md" />
@@ -150,7 +150,7 @@ export function ProfileSkeleton() {
 
 function ProfileIdentitySkeleton() {
   return (
-    <article className="flex flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4">
+    <article className="flex flex-col overflow-hidden rounded-2xl surface p-4">
       <Skeleton className="mb-5 size-8 shrink-0 rounded-sm" />
       <div className="flex min-h-0 flex-1 flex-col gap-3">
         <Skeleton className="h-7 w-3/4 rounded-sm" />
@@ -185,7 +185,7 @@ function ProfileBarSkeleton({ muted }: { muted?: boolean }) {
 
 function ProfileMetricSkeleton() {
   return (
-    <section className="flex min-h-36 flex-col rounded-md border border-sidebar-ring/8 bg-accent p-4">
+    <section className="flex min-h-36 flex-col rounded-2xl surface p-4">
       <div className="mb-5 flex items-center gap-2">
         <Skeleton className="size-6 rounded-sm" />
         <Skeleton className="h-7 w-28 rounded-sm" />
@@ -198,7 +198,7 @@ function ProfileMetricSkeleton() {
 
 function ProfileRecommendationSkeleton() {
   return (
-    <article className="min-h-52 overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent">
+    <article className="min-h-52 overflow-hidden rounded-2xl surface">
       <div className="grid h-28 grid-cols-3 gap-1 bg-background/40 p-1">
         <Skeleton className="h-full rounded-sm" />
         <Skeleton className="h-full rounded-sm" />

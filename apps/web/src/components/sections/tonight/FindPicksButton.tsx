@@ -33,8 +33,8 @@ export default function FindPicksButton({
     >
       <Button
         className={[
-          'relative w-full rounded-xl transition-shadow duration-500',
-          !isDisabled ? 'shadow-[0_0_24px_-4px_oklch(0.76_0.13_65/0.45)]' : '',
+          'relative h-12 w-full rounded-2xl text-base transition-shadow duration-500',
+          !isDisabled ? 'sheen' : '',
         ].join(' ')}
         disabled={isDisabled}
         onClick={onClick}

@@ -46,9 +46,7 @@ export default function ProfileMovieShelf({
   return (
     <section
       className={cn(
-        variant === 'embedded'
-          ? 'rounded-xl border border-foreground/8 bg-accent p-4'
-          : 'w-full',
+        variant === 'embedded' ? 'rounded-2xl surface p-4' : 'w-full',
       )}
     >
       {variant === 'embedded' ? (
