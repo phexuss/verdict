@@ -33,7 +33,7 @@ export default function ProfileMoviesPage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-8">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <BookmarkBold className="size-8 shrink-0 text-primary" />
+              <BookmarkBold className="size-8 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
               <h1 className="wrap-break-word text-4xl leading-tight md:text-5xl xl:text-6xl">
                 {t('title')}
               </h1>

@@ -42,7 +42,7 @@ export function FloatingMoods({ moods }: { moods: string[] }) {
               ease: 'easeInOut',
               delay: i * 0.2,
             }}
-            className="absolute rounded-full border font-medium"
+            className="absolute rounded-full border font-medium backdrop-blur-sm"
             style={{
               top: pos.top,
               right: pos.right,
@@ -54,7 +54,13 @@ export function FloatingMoods({ moods }: { moods: string[] }) {
 
               padding: pos.size === 'sm' ? '0.4rem 1.2rem' : '0.5rem 1.4rem',
 
-              opacity: pos.accent ? 0.55 : 0.25,
+              opacity: pos.accent ? 0.7 : 0.3,
+              background: pos.accent
+                ? 'color-mix(in oklch, var(--primary) 8%, transparent)'
+                : 'color-mix(in oklch, var(--foreground) 3%, transparent)',
+              boxShadow: pos.accent
+                ? '0 0 24px -6px oklch(0.76 0.13 65 / 0.55), inset 0 1px 0 oklch(1 0 0 / 0.08)'
+                : 'inset 0 1px 0 oklch(1 0 0 / 0.05)',
               borderColor: pos.accent
                 ? 'var(--primary)'
                 : 'color-mix(in oklch, var(--foreground) 20%, transparent)',

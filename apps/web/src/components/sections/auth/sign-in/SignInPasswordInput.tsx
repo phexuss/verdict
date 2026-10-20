@@ -26,7 +26,8 @@ const SignInPasswordInput = forwardRef<
       />
       <Button
         type="button"
-        className="absolute right-0 top-0 text-accent-foreground bg-transparent hover:bg-transparent"
+        variant="ghost"
+        className="absolute right-0 top-0 text-muted-foreground bg-transparent hover:bg-transparent hover:text-foreground"
         size="icon"
         onClick={() => {
           setShowPassword(!showPassword);

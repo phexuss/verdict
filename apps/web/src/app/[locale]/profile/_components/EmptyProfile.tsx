@@ -46,7 +46,7 @@ function GhostCard({
 }) {
   return (
     <div
-      className={`flex min-h-36 flex-col rounded-xl border border-foreground/8 bg-accent p-4 ${className}`}
+      className={`flex min-h-36 flex-col rounded-2xl surface p-4 ${className}`}
     >
       <div className="mb-3 flex flex-row items-center gap-2">
         <span className="text-primary">{icon}</span>
@@ -212,10 +212,10 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-col rounded-xl border border-foreground/8 bg-accent p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+            className="flex flex-col rounded-2xl surface p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
           >
             <div className="mb-3 flex flex-row items-center gap-2 sm:mb-0">
-              <ClapperboardOutline className="size-6 shrink-0 text-primary" />
+              <ClapperboardOutline className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
               <h3 className="font-medium text-xl">
                 {s('FrequentlySeen.title')}
               </h3>
@@ -263,9 +263,9 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
             variants={itemVariants}
             className="grid gap-4 sm:grid-cols-2"
           >
-            <div className="flex min-h-36 flex-col rounded-xl border border-foreground/8 bg-accent p-4">
+            <div className="flex min-h-36 flex-col rounded-2xl surface p-4">
               <div className="mb-3 flex flex-row items-center gap-2">
-                <ClockCircleLinear className="size-6 shrink-0 text-primary" />
+                <ClockCircleLinear className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
                 <h3 className="font-medium text-xl">{s('Runtime.time')}</h3>
               </div>
               <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">
@@ -276,9 +276,9 @@ export default function EmptyProfile({ markedCount }: EmptyProfileProps) {
               </div>
             </div>
 
-            <div className="flex min-h-36 flex-col rounded-xl border border-foreground/8 bg-accent p-4">
+            <div className="flex min-h-36 flex-col rounded-2xl surface p-4">
               <div className="mb-3 flex flex-row items-center gap-2">
-                <SkipNextLinear className="size-6 shrink-0 text-primary" />
+                <SkipNextLinear className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
                 <h3 className="font-medium text-xl">{s('Runtime.skip')}</h3>
               </div>
               <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">

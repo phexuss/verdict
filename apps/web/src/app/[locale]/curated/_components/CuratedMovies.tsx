@@ -45,10 +45,14 @@ export function CuratedMovies() {
 
   return (
     <main className="px-5 py-8 md:px-20 md:py-12 xl:px-30 xl:py-16">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredMovies.map((movie) => (
-          <Link href={`/movie/${movie.id}`} key={movie.id}>
-            <MovieCard movie={movie} locale={locale} key={movie.id} />
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredMovies.map((movie, index) => (
+          <Link
+            className="rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/40"
+            href={`/movie/${movie.id}`}
+            key={movie.id}
+          >
+            <MovieCard movie={movie} locale={locale} index={index % 8} />
           </Link>
         ))}
       </div>

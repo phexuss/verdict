@@ -13,7 +13,7 @@ export default function ImportImdbCard() {
 
   return (
     <>
-      <section className="relative flex flex-col justify-between rounded-2xl border border-foreground/8 bg-accent p-5 transition-all hover:border-foreground/15">
+      <section className="relative flex flex-col justify-between rounded-2xl surface surface-interactive p-5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Image

@@ -44,7 +44,7 @@ export default function TonightHistory({
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex min-w-0 flex-col gap-2">
           <div className="flex items-center gap-2">
-            <VideoFrameLinear className="size-6 shrink-0 text-primary" />
+            <VideoFrameLinear className="size-6 shrink-0 text-primary drop-shadow-[0_0_8px_oklch(0.76_0.13_65/0.55)]" />
             <h3 className="font-medium text-2xl">{t('title')}</h3>
           </div>
           <p className="max-w-2xl text-foreground/70 text-sm leading-relaxed">
@@ -84,7 +84,7 @@ export default function TonightHistory({
           ))}
         </motion.div>
       ) : (
-        <div className="rounded-xl border border-foreground/8 bg-accent p-5">
+        <div className="rounded-2xl surface p-5">
           <p className="font-medium text-lg">{t('emptyTitle')}</p>
           <p className="mt-2 max-w-2xl text-foreground/70 text-sm leading-relaxed">
             {t('emptyDescription')}
@@ -110,7 +110,7 @@ function RecommendationCard({
 
   return (
     <Link
-      className="group flex h-full min-h-52 flex-col overflow-hidden rounded-xl border border-foreground/8 bg-accent ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_8px_32px_-8px_oklch(0.76_0.13_65/0.18)]"
+      className="group flex h-full min-h-52 flex-col overflow-hidden rounded-2xl surface surface-interactive"
       href={`/tonight/${recommendation.slug}`}
     >
       <div className="grid h-28 grid-cols-3 gap-1 overflow-hidden bg-background/40 p-1">
@@ -198,7 +198,7 @@ function TonightHistorySkeleton() {
       {['tonight-history-1', 'tonight-history-2', 'tonight-history-3'].map(
         (item) => (
           <article
-            className="min-h-52 overflow-hidden rounded-xl border border-foreground/8 bg-accent"
+            className="min-h-52 overflow-hidden rounded-2xl surface"
             key={item}
           >
             <div className="grid h-28 grid-cols-3 gap-1 bg-background/40 p-1">

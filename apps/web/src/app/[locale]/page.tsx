@@ -67,11 +67,13 @@ export default async function HomePage({ params }: HomePageProps) {
   const moods = locale === 'ru' ? MOODS.ru : MOODS.en;
 
   return (
-    <div className="relative flex min-h-svh flex-col overflow-hidden bg-background">
-      <div
-        className="pointer-events-none absolute right-0 top-1/3 z-0 h-125 w-125 -translate-y-1/2 translate-x-1/3 rounded-full blur-[120px]"
-        style={{ background: 'var(--primary)', opacity: 0.07 }}
-      />
+    <div className="relative flex min-h-svh flex-col overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <div className="absolute top-1/3 right-0 h-125 w-125 translate-x-1/3 -translate-y-1/2 animate-aurora rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute -top-24 left-1/4 h-80 w-80 animate-aurora-slow rounded-full bg-[oklch(0.62_0.15_40/0.09)] blur-[100px]" />
+        <div className="absolute bottom-0 left-0 h-72 w-[60%] -translate-x-1/4 translate-y-1/3 animate-aurora rounded-full bg-primary/6 blur-[110px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(oklch(1_0_0/0.05)_1px,transparent_1px)] mask-[radial-gradient(ellipse_70%_60%_at_30%_45%,black,transparent)] bg-size-[28px_28px]" />
+      </div>
 
       <FloatingMoods moods={moods} />
 
@@ -81,10 +83,7 @@ export default async function HomePage({ params }: HomePageProps) {
             {t.rich('title', {
               chunk: (chunks) => <AnimatedChunk>{chunks}</AnimatedChunk>,
               accent: (chunks) => (
-                <em
-                  className="not-italic"
-                  style={{ color: 'var(--primary)', fontStyle: 'italic' }}
-                >
+                <em className="text-gold animate-text-shine pr-1 italic">
                   {chunks}
                 </em>
               ),

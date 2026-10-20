@@ -49,7 +49,7 @@ export default function MoodButtons({
             key={genre}
             value={genre}
             disabled={!selected.includes(genre) && selected.length >= 3}
-            className="h-9 rounded-full border px-4 text-sm transition-all duration-200 hover:border-primary/50 hover:text-foreground data-[state=on]:border-primary/60 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-[0_0_14px_-3px_oklch(0.76_0.13_65/0.6)]"
+            className="h-9 rounded-full border border-white/10 bg-white/[0.03] px-4 text-sm shadow-[inset_0_1px_0_oklch(1_0_0/0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground hover:shadow-[0_0_18px_-6px_oklch(0.76_0.13_65/0.5)] active:scale-95 data-[state=on]:border-primary/60 data-[state=on]:bg-primary data-[state=on]:bg-[linear-gradient(180deg,oklch(0.83_0.12_72),var(--primary))] data-[state=on]:text-primary-foreground data-[state=on]:shadow-[inset_0_1px_0_oklch(1_0_0/0.35),0_0_22px_-4px_oklch(0.76_0.13_65/0.75)]"
           >
             {t(`genres.${genre}`)}
           </ToggleGroupItem>

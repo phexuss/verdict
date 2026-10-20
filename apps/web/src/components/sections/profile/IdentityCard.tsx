@@ -20,11 +20,11 @@ export default function IdentityCard({
   return (
     <article
       className={cn(
-        'flex flex-col overflow-hidden rounded-md border border-sidebar-ring/8 bg-accent p-4 text-foreground',
+        'flex flex-col overflow-hidden rounded-2xl surface p-4 text-foreground',
         className,
       )}
     >
-      <div className="mb-5 shrink-0 text-primary">
+      <div className="mb-5 shrink-0 text-primary drop-shadow-[0_0_10px_oklch(0.76_0.13_65/0.55)]">
         {icon ?? <BuildingsBold className="size-8 shrink-0" />}
       </div>
 

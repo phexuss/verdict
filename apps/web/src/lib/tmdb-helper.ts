@@ -231,9 +231,9 @@ export async function getMovieTrailer(
       },
       next: { revalidate: 86400 },
     },
-  );
+  ).catch(() => null);
 
-  if (!res.ok) return null;
+  if (!res?.ok) return null;
 
   const data: TMDBVideosResponse = await res.json();
 

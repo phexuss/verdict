@@ -30,7 +30,7 @@ export function MovieCard({ movie, locale, index = 0 }: MovieCardProps) {
         y: -4,
         transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
       }}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card ring-1 ring-foreground/5 transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_8px_32px_-8px_oklch(0.76_0.13_65/0.2)] will-change-transform transform-gpu"
+      className="surface surface-interactive group flex h-full flex-col overflow-hidden rounded-2xl will-change-transform transform-gpu"
     >
       <div className="relative aspect-2/3 overflow-hidden bg-muted">
         {movie.poster_path ? (
@@ -38,7 +38,7 @@ export function MovieCard({ movie, locale, index = 0 }: MovieCardProps) {
             alt={movie.title}
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
             fill
-            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           />
         ) : (
@@ -47,20 +47,29 @@ export function MovieCard({ movie, locale, index = 0 }: MovieCardProps) {
           </div>
         )}
 
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded-md border border-foreground/10 bg-background/60 px-2 py-1 font-medium text-xs shadow-md backdrop-blur-md">
-          <StarBold className="size-3.5 text-primary" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-card via-card/40 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,oklch(0.76_0.13_65/0.25),transparent_60%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        />
+
+        <div className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded-full border border-white/10 bg-black/45 px-2.5 py-1 font-medium text-xs shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_4px_14px_-4px_oklch(0_0_0/0.6)] backdrop-blur-md">
+          <StarBold className="size-3.5 text-primary drop-shadow-[0_0_6px_oklch(0.76_0.13_65/0.8)]" />
           <span>{movie.vote_average.toFixed(1)}</span>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-4">
+      <div className="flex flex-1 flex-col gap-2.5 p-3 sm:gap-3 sm:p-4">
         <div className="space-y-0.5">
           {releaseYear ? (
             <p className="text-muted-foreground/60 text-xs tabular-nums">
               {releaseYear}
             </p>
           ) : null}
-          <h2 className="line-clamp-2 font-semibold text-base leading-snug">
+          <h2 className="line-clamp-2 font-semibold text-sm leading-snug sm:text-base transition-colors duration-300 group-hover:text-gold-soft">
             {movie.title}
           </h2>
         </div>
@@ -69,7 +78,7 @@ export function MovieCard({ movie, locale, index = 0 }: MovieCardProps) {
           <div className="flex flex-wrap gap-1.5">
             {genreNames.slice(0, 2).map((name) => (
               <Badge
-                className="rounded-full px-2.5 py-0.5 font-normal text-[11px]"
+                className="rounded-full border-white/10 bg-white/[0.03] px-2.5 py-0.5 font-normal text-[11px] text-foreground/80"
                 key={name}
                 variant="outline"
               >
@@ -80,7 +89,7 @@ export function MovieCard({ movie, locale, index = 0 }: MovieCardProps) {
         ) : null}
 
         {movie.overview ? (
-          <p className="line-clamp-3 text-muted-foreground/75 text-sm leading-relaxed">
+          <p className="hidden text-muted-foreground/75 text-sm leading-relaxed sm:line-clamp-3">
             {getShortOverview(movie.overview, 150)}
           </p>
         ) : null}
