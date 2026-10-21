@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import Footer from '@/components/sections/footer/Footer';
 import Header from '@/components/sections/header/Header';
 import { routing } from '@/i18n/routing';
+import { UI_MODE_BOOT_SCRIPT } from '@/lib/ui-mode';
 import { QueryProvider } from '@/providers/query-provider';
 import '@repo/ui/globals.css';
 
@@ -82,7 +83,13 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={jost.variable}>
+    <html lang={locale} className={jost.variable} suppressHydrationWarning>
+      <head>
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static inline script that applies the saved UI mode before first paint
+          dangerouslySetInnerHTML={{ __html: UI_MODE_BOOT_SCRIPT }}
+        />
+      </head>
       <body className="min-h-svh bg-background pb-[calc(6rem+env(safe-area-inset-bottom))] font-sans text-foreground antialiased md:pb-0">
         <QueryProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>

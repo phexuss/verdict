@@ -13,6 +13,7 @@ import { SettingsLinear } from '@solar-icons/react-perf';
 import { FileText, LogOut, Shield, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
+import { useUiMode } from '@/hooks/useUiMode';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
@@ -24,6 +25,7 @@ export default function SettingsMobileButton() {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+  const [uiMode, setUiMode] = useUiMode();
 
   const switchLanguage = (newLocale: Locale) => {
     if (newLocale === locale || isPending) return;
@@ -100,6 +102,31 @@ export default function SettingsMobileButton() {
               >
                 {t('locale.en')}
               </Button>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+              {t('interface')}
+            </p>
+
+            <div className="flex rounded-2xl border border-white/8 bg-white/[0.03] p-1">
+              {(['modern', 'classic'] as const).map((mode) => (
+                <Button
+                  aria-pressed={uiMode === mode}
+                  className={cn(
+                    'flex-1 rounded-xl py-2.5 text-sm font-medium transition-all duration-200',
+                    uiMode === mode
+                      ? 'border border-primary/25 bg-primary/10 text-primary shadow-[0_0_16px_-6px_oklch(0.76_0.13_65/0.6)]'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                  key={mode}
+                  onClick={() => setUiMode(mode)}
+                  variant="ghost"
+                >
+                  {t(`ui.${mode}`)}
+                </Button>
+              ))}
             </div>
           </div>
 

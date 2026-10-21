@@ -354,3 +354,121 @@
     animation: none;
   }
 }
+
+/*
+ * Classic UI: the flat look from before the glass/glow pass. Enabled from
+ * Settings, which sets <html data-ui="classic">. These rules are unlayered so
+ * they win over the utilities they switch off.
+ */
+:root[data-ui="classic"] body::before,
+:root[data-ui="classic"] body::after,
+:root[data-ui="classic"] header::after,
+:root[data-ui="classic"] [data-ambience],
+:root[data-ui="classic"] .sheen::after,
+:root[data-ui="classic"] [data-slot="skeleton"]::before {
+  display: none;
+}
+
+:root[data-ui="classic"] .surface {
+  border-color: color-mix(in oklch, var(--foreground) 8%, transparent);
+  background-color: var(--accent);
+  background-image: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root[data-ui="classic"] .surface-interactive:hover {
+  border-color: color-mix(in oklch, var(--primary) 50%, transparent);
+  box-shadow: 0 8px 32px -8px oklch(0.76 0.13 65 / 0.2);
+}
+
+:root[data-ui="classic"] .glass {
+  background-color: color-mix(in oklch, var(--background) 78%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:root[data-ui="classic"] .text-gold {
+  background-image: none;
+  color: var(--primary);
+}
+
+:root[data-ui="classic"] header .text-gold {
+  color: var(--gold-soft);
+}
+
+:root[data-ui="classic"] .text-glow {
+  text-shadow: none;
+}
+
+:root[data-ui="classic"] [class*="bg-clip-text"] {
+  background-image: none;
+  color: var(--foreground);
+}
+
+:root[data-ui="classic"] [class*="shadow-["] {
+  box-shadow: none;
+}
+
+:root[data-ui="classic"] [class*="drop-shadow-["] {
+  filter: none;
+}
+
+:root[data-ui="classic"] [class*="bg-[linear-gradient"],
+:root[data-ui="classic"] [class*="bg-[radial-gradient"],
+:root[data-ui="classic"] [data-slot="slider-range"] {
+  background-image: none;
+}
+
+:root[data-ui="classic"] .animate-aurora,
+:root[data-ui="classic"] .animate-aurora-slow,
+:root[data-ui="classic"] .animate-text-shine {
+  animation: none;
+}
+
+:root[data-ui="classic"] [data-slot="button"][data-variant="default"]:hover {
+  background-color: color-mix(in oklch, var(--primary) 80%, transparent);
+  filter: none;
+}
+
+:root[data-ui="classic"] [data-slot="skeleton"] {
+  background-color: var(--muted);
+  animation: classic-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+:root[data-ui="classic"] [data-slot="dialog-content"] {
+  background-color: var(--popover);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root[data-ui="classic"] [data-slot="drawer-content"]::before {
+  border-color: var(--border);
+  background-color: var(--popover);
+  background-image: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Full-width bottom bar instead of the floating pill. */
+:root[data-ui="classic"] [data-slot="bottom-nav"] {
+  padding: 0;
+}
+
+:root[data-ui="classic"] [data-slot="bottom-nav"] > div {
+  max-width: none;
+  border-width: 1px 0 0;
+  border-radius: 0;
+  border-color: oklch(1 0 0 / 0.1);
+  padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom));
+  background-color: color-mix(in oklch, var(--background) 80%, transparent);
+  box-shadow: none;
+}
+
+@keyframes classic-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}

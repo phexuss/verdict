@@ -9,6 +9,7 @@ export function AmbientBackdrop({ src }: AmbienceProps) {
   return (
     <div
       aria-hidden
+      data-ambience
       className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-[75svh] w-screen -translate-x-1/2 overflow-hidden opacity-35 mask-[linear-gradient(to_bottom,black,transparent)]"
     >
       <Image
@@ -28,6 +29,7 @@ export function PosterGlow({ src }: AmbienceProps) {
   return (
     <div
       aria-hidden
+      data-ambience
       className="pointer-events-none absolute inset-2 -z-10 translate-y-4 opacity-60 blur-2xl saturate-150"
     >
       <Image alt="" className="object-cover" fill sizes="10rem" src={src} />

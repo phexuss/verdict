@@ -14,10 +14,11 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { SettingsLinear } from '@solar-icons/react-perf';
-import { Check, FileText, Globe, LogOut, Shield } from 'lucide-react';
+import { Check, FileText, Globe, LogOut, Shield, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
+import { useUiMode } from '@/hooks/useUiMode';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
@@ -42,6 +43,7 @@ export default function SettingsButton() {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+  const [uiMode, setUiMode] = useUiMode();
 
   const switchLanguage = (newLocale: Locale) => {
     if (newLocale === locale || isPending) return;
@@ -124,6 +126,38 @@ export default function SettingsButton() {
                     </span>
                     {t('locale.en')}
                   </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="cursor-pointer gap-3 focus:bg-accent data-[state=open]:bg-accent">
+                <Sparkles className="size-4 text-muted-foreground" />
+                <span>{t('interface')}</span>
+
+                <span className="ml-auto text-muted-foreground text-xs">
+                  {t(`ui.${uiMode}`)}
+                </span>
+              </DropdownMenuSubTrigger>
+
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent
+                  sideOffset={6}
+                  alignOffset={-4}
+                  className="min-w-40"
+                >
+                  {(['modern', 'classic'] as const).map((mode) => (
+                    <DropdownMenuItem
+                      className="cursor-pointer gap-2 focus:bg-accent"
+                      key={mode}
+                      onClick={() => setUiMode(mode)}
+                    >
+                      <span className="flex w-4 justify-center">
+                        {uiMode === mode && <Check className="size-3.5" />}
+                      </span>
+                      {t(`ui.${mode}`)}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
