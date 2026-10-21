@@ -26,6 +26,11 @@
         "en": "English",
         "ru": "Русский"
       },
+      "interface": "Interface",
+      "ui": {
+        "modern": "New",
+        "classic": "Classic"
+      },
       "tou": "Terms of Use",
       "privacy": "Privacy Policy",
       "logout": "Logout",

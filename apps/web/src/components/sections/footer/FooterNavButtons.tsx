@@ -29,7 +29,10 @@ export default function FooterNavButtons() {
   const t = useTranslations('Footer.navigation');
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+    <nav
+      data-slot="bottom-nav"
+      className="fixed inset-x-0 bottom-0 z-50 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+    >
       <div className="glass relative mx-auto grid max-w-md grid-cols-3 gap-1 rounded-[1.75rem] border border-white/10 p-1.5 shadow-[inset_0_1px_0_oklch(1_0_0/0.06),0_18px_40px_-12px_oklch(0_0_0/0.9),0_0_40px_-20px_oklch(0.76_0.13_65/0.35)]">
         {navItems.map((item) => {
           const isActive = isActivePath(pathname, item.href);
