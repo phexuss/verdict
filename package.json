@@ -17,7 +17,7 @@
     "dev:api": "turbo run dev --filter=api"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.4",
+    "@biomejs/biome": "^2.6.5",
     "@nestjs/cli": "^11.0.24",
     "turbo": "^2.11.10",
     "typescript": "^5.9.3"
